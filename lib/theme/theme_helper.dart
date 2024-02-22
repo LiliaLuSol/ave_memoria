@@ -1,0 +1,112 @@
+import 'dart:ui';
+import 'package:flutter/material.dart';
+import 'package:ave_memoria/other/app_export.dart';
+
+class ThemeHelper {
+  var _appTheme = PrefUtils().getThemeData();
+
+  Map<String, PrimaryColors> _supportedCustomColor = {
+    'primary': PrimaryColors()
+  };
+
+  Map<String, ColorScheme> _supportedColorScheme = {
+    'primary': ColorSchemes.primaryColorScheme
+  };
+
+  PrimaryColors _getThemeColors() {
+    if (!_supportedCustomColor.containsKey(_appTheme)) {
+      throw Exception("$_appTheme не найден");
+    }
+    return _supportedCustomColor[_appTheme] ?? PrimaryColors();
+  }
+
+  ThemeData _getThemeData() {
+    if (!_supportedColorScheme.containsKey(_appTheme)) {
+      throw Exception("$_appTheme не найден");
+    }
+
+    var colorScheme =
+        _supportedColorScheme[_appTheme] ?? ColorSchemes.primaryColorScheme;
+    return ThemeData(
+      visualDensity: VisualDensity.standard,
+      colorScheme: colorScheme,
+      textTheme: TextThemes.textTheme(colorScheme),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: colorScheme.primary,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5.h),
+          ),
+          visualDensity: const VisualDensity(
+            vertical: -4,
+            horizontal: -4,
+          ),
+          padding: EdgeInsets.zero,
+        ),
+      ),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+          backgroundColor: Colors.transparent,
+          side: BorderSide(
+            color: appTheme.white.withOpacity(0.9),
+            width: 1.h,
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15.h),
+          ),
+          visualDensity: const VisualDensity(
+            vertical: -4,
+            horizontal: -4,
+          ),
+          padding: EdgeInsets.zero,
+        ),
+      ),
+    );
+  }
+
+  PrimaryColors themeColor() => _getThemeColors();
+
+  ThemeData themeData() => _getThemeData();
+}
+
+class TextThemes {
+  static TextTheme textTheme(ColorScheme colorScheme) => TextTheme(
+        headlineLarge: TextStyle(
+          color: appTheme.white,
+          fontSize: 30.fSize,
+          fontFamily: 'Open Sans',
+          fontWeight: FontWeight.w700,
+        ),
+        titleMedium: TextStyle(
+          color: appTheme.white,
+          fontSize: 18.fSize,
+          fontFamily: 'Open Sans',
+          fontWeight: FontWeight.w600,
+        ),
+        bodyMedium: TextStyle(
+          color: appTheme.white,
+          fontSize: 14.fSize,
+          fontFamily: 'Open Sans',
+          fontWeight: FontWeight.w400,
+        ),
+      );
+}
+
+class ColorSchemes {
+  static final primaryColorScheme = const ColorScheme.light(
+    primary: Color(0XFF3498DB),
+    background: Color(0XFFF0F0F0),
+  );
+}
+
+class PrimaryColors {
+
+  Color get black => const Color(0XFF000000);
+
+  Color get white => const Color(0XFFFFFFFF);
+
+}
+
+PrimaryColors get appTheme => ThemeHelper().themeColor();
+
+ThemeData get theme => ThemeHelper().themeData();
