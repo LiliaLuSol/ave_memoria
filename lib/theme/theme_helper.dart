@@ -31,6 +31,7 @@ class ThemeHelper {
       visualDensity: VisualDensity.standard,
       colorScheme: colorScheme,
       textTheme: TextThemes.textTheme(colorScheme),
+      scaffoldBackgroundColor: appTheme.background,
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: colorScheme.primary,
@@ -48,11 +49,11 @@ class ThemeHelper {
         style: OutlinedButton.styleFrom(
           backgroundColor: Colors.transparent,
           side: BorderSide(
-            color: appTheme.white.withOpacity(0.9),
+            color: appTheme.gray.withOpacity(0.8),
             width: 1.h,
           ),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15.h),
+            borderRadius: BorderRadius.circular(5.h),
           ),
           visualDensity: const VisualDensity(
             vertical: -4,
@@ -60,6 +61,26 @@ class ThemeHelper {
           ),
           padding: EdgeInsets.zero,
         ),
+      ),
+      checkboxTheme: CheckboxThemeData(
+        fillColor: MaterialStateColor.resolveWith((states) {
+          if (states.contains(MaterialState.selected)) {
+            return colorScheme.primary;
+          }
+          return colorScheme.onSurface;
+        }),
+        side: BorderSide(
+          width: 1,
+        ),
+        visualDensity: const VisualDensity(
+          vertical: -4,
+          horizontal: -4,
+        ),
+      ),
+      dividerTheme: DividerThemeData(
+        thickness: 1,
+        space: 1,
+        color: appTheme.gray,
       ),
     );
   }
@@ -73,20 +94,20 @@ class TextThemes {
   static TextTheme textTheme(ColorScheme colorScheme) => TextTheme(
         headlineLarge: TextStyle(
           color: appTheme.white,
-          fontSize: 30.fSize,
-          fontFamily: 'Open Sans',
-          fontWeight: FontWeight.w700,
+          fontSize: 32.fSize,
+          fontFamily: 'Poppins',
+          fontWeight: FontWeight.w800,
         ),
         titleMedium: TextStyle(
           color: appTheme.white,
           fontSize: 18.fSize,
-          fontFamily: 'Open Sans',
+          fontFamily: 'Poppins',
           fontWeight: FontWeight.w600,
         ),
         bodyMedium: TextStyle(
           color: appTheme.white,
           fontSize: 14.fSize,
-          fontFamily: 'Open Sans',
+          fontFamily: 'Poppins',
           fontWeight: FontWeight.w400,
         ),
       );
@@ -96,15 +117,30 @@ class ColorSchemes {
   static final primaryColorScheme = const ColorScheme.light(
     primary: Color(0XFF3498DB),
     background: Color(0XFFF0F0F0),
+    //text
+    onPrimary: Color(0XFF333333),
+    onPrimaryContainer: Color(0XFFFFFFFF),
   );
 }
 
 class PrimaryColors {
-
   Color get black => const Color(0XFF000000);
 
   Color get white => const Color(0XFFFFFFFF);
 
+  Color get lightGray => Color(0XFFD9D9D9);
+
+  Color get turquoise => Color(0XFF48949B);
+
+  Color get background => Color(0XFFF0F0F0);
+
+  Color get gray => Color(0XFF4F4F4F);
+
+  Color get orange => Color(0XFFF3D36B);
+
+  Color get green => Color(0XFF64D677);
+
+  Color get yellow => Color(0XFFF4D36C);
 }
 
 PrimaryColors get appTheme => ThemeHelper().themeColor();

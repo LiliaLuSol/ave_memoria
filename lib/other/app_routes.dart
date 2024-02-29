@@ -1,4 +1,5 @@
 import 'package:ave_memoria/pages/load_screen.dart';
+import 'package:ave_memoria/pages/onboard.dart';
 import 'package:flutter/material.dart';
 import 'package:ave_memoria/main.dart';
 import 'package:go_router/go_router.dart';
@@ -6,7 +7,8 @@ import 'app_export.dart';
 
 class AppRoutes {
   static const root = '/';
-  static const load = '/app_routes.dart';
+  static const load = '/load_screen';
+  static const onboard = '/onboard';
 
   static final GoRouter _router = GoRouter(
     routes: <GoRoute>[
@@ -14,7 +16,7 @@ class AppRoutes {
         path: root,
         builder: (context, state) {
           // if (supabase.auth.currentUser != null) {
-            return const LoadScreen();
+            return const Onboard();
           // } else {
           //   return const Onboard();
           // }
@@ -23,6 +25,10 @@ class AppRoutes {
       GoRoute(
         path: load,
         builder: (context, state) => const LoadScreen(),
+      ),
+      GoRoute(
+        path: onboard,
+        builder: (context, state) => const Onboard(),
       ),
      ],
     // initialLocation: root,

@@ -13,9 +13,8 @@ class LoadScreen extends StatelessWidget {
                   child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        SizedBox(height: 5.v),
                         Text("AveMemoria",
-                      //      style: CustomTextStyles.headlineLargePrimary
+                            style: CustomTextStyles.extraBold32Primary
                         )
                       ]))));
   }

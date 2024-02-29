@@ -83,7 +83,7 @@ class CustomTextFormField extends StatelessWidget {
           onFieldSubmitted: onSubmit,
           focusNode: focusNode ?? FocusNode(),
           autofocus: autofocus!,
-          style: textStyle ?? CustomTextStyles.bodyLargeBlack,
+          //style: textStyle ?? CustomTextStyles.bodyLargeBlack,
           obscureText: obscureText!,
           textInputAction: textInputAction,
           keyboardType: textInputType,
@@ -99,7 +99,7 @@ class CustomTextFormField extends StatelessWidget {
 
   InputDecoration get decoration => InputDecoration(
         hintText: hintText ?? "",
-        hintStyle: hintStyle ?? CustomTextStyles.bodyLargeBlack,
+       // hintStyle: hintStyle ?? CustomTextStyles.bodyLargeBlack,
         prefixIcon: prefix,
         prefixIconConstraints: prefixConstraints,
         suffixIcon: suffix,
