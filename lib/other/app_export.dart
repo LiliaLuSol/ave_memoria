@@ -9,7 +9,6 @@ export 'package:ave_memoria/theme/app_decoration.dart';
 export 'package:ave_memoria/theme/custom_text_style.dart';
 export 'package:ave_memoria/theme/theme_helper.dart';
 export 'package:ave_memoria/theme/theme_bloc/theme_bloc.dart';
-export 'package:ave_memoria/theme/custom_button_style.dart';
 export 'package:ave_memoria/widgets/custom_image_view.dart';
 export 'package:ave_memoria/widgets/custom_text_form_field.dart';
 export 'package:ave_memoria/widgets/custom_switch.dart';

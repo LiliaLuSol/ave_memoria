@@ -56,34 +56,31 @@ class _MyAppState extends State<MyApp> {
             value: SystemUiOverlayStyle(
               statusBarColor: theme.colorScheme.background,
               systemNavigationBarColor: theme.colorScheme.background,
-              statusBarIconBrightness: Brightness.light,
-              systemNavigationBarIconBrightness: Brightness.light,
+              statusBarIconBrightness: Brightness.dark,
+              systemNavigationBarIconBrightness: Brightness.dark,
             ),
-            child:
-                //return
-                Sizer(
-                    builder: (context, orientation, deviceType) =>
-                        MaterialApp.router(
-                          theme: ThemeData(
-                              scaffoldBackgroundColor:
-                                  theme.colorScheme.background),
-                          title: 'ave_memoria',
-                          debugShowCheckedModeBanner: false,
-                          routeInformationProvider:
-                              AppRoutes.router.routeInformationProvider,
-                          routeInformationParser:
-                              AppRoutes.router.routeInformationParser,
-                          routerDelegate: AppRoutes.router.routerDelegate,
-                          scrollBehavior:
-                              const MaterialScrollBehavior().copyWith(
-                            dragDevices: {
-                              PointerDeviceKind.mouse,
-                              PointerDeviceKind.touch,
-                              PointerDeviceKind.stylus,
-                              PointerDeviceKind.unknown
-                            },
-                          ),
-                        )));
+            child: Sizer(
+                builder: (context, orientation, deviceType) =>
+                    MaterialApp.router(
+                      theme: ThemeData(
+                          scaffoldBackgroundColor:
+                              theme.colorScheme.background),
+                      title: 'ave_memoria',
+                      debugShowCheckedModeBanner: false,
+                      routeInformationProvider:
+                          AppRoutes.router.routeInformationProvider,
+                      routeInformationParser:
+                          AppRoutes.router.routeInformationParser,
+                      routerDelegate: AppRoutes.router.routerDelegate,
+                      scrollBehavior: const MaterialScrollBehavior().copyWith(
+                        dragDevices: {
+                          PointerDeviceKind.mouse,
+                          PointerDeviceKind.touch,
+                          PointerDeviceKind.stylus,
+                          PointerDeviceKind.unknown
+                        },
+                      ),
+                    )));
       }),
     );
   }

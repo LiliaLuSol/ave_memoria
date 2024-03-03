@@ -93,19 +93,19 @@ class ThemeHelper {
 class TextThemes {
   static TextTheme textTheme(ColorScheme colorScheme) => TextTheme(
         headlineLarge: TextStyle(
-          color: appTheme.white,
+          color: colorScheme.onPrimary,
           fontSize: 32.fSize,
           fontFamily: 'Poppins',
           fontWeight: FontWeight.w800,
         ),
         titleMedium: TextStyle(
-          color: appTheme.white,
+          color: colorScheme.onPrimary,
           fontSize: 18.fSize,
           fontFamily: 'Poppins',
           fontWeight: FontWeight.w600,
         ),
         bodyMedium: TextStyle(
-          color: appTheme.white,
+          color: colorScheme.onPrimary,
           fontSize: 14.fSize,
           fontFamily: 'Poppins',
           fontWeight: FontWeight.w400,
@@ -135,6 +135,10 @@ class PrimaryColors {
   Color get background => Color(0XFFF0F0F0);
 
   Color get gray => Color(0XFF4F4F4F);
+
+  Color get gray80 => Color(0XCC4F4F4F);
+
+  Color get onPrimary50 => Color(0X80333333);
 
   Color get orange => Color(0XFFF3D36B);
 

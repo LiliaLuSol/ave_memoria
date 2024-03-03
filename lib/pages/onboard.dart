@@ -1,7 +1,6 @@
+import 'package:ave_memoria/blocs/Auth/bloc/authentication_bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:ave_memoria/other/app_export.dart';
-import 'package:ave_memoria/widgets/app_bar/custom_app_bar.dart';
 import 'package:page_view_indicators/page_view_indicators.dart';
 
 class Onboard extends StatefulWidget {
@@ -17,37 +16,48 @@ class Onboard extends StatefulWidget {
 class _OnboardState extends State<Onboard> {
   final PageController pageController = PageController();
   final _currentPageNotifier = ValueNotifier<int>(0);
+
   final List<Widget> pages = [
     OnboardPage(
         title1: "Добро пожаловать в ",
         title2: "AveMemoria",
+        title3: "",
+        title4: "",
         message:
             "Здесь вы начнете увлекательное путешествие по улучшению своей памяти. Давайте вместе тренировать ваш разум!",
-        size: 38.v),
+        size: 25.v),
     OnboardPage(
         title1: "Мини-",
         title2: "игры",
+        title3: "",
+        title4: "",
         message:
             " Играйте в разнообразные игры, созданные для улучшения вашей памяти и концентрации. Разнообразные задачи ждут вас в свободном доступе!",
-        size: 82.v),
+        size: 70.v),
     OnboardPage(
-        title1: "Сюжетная ",
-        title2: "линия",
+        title1: "",
+        title2: "Сюжетная ",
+        title3: "линия",
+        title4: "",
         message:
-            "Погрузитесь в уникальный сюжет, где улучшение памяти становится захватывающим приключением. Здесь никогда еще не было так интересно развивать свой разум!",
-        size: 38.v),
+            "Погрузитесь в уникальный сюжет, где улучшение памяти становится захватывающим приключением. Никогда еще не было так интересно развивать свой разум!",
+        size: 45.v),
     OnboardPage(
         title1: "Интересные ",
-        title2: "советы и факты",
+        title2: "советы ",
+        title3: "и ",
+        title4: "факты",
         message:
-            "Погрузитесь в мир увлекательных знаний! Каждый день мы предоставляем вам интересные факты и полезные советы, чтобы не только улучшить вашу память, но и обогатить ваш разум.",
-        size: 38.v),
+            "Каждый день мы предоставляем вам интересные факты и полезные советы, чтобы не только улучшить вашу память, но и обогатить ваш разум.",
+        size: 25.v),
     OnboardPage(
         title1: "Успехи с ",
         title2: "авторизацией",
+        title3: "",
+        title4: "",
         message:
             "Авторизованные пользователи могут отслеживать свой прогресс, анализировать статистику и следить за улучшениями в своей памяти.",
-        size: 82.v),
+        size: 70.v),
   ];
 
   int currentPageIndex = 0;
@@ -55,10 +65,10 @@ class _OnboardState extends State<Onboard> {
   final String namebuttonF = "Завершить";
 
   ValueNotifier<String> buttonTextNotifier =
-  ValueNotifier<String>("Продолжить");
+      ValueNotifier<String>("Продолжить");
 
   String getLabel(int page) {
-    if (page == 2) {
+    if (page == 4) {
       buttonTextNotifier.value = namebuttonF;
     } else {
       buttonTextNotifier.value = namebuttonC;
@@ -68,88 +78,112 @@ class _OnboardState extends State<Onboard> {
 
   @override
   Widget build(BuildContext context) {
-    // return BlocBuilder<OnboardoneBloc, OnboardoneState>(
-    //   builder: (context, state) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: CustomAppBar(),
-        body: Container(
-          width: double.maxFinite,
-          padding: EdgeInsets.only(
-            left: 22.h,
-            top: 189.v,
-            right: 22.h,
-          ),
-          child: Column(
-            children: [
-              SizedBox(
-                width: 346.h,
-                child: RichText(
-                  text: TextSpan(
-                    children: [
-                      TextSpan(
-                        text: "Добро пожаловать в ",
-                        style: CustomTextStyles.semiBold32Text,
+    mediaQueryData = MediaQuery.of(context);
+    return BlocListener<AuthenticationBloc, AuthenticationState>(
+        listener: (context, state) {
+          if (state is AuthSuccessState) {
+            // GoRouter.of(context).go(AppRoutes.homepage);
+          } else if (state is UnAuthenticatedState) {
+            GoRouter.of(context).go(AppRoutes.onboard);
+          } else if (state is AuthErrorState) {
+            context.showsnackbar(title: 'Что-то пошло не так!');
+          }
+        },
+        child: SafeArea(
+          child: Scaffold(
+            extendBody: true,
+            extendBodyBehindAppBar: true,
+            body: Container(
+              width: mediaQueryData.size.width,
+              height: mediaQueryData.size.height,
+              child: Container(
+                width: double.maxFinite,
+                child: Column(
+                  children: [
+                    Spacer(flex: 1),
+                    Expanded(
+                      child: PageView.builder(
+                        controller: pageController,
+                        itemCount: pages.length,
+                        itemBuilder: (context, index) {
+                          return pages[index];
+                        },
+                        onPageChanged: (int page) {
+                          _currentPageNotifier.value = page;
+                          currentPageIndex = page;
+                          getLabel(page);
+                        },
                       ),
-                      TextSpan(
-                        text: "AveMemoria",
-                        style: CustomTextStyles.semiBold32Primary,
+                    ),
+                    Positioned(
+                      left: 0.0,
+                      right: 0.0,
+                      bottom: 0.0,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: CirclePageIndicator(
+                          itemCount: pages.length,
+                          currentPageNotifier: _currentPageNotifier,
+                        ),
                       ),
-                    ],
-                  ),
-                  textAlign: TextAlign.center,
+                    ),
+                    Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 16.h,
+                        ),
+                        child: ValueListenableBuilder<String>(
+                            valueListenable: buttonTextNotifier,
+                            builder: (context, label, child) {
+                              return CustomElevatedButton(
+                                  text: label,
+                                  buttonTextStyle:
+                                      CustomTextStyles.semiBold18TextWhite,
+                                  margin: EdgeInsets.fromLTRB(
+                                      5.h, 131.v, 5.h, 131.v),
+                                  buttonStyle: ElevatedButton.styleFrom(
+                                      backgroundColor:
+                                          theme.colorScheme.primary,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(5))),
+                                  onTap: () {
+                                    if (getLabel(currentPageIndex) ==
+                                        namebuttonC) {
+                                      if (currentPageIndex < pages.length - 1) {
+                                        pageController.animateToPage(
+                                            currentPageIndex + 1,
+                                            duration:
+                                                Duration(milliseconds: 500),
+                                            curve: Curves.ease);
+                                      }
+                                    } else {
+                                      GoRouter.of(context)
+                                          .push(AppRoutes.authreg);
+                                    }
+                                  });
+                            })),
+                  ],
                 ),
               ),
-              SizedBox(height: 53.v),
-              Container(
-                width: 327.h,
-                margin: EdgeInsets.only(
-                  left: 11.h,
-                  right: 9.h,
-                ),
-                child: Text(
-                  "Здесь вы начнете увлекательное путешествие по улучшению своей памяти. Давайте вместе тренировать ваш разум!",
-                  maxLines: 4,
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.center,
-                  style: CustomTextStyles.semiBold18Text,
-                ),
-              ),
-              SizedBox(height: 35.v),
-              SizedBox(
-                height: 4.v,
-                child: AnimatedSmoothIndicator(
-                  activeIndex: 0,
-                  count: 3,
-                  effect: ScrollingDotsEffect(
-                    spacing: 3.91,
-                    activeDotColor: theme.colorScheme.onPrimary,
-                    dotColor: appTheme.gray,
-                    dotHeight: 4.v,
-                    dotWidth: 3.h,
-                  ),
-                ),
-              ),
-              SizedBox(height: 5.v),
-            ],
+            ),
           ),
-        ),
-      ),
-    );
-    //   },
-    // );
+        ));
   }
 }
 
 class OnboardPage extends StatelessWidget {
   final String title1;
   final String title2;
+  final String title3;
+  final String title4;
   final String message;
   final double size;
 
   OnboardPage(
       {required this.title1,
       required this.title2,
+      required this.title3,
+      required this.title4,
       required this.message,
       required this.size});
 
@@ -160,8 +194,8 @@ class OnboardPage extends StatelessWidget {
         Container(
           width: 336.h,
           margin: EdgeInsets.only(
-            left: 12.h,
-            right: 11.h,
+            left: 10.h,
+            right: 10.h,
           ),
           child: RichText(
             text: TextSpan(
@@ -174,6 +208,14 @@ class OnboardPage extends StatelessWidget {
                   text: title2,
                   style: CustomTextStyles.semiBold32Primary,
                 ),
+                TextSpan(
+                  text: title3,
+                  style: CustomTextStyles.semiBold32Text,
+                ),
+                TextSpan(
+                  text: title4,
+                  style: CustomTextStyles.semiBold32Primary,
+                ),
               ],
             ),
             textAlign: TextAlign.center,
@@ -184,11 +226,11 @@ class OnboardPage extends StatelessWidget {
           margin: EdgeInsets.only(
             left: 5.h,
             top: size,
-            right: 3.h,
+            right: 5.h,
           ),
           child: Text(
             message,
-            maxLines: 6,
+            maxLines: 5,
             overflow: TextOverflow.ellipsis,
             textAlign: TextAlign.center,
             style: CustomTextStyles.semiBold18Text,

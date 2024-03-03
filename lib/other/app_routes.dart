@@ -1,5 +1,8 @@
+import 'package:ave_memoria/pages/authorization.dart';
 import 'package:ave_memoria/pages/load_screen.dart';
 import 'package:ave_memoria/pages/onboard.dart';
+import 'package:ave_memoria/pages/auth_reg.dart';
+import 'package:ave_memoria/pages/registration.dart';
 import 'package:flutter/material.dart';
 import 'package:ave_memoria/main.dart';
 import 'package:go_router/go_router.dart';
@@ -9,6 +12,9 @@ class AppRoutes {
   static const root = '/';
   static const load = '/load_screen';
   static const onboard = '/onboard';
+  static const authreg = '/auth_reg';
+  static const authorization = '/authorization';
+  static const registration = '/regisrtration';
 
   static final GoRouter _router = GoRouter(
     routes: <GoRoute>[
@@ -29,6 +35,18 @@ class AppRoutes {
       GoRoute(
         path: onboard,
         builder: (context, state) => const Onboard(),
+      ),
+      GoRoute(
+        path: authreg,
+        builder: (context, state) => const AuthReg(),
+      ),
+      GoRoute(
+        path: authorization,
+        builder: (context, state) => const Authorization(),
+      ),
+      GoRoute(
+        path: registration,
+        builder: (context, state) => const Registration(),
       ),
      ],
     // initialLocation: root,
