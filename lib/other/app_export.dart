@@ -15,10 +15,12 @@ export 'package:ave_memoria/widgets/custom_switch.dart';
 export 'package:ave_memoria/widgets/custom_icon_button.dart';
 export 'package:ave_memoria/widgets/custom_elevated_button.dart';
 export 'package:ave_memoria/widgets/custom_checkbox_button.dart';
+export 'package:ave_memoria/widgets/custom_alert_dialog.dart';
 export 'package:ave_memoria/widgets/app_bar/custom_app_bar.dart';
 export 'package:ave_memoria/widgets/app_bar/appbar_iconbutton.dart';
 export 'package:ave_memoria/widgets/app_bar/appbar_iconbutton_1.dart';
 export 'package:ave_memoria/widgets/app_bar/appbar_subtitle.dart';
 export 'package:connectivity_plus/connectivity_plus.dart';
 export 'package:go_router/go_router.dart';
+export 'package:font_awesome_flutter/font_awesome_flutter.dart';
 

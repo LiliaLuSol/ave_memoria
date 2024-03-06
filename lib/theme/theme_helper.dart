@@ -128,23 +128,23 @@ class PrimaryColors {
 
   Color get white => const Color(0XFFFFFFFF);
 
-  Color get lightGray => Color(0XFFD9D9D9);
+  Color get lightGray => const Color(0XFFD9D9D9);
 
-  Color get turquoise => Color(0XFF48949B);
+  Color get turquoise => const Color(0XFF48949B);
 
-  Color get background => Color(0XFFF0F0F0);
+  Color get background => const Color(0XFFF0F0F0);
 
-  Color get gray => Color(0XFF4F4F4F);
+  Color get gray => const Color(0XFF4F4F4F);
 
-  Color get gray80 => Color(0XCC4F4F4F);
+  Color get gray80 => const Color(0XCC4F4F4F);
 
-  Color get onPrimary50 => Color(0X80333333);
+  Color get onPrimary50 => const Color(0X80333333);
 
-  Color get orange => Color(0XFFF3D36B);
+  Color get orange => const Color(0XFFF3D36B);
 
-  Color get green => Color(0XFF64D677);
+  Color get green => const Color(0XFF64D677);
 
-  Color get yellow => Color(0XFFF4D36C);
+  Color get yellow => const Color(0XFFFFD43B);
 }
 
 PrimaryColors get appTheme => ThemeHelper().themeColor();

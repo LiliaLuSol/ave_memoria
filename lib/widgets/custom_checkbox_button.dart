@@ -1,3 +1,4 @@
+import 'package:ave_memoria/theme/theme_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:ave_memoria/other/app_export.dart';
 
@@ -15,8 +16,8 @@ class CustomCheckboxButton extends StatelessWidget {
     this.margin,
     this.padding,
     required this.checkColor,
-    this.fillColor = Colors.white,
-    this.borderColor = Colors.white,
+    this.fillColor,
+    this.borderColor,
     this.textStyle,
     this.textAlignment,
     this.isExpandedText = false,
@@ -52,9 +53,9 @@ class CustomCheckboxButton extends StatelessWidget {
 
   final Color checkColor;
 
-  final Color fillColor;
+  final Color? fillColor;
 
-  final Color borderColor;
+  final Color? borderColor;
 
   @override
   Widget build(BuildContext context) {
@@ -120,9 +121,10 @@ class CustomCheckboxButton extends StatelessWidget {
             onChange(value!);
           },
           checkColor: checkColor,
-          fillColor: MaterialStateProperty.resolveWith((states) => fillColor),
-          side: BorderSide(
-            color: borderColor,
+          fillColor: MaterialStateProperty.resolveWith((states) => fillColor ?? appTheme.white),
+          activeColor: appTheme.white,
+          side: MaterialStateBorderSide.resolveWith(
+                (states) => BorderSide(width: 1, color: appTheme.gray),
           ),
         ),
       );

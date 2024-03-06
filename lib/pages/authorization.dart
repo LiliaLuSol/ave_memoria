@@ -80,19 +80,19 @@ class _AuthorizationState extends State<Authorization>
                         child: Container(
                             width: double.maxFinite,
                             padding: EdgeInsets.symmetric(
-                                horizontal: 18.h, vertical: 29.v),
+                                horizontal: 18.h, vertical: 30.v),
                             child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   SizedBox(height: 34.v),
                                   Padding(
                                       padding:
-                                          EdgeInsets.only(left: 4.h, top: 9.v),
+                                          EdgeInsets.only(left: 4.h, top: 13.v),
                                       child: Text("Войти",
                                           style: CustomTextStyles.bold30Text)),
                                   Padding(
                                       padding:
-                                          EdgeInsets.only(left: 4.h, top: 37.v),
+                                          EdgeInsets.only(left: 4.h, top: 30.v),
                                       child: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
@@ -142,10 +142,6 @@ class _AuthorizationState extends State<Authorization>
                                                 focusNode:
                                                     inputfieldoneFocusNode,
                                                 autofocus: false,
-                                                textStyle: CustomTextStyles
-                                                    .regular16Text,
-                                                hintStyle: CustomTextStyles
-                                                    .regular16TextHint,
                                                 textInputAction:
                                                     TextInputAction.done,
                                                 hintText: "Password",
@@ -197,7 +193,7 @@ class _AuthorizationState extends State<Authorization>
                                       AuthenticationState>(
                                     listener: (context, state) {
                                       if (state is AuthSuccessState) {
-                                        // GoRouter.of(context).push(AppRoutes.homepage);
+                                        GoRouter.of(context).push(AppRoutes.homepage);
                                       } else if (state is AuthErrorState) {
                                         context.showsnackbar(
                                             title:
@@ -209,20 +205,18 @@ class _AuthorizationState extends State<Authorization>
                                       buttonTextStyle:
                                           CustomTextStyles.semiBold18TextWhite,
                                       margin: EdgeInsets.only(left: 2.h),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(5)),
                                       buttonStyle: isEmailValid &&
                                               isPasswordValid
                                           ? ElevatedButton.styleFrom(
                                               backgroundColor:
                                                   theme.colorScheme.primary,
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(5)))
+                                            )
                                           : ElevatedButton.styleFrom(
                                               backgroundColor: appTheme.gray,
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          5))),
+                                            ),
                                       onTap: isEmailValid && isPasswordValid
                                           ? () {
                                               if (_formKey.currentState!

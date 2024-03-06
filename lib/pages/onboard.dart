@@ -1,4 +1,5 @@
 import 'package:ave_memoria/blocs/Auth/bloc/authentication_bloc.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ave_memoria/other/app_export.dart';
 import 'package:page_view_indicators/page_view_indicators.dart';
@@ -93,6 +94,39 @@ class _OnboardState extends State<Onboard> {
           child: Scaffold(
             extendBody: true,
             extendBodyBehindAppBar: true,
+            appBar: CustomAppBar(
+                height: 45.v,
+                leadingWidth: double.maxFinite,
+                leading: Row(children: [
+                  SizedBox(width: 20.h),
+                  TextButton(
+                      onPressed: () => showDialog<String>(
+                            context: context,
+                            builder: (BuildContext context) => CustomAlertDialog(
+                              title: "Пропустить",
+                              content:
+                                  "Вы уверены, что хотите пропустить раздел возможностей приложения?",
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () =>
+                                      Navigator.pop(context, "Нет"),
+                                  child: Text("Нет",
+                                      style: CustomTextStyles.regular16Primary),
+                                ),
+                                TextButton(
+                                  onPressed: () => GoRouter.of(context)
+                                      .push(AppRoutes.authreg),
+                                  child: Text("Да",
+                                      style: CustomTextStyles.regular16Primary),
+                                ),
+                              ],
+                            ),
+                          ),
+                      child: Text(
+                        "Пропустить",
+                        style: CustomTextStyles.semiBold18TextGray,
+                      )),
+                ])),
             body: Container(
               width: mediaQueryData.size.width,
               height: mediaQueryData.size.height,

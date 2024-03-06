@@ -1,4 +1,5 @@
 import 'package:ave_memoria/blocs/Auth/bloc/authentication_bloc.dart';
+import 'package:ave_memoria/main.dart';
 import 'package:ave_memoria/utils/validator.dart';
 import 'package:flutter/material.dart';
 import 'package:ave_memoria/other/app_export.dart';
@@ -25,6 +26,7 @@ class _RegistrationState extends State<Registration>
   bool isEmailValid = false;
   bool isPasswordValid = false;
   bool isConfirmPasswordValid = false;
+  bool _wantNewsInfoValue  = false;
 
   @override
   void initState() {
@@ -45,6 +47,23 @@ class _RegistrationState extends State<Registration>
     _confirmpasscontroller = TextEditingController();
     _controller.dispose();
     super.dispose();
+  }
+
+  void addNewUser() async {
+    try {
+      final res = await supabase.from('UserChoice').select().execute();
+      String? email = _emailcontroller.text;
+      final count = res.data.length;
+      int countNew = count + 1;
+      email = email.toString();
+      supabase.from('UserChoice').upsert({
+        'id': countNew,
+        'email': email.toString(),
+        'news': _wantNewsInfoValue,
+      });
+    } catch (error) {
+      print('Ошибка при выполнении запроса: $error');
+    }
   }
 
   @override
@@ -68,7 +87,7 @@ class _RegistrationState extends State<Registration>
                         svgPath: ImageConstant.imgArrowleft,
                         margin: EdgeInsets.only(left: 20.h, right: 333.h),
                         onTap: () {
-                          // GoRouter.of(context).push(AppRoutes.authReg);
+                          GoRouter.of(context).push(AppRoutes.authreg);
                         })),
                 body: Container(
                     width: mediaQueryData.size.width,
@@ -87,11 +106,10 @@ class _RegistrationState extends State<Registration>
                                       padding:
                                           EdgeInsets.only(left: 4.h, top: 13.v),
                                       child: Text("Регистрация",
-                                          style:
-                                              theme.textTheme.headlineLarge)),
+                                          style: CustomTextStyles.bold30Text)),
                                   Padding(
                                       padding:
-                                          EdgeInsets.only(left: 4.h, top: 32.v),
+                                          EdgeInsets.only(left: 4.h, top: 30.v),
                                       child: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
@@ -104,8 +122,6 @@ class _RegistrationState extends State<Registration>
                                               controller: _emailcontroller,
                                               focusNode: emailFocusNode,
                                               autofocus: false,
-                                              textStyle: const TextStyle(
-                                                  color: Colors.black),
                                               hintText: "example@gmail.com",
                                               textInputType:
                                                   TextInputType.emailAddress,
@@ -143,8 +159,6 @@ class _RegistrationState extends State<Registration>
                                                 focusNode:
                                                     inputfieldoneFocusNode,
                                                 autofocus: false,
-                                                textStyle: const TextStyle(
-                                                    color: Colors.black),
                                                 textInputAction:
                                                     TextInputAction.done,
                                                 hintText: "Password",
@@ -210,8 +224,6 @@ class _RegistrationState extends State<Registration>
                                                     _confirmpasscontroller,
                                                 focusNode: inputfieldFocusNode,
                                                 autofocus: false,
-                                                textStyle: const TextStyle(
-                                                    color: Colors.black),
                                                 textInputAction:
                                                     TextInputAction.done,
                                                 hintText: "Password",
@@ -271,7 +283,7 @@ class _RegistrationState extends State<Registration>
                                       builder: (context, wantNewsInfo) {
                                         return CustomCheckboxButton(
                                             text:
-                                                "Хочу получать информацию о новостях и акциях",
+                                                "Хочу получать информацию о новостях и отчеты о достижениях",
                                             isExpandedText: true,
                                             value: wantNewsInfo,
                                             checkColor:
@@ -285,6 +297,7 @@ class _RegistrationState extends State<Registration>
                                                   .read<AuthenticationBloc>()
                                                   .add(ChangeCheckBoxEvent(
                                                       value: value));
+                                              _wantNewsInfoValue = value;
                                             });
                                       }),
                                   Spacer(),
@@ -293,16 +306,23 @@ class _RegistrationState extends State<Registration>
                                       builder: (context, state) {
                                     return CustomElevatedButton(
                                       text: "Создать аккаунт",
+                                      buttonTextStyle:
+                                          CustomTextStyles.semiBold18TextWhite,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(5)),
                                       margin:
                                           EdgeInsets.only(left: 3.h, top: 27.v),
-                                      // buttonStyle: isEmailValid &&
-                                      //         isPasswordValid &&
-                                      //         isConfirmPasswordValid
-                                      //     ? ElevatedButton.styleFrom(
-                                      //         backgroundColor:
-                                      //             theme.colorScheme.primary,
-                                      //       )
-                                      //     : CustomButtonStyles.fillGray,
+                                      buttonStyle: isEmailValid &&
+                                              isPasswordValid &&
+                                              isConfirmPasswordValid
+                                          ? ElevatedButton.styleFrom(
+                                              backgroundColor:
+                                                  theme.colorScheme.primary,
+                                            )
+                                          : ElevatedButton.styleFrom(
+                                              backgroundColor: appTheme.gray,
+                                            ),
                                       onTap: isEmailValid &&
                                               isPasswordValid &&
                                               isConfirmPasswordValid
@@ -315,8 +335,9 @@ class _RegistrationState extends State<Registration>
                                                     _emailcontroller.text,
                                                     _passcontroller.text),
                                               );
-                                              // GoRouter.of(context)
-                                              //     .push(AppRoutes.homepage);
+                                              addNewUser();
+                                              GoRouter.of(context)
+                                                  .push(AppRoutes.confirmemail);
                                             }
                                           : null,
                                     );
@@ -330,27 +351,25 @@ class _RegistrationState extends State<Registration>
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            // Padding(
-                                            //     padding: EdgeInsets.only(
-                                            //         bottom: 10.v),
-                                            //     child: SizedBox(
-                                            //         width: 80.h,
-                                            //         child: Divider(
-                                            //             thickness: 0.7,
-                                            //             color: appTheme
-                                            //                 .whiteP70))),
-                                            // Text("Или войдите с помощью",
-                                            //     style: CustomTextStyles
-                                            //         .bodyMediumWhite),
-                                            // Padding(
-                                            //     padding: EdgeInsets.only(
-                                            //         bottom: 10.v),
-                                            //     child: SizedBox(
-                                            //         width: 80.h,
-                                            //         child: Divider(
-                                            //             thickness: 0.7,
-                                            //             color:
-                                            //                 appTheme.whiteP70)))
+                                            Padding(
+                                                padding: EdgeInsets.only(
+                                                    bottom: 10.v),
+                                                child: SizedBox(
+                                                    width: 80.h,
+                                                    child: Divider(
+                                                        thickness: 0.7,
+                                                        color: appTheme.gray))),
+                                            Text("Или войдите с помощью",
+                                                style:
+                                                    theme.textTheme.bodyMedium),
+                                            Padding(
+                                                padding: EdgeInsets.only(
+                                                    bottom: 10.v),
+                                                child: SizedBox(
+                                                    width: 80.h,
+                                                    child: Divider(
+                                                        thickness: 0.7,
+                                                        color: appTheme.gray)))
                                           ])),
                                   Padding(
                                       padding: EdgeInsets.only(
@@ -422,13 +441,13 @@ class _RegistrationState extends State<Registration>
                                                       ImageConstant.imgUilvk,
                                                 ))
                                           ])),
-                                  SizedBox(height: 33.v),
+                                  SizedBox(height: 34.v),
                                   Align(
                                       alignment: Alignment.center,
                                       child: GestureDetector(
                                           onTap: () {
-                                            // GoRouter.of(context)
-                                            //     .push(AppRoutes.authorization);
+                                            GoRouter.of(context)
+                                                .push(AppRoutes.authorization);
                                           },
                                           child: RichText(
                                               text: TextSpan(children: [
@@ -437,10 +456,10 @@ class _RegistrationState extends State<Registration>
                                                     style: theme
                                                         .textTheme.bodyMedium),
                                                 const TextSpan(text: "  "),
-                                                // TextSpan(
-                                                //     text: "Войти",
-                                                //     style: CustomTextStyles
-                                                //         .bodyMediumPrimary)
+                                                TextSpan(
+                                                    text: "Войти",
+                                                    style: CustomTextStyles
+                                                        .bodyMediumPrimary)
                                               ]),
                                               textAlign: TextAlign.left)))
                                 ])))))));

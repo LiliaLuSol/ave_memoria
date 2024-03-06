@@ -54,8 +54,8 @@ class _MyAppState extends State<MyApp> {
       child: BlocBuilder<ThemeBloc, ThemeState>(builder: (context, state) {
         return AnnotatedRegion<SystemUiOverlayStyle>(
             value: SystemUiOverlayStyle(
-              statusBarColor: theme.colorScheme.background,
-              systemNavigationBarColor: theme.colorScheme.background,
+              statusBarColor: theme.colorScheme.onPrimaryContainer,
+              systemNavigationBarColor: theme.colorScheme.onPrimaryContainer,
               statusBarIconBrightness: Brightness.dark,
               systemNavigationBarIconBrightness: Brightness.dark,
             ),

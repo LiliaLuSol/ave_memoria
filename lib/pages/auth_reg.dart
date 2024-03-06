@@ -83,9 +83,9 @@ class _AuthRegState extends State<AuthReg> {
                       backgroundColor: appTheme.white,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5)),
-                      side: BorderSide(width: 1, color: appTheme.gray80)),
+                      side: BorderSide(width: 1, color: appTheme.gray)),
                   onTap: () {
-                    // GoRouter.of(context).push(AppRoutes.authorization);
+                    GoRouter.of(context).push(AppRoutes.homepage);
                   },
                 ),
                 Spacer(),

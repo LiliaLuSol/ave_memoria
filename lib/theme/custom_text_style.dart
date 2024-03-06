@@ -6,6 +6,10 @@ class CustomTextStyles {
         color: theme.colorScheme.primary,
       );
 
+  static get extraBold32Text => theme.textTheme.headlineLarge!.copyWith(
+        color: theme.colorScheme.onPrimary,
+      );
+
   static get semiBold32Text => theme.textTheme.headlineLarge!.copyWith(
       color: theme.colorScheme.onPrimary, fontWeight: FontWeight.w600);
 
@@ -30,12 +34,22 @@ class CustomTextStyles {
       theme.textTheme.bodyMedium!.copyWith(color: theme.colorScheme.primary);
 
   static get regular16Text => theme.textTheme.bodyMedium!
-      .copyWith(color: theme.colorScheme.onPrimary,
-      fontSize: 16.fSize);
+      .copyWith(color: theme.colorScheme.onPrimary, fontSize: 16.fSize);
 
   static get regular16TextHint => theme.textTheme.bodyMedium!
-      .copyWith(color: appTheme.onPrimary50,
-      fontSize: 16.fSize);
+      .copyWith(color: appTheme.onPrimary50, fontSize: 16.fSize);
+
+  static get regular16Primary => theme.textTheme.bodyMedium!
+      .copyWith(color: theme.colorScheme.primary, fontSize: 16.fSize);
+
+  static get regular16White => theme.textTheme.bodyMedium!
+      .copyWith(color: appTheme.white, fontSize: 16.fSize);
+
+  static get semiBold14Primary => theme.textTheme.bodyMedium!
+      .copyWith(color: theme.colorScheme.primary, fontWeight: FontWeight.w600);
+
+  static get semiBold14Text => theme.textTheme.bodyMedium!.copyWith(
+      color: theme.colorScheme.onPrimary, fontWeight: FontWeight.w600);
 }
 
 extension on TextStyle {
