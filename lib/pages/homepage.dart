@@ -65,12 +65,7 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                 onPressed: () {},
               )
             ],
-          ),
-          // Padding(
-          //     padding: EdgeInsets.only(left: 16.h, right: 16.h),
-          //     child: Text("AveMemoria",
-          //         style: CustomTextStyles.extraBold32Primary)),
-          styleType: Style.bgFill,
+          ), styleType: Style.bgFill,
         ),
         body: Container(
           width: mediaQueryData.size.width,

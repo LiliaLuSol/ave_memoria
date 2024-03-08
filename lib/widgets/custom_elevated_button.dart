@@ -51,7 +51,9 @@ class CustomElevatedButton extends BaseButton {
         margin: margin,
         decoration: decoration,
         child: ElevatedButton(
-          style: buttonStyle,
+          style: buttonStyle ?? ElevatedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5))),
           onPressed: isDisabled ?? false ? null : onTap ?? () {},
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,

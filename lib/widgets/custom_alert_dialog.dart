@@ -24,7 +24,8 @@ class CustomAlertDialog extends StatelessWidget {
       ),
       title: Text(
         title ?? "",
-        style: CustomTextStyles.semiBold32Text,textAlign: TextAlign.center,
+        style: CustomTextStyles.semiBold32Text,
+        textAlign: TextAlign.center,
         ),
       content: Text(
         content ?? "",

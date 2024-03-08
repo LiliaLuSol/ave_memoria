@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:ave_memoria/blocs/Auth/bloc/authentication_bloc.dart';
 import 'package:ave_memoria/main.dart';
 import 'package:ave_memoria/utils/validator.dart';
@@ -20,13 +22,13 @@ class _RegistrationState extends State<Registration>
   late TextEditingController _emailcontroller;
   late TextEditingController _passcontroller;
   late TextEditingController _confirmpasscontroller;
-  final _formkey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
   late AnimationController _controller;
 
   bool isEmailValid = false;
   bool isPasswordValid = false;
   bool isConfirmPasswordValid = false;
-  bool _wantNewsInfoValue  = false;
+  bool _wantNewsInfoValue = false;
 
   @override
   void initState() {
@@ -93,7 +95,7 @@ class _RegistrationState extends State<Registration>
                     width: mediaQueryData.size.width,
                     height: mediaQueryData.size.height,
                     child: Form(
-                        key: _formkey,
+                        key: _formKey,
                         child: Container(
                             width: double.maxFinite,
                             padding: EdgeInsets.symmetric(
@@ -319,25 +321,63 @@ class _RegistrationState extends State<Registration>
                                           ? ElevatedButton.styleFrom(
                                               backgroundColor:
                                                   theme.colorScheme.primary,
-                                            )
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(5)))
                                           : ElevatedButton.styleFrom(
                                               backgroundColor: appTheme.gray,
-                                            ),
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          5))),
                                       onTap: isEmailValid &&
                                               isPasswordValid &&
                                               isConfirmPasswordValid
-                                          ? () {
-                                              BlocProvider.of<
-                                                          AuthenticationBloc>(
-                                                      context)
-                                                  .add(
-                                                EmailSignUpAuthEvent(
-                                                    _emailcontroller.text,
-                                                    _passcontroller.text),
-                                              );
-                                              addNewUser();
-                                              GoRouter.of(context)
-                                                  .push(AppRoutes.confirmemail);
+                                          ? () async {
+                                              if (_formKey.currentState!
+                                                  .validate()) {
+                                                try {
+                                                  BlocProvider.of<
+                                                              AuthenticationBloc>(
+                                                          context)
+                                                      .add(
+                                                    EmailSignUpAuthEvent(
+                                                        _emailcontroller.text,
+                                                        _passcontroller.text),
+                                                  );
+                                                  await AwesomeDialog(
+                                                    context: context,
+                                                    dialogType:
+                                                        DialogType.success,
+                                                    animType:
+                                                        AnimType.rightSlide,
+                                                    title: 'Почти всё!',
+                                                    desc:
+                                                        'Пожалуйста, не забудьте подтвердить Вашу почту для окончательного подтверждения регистрации',
+                                                  ).show();
+                                                  addNewUser();
+                                                  await GoRouter.of(context)
+                                                      .push(AppRoutes.homepage);
+                                                } catch (e) {
+                                                  AwesomeDialog(
+                                                          context: context,
+                                                          dialogType:
+                                                              DialogType.error,
+                                                          animType:
+                                                              AnimType.topSlide,
+                                                          title:
+                                                              "Упс! Что-то пошло не так...",
+                                                          titleTextStyle:
+                                                              CustomTextStyles
+                                                                  .semiBold32Text,
+                                                          desc:
+                                                              "Неудачная регистрация нового пользователя! Возможно уже есть пользователь с указанной почтой или есть другая проблема.",
+                                                          descTextStyle:
+                                                              CustomTextStyles
+                                                                  .regular16Text)
+                                                      .show();
+                                                }
+                                              }
                                             }
                                           : null,
                                     );

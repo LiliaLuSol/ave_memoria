@@ -1,4 +1,3 @@
-import 'package:ave_memoria/pages/confirm_email.dart';
 import 'package:flutter/material.dart';
 import 'package:ave_memoria/pages/authorization.dart';
 import 'package:ave_memoria/pages/base_screen.dart';
@@ -18,7 +17,6 @@ class AppRoutes {
   static const authreg = '/auth_reg';
   static const authorization = '/authorization';
   static const registration = '/regisrtration';
-  static const confirmemail = '/confirm_email';
   static const homepage = '/homepage';
 
   static final GoRouter _router = GoRouter(
@@ -52,10 +50,6 @@ class AppRoutes {
       GoRoute(
         path: registration,
         builder: (context, state) => const Registration(),
-      ),
-      GoRoute(
-        path: confirmemail,
-        builder: (context, state) => const ConfirmEmail(),
       ),
       GoRoute(
         path: homepage,

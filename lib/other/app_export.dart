@@ -23,4 +23,4 @@ export 'package:ave_memoria/widgets/app_bar/appbar_subtitle.dart';
 export 'package:connectivity_plus/connectivity_plus.dart';
 export 'package:go_router/go_router.dart';
 export 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
+export 'package:awesome_dialog/awesome_dialog.dart';

@@ -100,28 +100,24 @@ class _OnboardState extends State<Onboard> {
                 leading: Row(children: [
                   SizedBox(width: 20.h),
                   TextButton(
-                      onPressed: () => showDialog<String>(
+                      onPressed: () => AwesomeDialog(
                             context: context,
-                            builder: (BuildContext context) => CustomAlertDialog(
-                              title: "Пропустить",
-                              content:
-                                  "Вы уверены, что хотите пропустить раздел возможностей приложения?",
-                              actions: <Widget>[
-                                TextButton(
-                                  onPressed: () =>
-                                      Navigator.pop(context, "Нет"),
-                                  child: Text("Нет",
-                                      style: CustomTextStyles.regular16Primary),
-                                ),
-                                TextButton(
-                                  onPressed: () => GoRouter.of(context)
-                                      .push(AppRoutes.authreg),
-                                  child: Text("Да",
-                                      style: CustomTextStyles.regular16Primary),
-                                ),
-                              ],
-                            ),
-                          ),
+                            dialogType: DialogType.info,
+                            animType: AnimType.topSlide,
+                            title: "Пропустить",
+                            titleTextStyle: CustomTextStyles.semiBold32Text,
+                            desc:
+                                "Вы уверены, что хотите пропустить данный раздел?",
+                            descTextStyle: CustomTextStyles.regular16Text,
+                            btnCancelText: "Нет",
+                            btnCancelOnPress: () {
+
+                            },
+                            btnOkText: "Да",
+                            btnOkOnPress: () =>
+                                GoRouter.of(context).push(AppRoutes.authreg),
+                            buttonsTextStyle: CustomTextStyles.regular16White,
+                          ).show(),
                       child: Text(
                         "Пропустить",
                         style: CustomTextStyles.semiBold18TextGray,

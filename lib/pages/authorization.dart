@@ -188,12 +188,24 @@ class _AuthorizationState extends State<Authorization>
                                               );
                                             })
                                           ])),
+                                  SizedBox(height: 3.v),
+                                  Align(
+                                      alignment: Alignment.centerRight,
+                                      child: TextButton(
+                                          onPressed: () {},
+                                          child: Text(
+                                            "Забыли пароль?",
+                                            style: CustomTextStyles
+                                                .bodyMediumPrimary,
+                                            textAlign: TextAlign.right,
+                                          ))),
                                   Spacer(),
                                   BlocListener<AuthenticationBloc,
                                       AuthenticationState>(
                                     listener: (context, state) {
                                       if (state is AuthSuccessState) {
-                                        GoRouter.of(context).push(AppRoutes.homepage);
+                                        GoRouter.of(context)
+                                            .push(AppRoutes.homepage);
                                       } else if (state is AuthErrorState) {
                                         context.showsnackbar(
                                             title:
@@ -205,18 +217,20 @@ class _AuthorizationState extends State<Authorization>
                                       buttonTextStyle:
                                           CustomTextStyles.semiBold18TextWhite,
                                       margin: EdgeInsets.only(left: 2.h),
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(5)),
                                       buttonStyle: isEmailValid &&
                                               isPasswordValid
                                           ? ElevatedButton.styleFrom(
                                               backgroundColor:
                                                   theme.colorScheme.primary,
-                                            )
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(5)))
                                           : ElevatedButton.styleFrom(
                                               backgroundColor: appTheme.gray,
-                                            ),
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          5))),
                                       onTap: isEmailValid && isPasswordValid
                                           ? () {
                                               if (_formKey.currentState!

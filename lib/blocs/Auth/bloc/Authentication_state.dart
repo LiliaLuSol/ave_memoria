@@ -9,6 +9,7 @@ class AuthenticationState extends Equatable {
   final TextEditingController? emailController;
   final TextEditingController? inputfieldoneController;
   final AuthenticationModel? authenticationModelObj;
+  final bool isEmailVerified;
 
   AuthenticationState({
     this.isShowPassword = true,
@@ -18,6 +19,7 @@ class AuthenticationState extends Equatable {
     this.authenticationModelObj,
     this.wantNewsInfo = false,
     this.isSelectedSwitch = false,
+    this.isEmailVerified = false
   });
 
   AuthenticationState copyWith({
@@ -28,6 +30,7 @@ class AuthenticationState extends Equatable {
     AuthenticationModel? authorizationModelObj,
     bool? wantNewsInfo,
     bool? isSelectedSwitch,
+    bool? isEmailVerified
   }) {
 
     return AuthenticationState(
@@ -38,6 +41,7 @@ class AuthenticationState extends Equatable {
       inputfieldoneController: inputfieldoneController ?? this.inputfieldoneController,
       authenticationModelObj: authorizationModelObj ?? this.authenticationModelObj,
       isSelectedSwitch: isSelectedSwitch ?? this.isSelectedSwitch,
+      isEmailVerified: isEmailVerified ?? this.isEmailVerified,
     );
   }
 
@@ -50,6 +54,7 @@ class AuthenticationState extends Equatable {
     authenticationModelObj,
     wantNewsInfo,
     isSelectedSwitch,
+    isEmailVerified
   ];
 }
 class AuthenticationInitial extends AuthenticationState {

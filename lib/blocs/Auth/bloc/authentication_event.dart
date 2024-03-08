@@ -18,7 +18,7 @@ class EmailSignInAuthEvent extends AuthenticationEvent {
 }
 
 class EmailSignUpAuthEvent extends AuthenticationEvent {
-  final String email, password;
+  final String email, password ;
 
   const EmailSignUpAuthEvent(this.email, this.password);
 

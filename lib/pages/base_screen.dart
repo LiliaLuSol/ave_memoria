@@ -1,4 +1,5 @@
 import 'package:ave_memoria/pages/homepage.dart';
+import 'package:ave_memoria/pages/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:ave_memoria/other/app_export.dart';
 
@@ -13,6 +14,7 @@ class _BaseScreenState extends State<BaseScreen> {
   int _selectedIndex = 0;
   final List<Widget> _screens = const [
     Homepage(),
+    Profile()
   ];
 
   @override
