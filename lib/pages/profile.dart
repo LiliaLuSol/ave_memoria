@@ -72,7 +72,8 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
                     onPressed: () {},
                   )
                 ],
-              )),
+              ),
+              styleType: Style.bgFill),
           body: Container(
             width: mediaQueryData.size.width,
             height: mediaQueryData.size.height,
