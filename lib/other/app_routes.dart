@@ -1,3 +1,4 @@
+import 'package:ave_memoria/pages/support.dart';
 import 'package:flutter/material.dart';
 import 'package:ave_memoria/pages/authorization.dart';
 import 'package:ave_memoria/pages/base_screen.dart';
@@ -18,6 +19,7 @@ class AppRoutes {
   static const authorization = '/authorization';
   static const registration = '/regisrtration';
   static const homepage = '/homepage';
+  static const support = '/support';
 
   static final GoRouter _router = GoRouter(
     routes: <GoRoute>[
@@ -50,6 +52,10 @@ class AppRoutes {
       GoRoute(
         path: registration,
         builder: (context, state) => const Registration(),
+      ),
+      GoRoute(
+        path: support,
+        builder: (context, state) => const Support(),
       ),
       GoRoute(
         path: homepage,

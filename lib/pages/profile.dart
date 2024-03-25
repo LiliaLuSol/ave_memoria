@@ -14,6 +14,10 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> with TickerProviderStateMixin {
   final _emailcontroller = TextEditingController();
   final emailFocusNode = FocusNode();
+  final _namecontroller = TextEditingController();
+  final nameFocusNode = FocusNode();
+
+  bool isNameValid = false;
 
   String? getEmail() {
     final currentUser = supabase.auth.currentUser;
@@ -101,6 +105,33 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
+                                            "Имя воплощения",
+                                            style: theme.textTheme.bodyMedium,
+                                          ),
+                                          SizedBox(height: 4.v),
+                                          CustomTextFormField(
+                                            controller: _namecontroller,
+                                            focusNode: nameFocusNode,
+                                            autofocus: false,
+                                            hintText: "Игрок",
+                                            textInputType:
+                                            TextInputType.text,
+                                            validator: (value) {
+                                              return  value!.length >= 1 &&
+                                                  value!.length <= 16
+                                                  ? "Длина имени от 1 до 16 символов"
+                                                  : null;
+                                            },
+                                            onChanged: (value) {
+                                              setState(() {
+                                                isNameValid =
+                                                    value.length >= 1 &&
+                                                        value.length <= 16;
+                                              });
+                                            },
+                                          ),
+                                          SizedBox(height: 16.v),
+                                          Text(
                                             "Email",
                                             style: theme.textTheme.bodyMedium,
                                           ),
@@ -109,8 +140,6 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
                                             controller: _emailcontroller,
                                             focusNode: emailFocusNode,
                                             autofocus: false,
-                                            textStyle: const TextStyle(
-                                                color: Colors.black),
                                             hintText: getEmail(),
                                             textInputType:
                                                 TextInputType.emailAddress,
@@ -120,19 +149,19 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
                                           SizedBox(height: 16.v),
                                           GestureDetector(
                                               onTap: () {
-                                                // GoRouter.of(context)
-                                                //     .push(AppRoutes.support);
+                                                GoRouter.of(context)
+                                                    .push(AppRoutes.support);
                                               },
                                               child: Container(
                                                   padding: EdgeInsets.symmetric(
                                                       horizontal: 13.h,
                                                       vertical: 15.v),
-                                                  // decoration: AppDecoration
-                                                  //     .fillOnPrimary
-                                                  //     .copyWith(
-                                                  //         borderRadius:
-                                                  //             BorderRadiusStyle
-                                                  //                 .roundedBorder15),
+                                                  decoration: AppDecoration
+                                                      .outlineGray
+                                                      .copyWith(
+                                                          borderRadius:
+                                                              BorderRadiusStyle
+                                                                  .circleBorder15),
                                                   child: Row(
                                                       mainAxisAlignment:
                                                           MainAxisAlignment
@@ -156,16 +185,52 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
                                                                         5.v))
                                                       ]))),
                                           SizedBox(height: 16.v),
+                                          GestureDetector(
+                                              onTap: () {
+                                              },
+                                              child: Container(
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 13.h,
+                                                      vertical: 15.v),
+                                                  decoration: AppDecoration
+                                                      .outlineGray
+                                                      .copyWith(
+                                                      borderRadius:
+                                                      BorderRadiusStyle
+                                                          .circleBorder15),
+                                                  child: Row(
+                                                      mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                      crossAxisAlignment:
+                                                      CrossAxisAlignment
+                                                          .start,
+                                                      children: [
+                                                        Text("Написать отзыв",
+                                                            style: CustomTextStyles
+                                                                .regular16Text),
+                                                        CustomImageView(
+                                                            svgPath: ImageConstant
+                                                                .imgArrowright,
+                                                            height: 15.v,
+                                                            width: 9.h,
+                                                            margin:
+                                                            EdgeInsets.only(
+                                                                top: 2.v,
+                                                                bottom:
+                                                                5.v))
+                                                      ]))),
+                                          SizedBox(height: 16.v), Row(children: [
                                           Container(
                                               padding: EdgeInsets.symmetric(
                                                   horizontal: 13.h,
                                                   vertical: 15.v),
-                                              // decoration: AppDecoration
-                                              //     .fillOnPrimary
-                                              //     .copyWith(
-                                              //         borderRadius:
-                                              //             BorderRadiusStyle
-                                              //                 .roundedBorder15),
+                                              decoration: AppDecoration
+                                                  .outlineGray
+                                                  .copyWith(
+                                                  borderRadius:
+                                                  BorderRadiusStyle
+                                                      .circleBorder15),
                                               child: Row(
                                                   mainAxisAlignment:
                                                       MainAxisAlignment
@@ -200,11 +265,59 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
                                                               });
                                                         })
                                                   ])),
-                                          SizedBox(height: 290.v),
+                                            Container(
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 13.h,
+                                                    vertical: 15.v),
+                                                decoration: AppDecoration
+                                                    .outlineGray
+                                                    .copyWith(
+                                                    borderRadius:
+                                                    BorderRadiusStyle
+                                                        .circleBorder15),
+                                                child: Row(
+                                                    mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                    children: [
+                                                      Text("Уведомления",
+                                                          style: CustomTextStyles
+                                                              .regular16Text),
+                                                      BlocSelector<
+                                                          AuthenticationBloc,
+                                                          AuthenticationState,
+                                                          bool?>(
+                                                          selector: (state) => state
+                                                              .isSelectedSwitch,
+                                                          builder: (context,
+                                                              isSelectedSwitch) {
+                                                            return CustomSwitch(
+                                                                height: 15.v,
+                                                                margin: EdgeInsets
+                                                                    .only(
+                                                                    top: 2.v),
+                                                                value:
+                                                                isSelectedSwitch,
+                                                                onChange:
+                                                                    (value) {
+                                                                  context
+                                                                      .read<
+                                                                      AuthenticationBloc>()
+                                                                      .add(ChangeSwitchEvent(
+                                                                      value:
+                                                                      value));
+                                                                });
+                                                          })
+                                                    ])),
+                                          ]),
+                                          SizedBox(height: 200.v),
                                           CustomElevatedButton(
                                             text: "Выход из аккаунта",
-                                            // buttonStyle:
-                                            //     CustomButtonStyles.fillGray,
+                                            buttonTextStyle: CustomTextStyles.semiBold18TextWhite,
+                                            buttonStyle: ElevatedButton.styleFrom(
+                                                backgroundColor: appTheme.gray,
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.circular(5))),
                                             onTap: () {
                                               context
                                                   .read<AuthenticationBloc>()
