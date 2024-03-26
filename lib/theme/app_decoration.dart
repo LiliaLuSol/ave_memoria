@@ -14,6 +14,14 @@ class AppDecoration {
         ),
       );
 
+  static BoxDecoration get outlineLightGray => BoxDecoration(
+    color: theme.colorScheme.onPrimaryContainer,
+    border: Border.all(
+      color: appTheme.lightGray,
+      width: 1.h,
+    ),
+  );
+
 }
 
 class BorderRadiusStyle {

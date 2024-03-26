@@ -18,6 +18,7 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
   final nameFocusNode = FocusNode();
 
   bool isNameValid = false;
+  bool isSelectedSwitch = false;
 
   String? getEmail() {
     final currentUser = supabase.auth.currentUser;
@@ -114,11 +115,10 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
                                             focusNode: nameFocusNode,
                                             autofocus: false,
                                             hintText: "Игрок",
-                                            textInputType:
-                                            TextInputType.text,
+                                            textInputType: TextInputType.text,
                                             validator: (value) {
-                                              return  value!.length >= 1 &&
-                                                  value!.length <= 16
+                                              return value!.length >= 1 &&
+                                                      value!.length <= 16
                                                   ? "Длина имени от 1 до 16 символов"
                                                   : null;
                                             },
@@ -135,7 +135,7 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
                                             "Email",
                                             style: theme.textTheme.bodyMedium,
                                           ),
-                                          SizedBox(height: 5.v),
+                                          SizedBox(height: 4.v),
                                           CustomTextFormField(
                                             controller: _emailcontroller,
                                             focusNode: emailFocusNode,
@@ -186,8 +186,7 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
                                                       ]))),
                                           SizedBox(height: 16.v),
                                           GestureDetector(
-                                              onTap: () {
-                                              },
+                                              onTap: () {},
                                               child: Container(
                                                   padding: EdgeInsets.symmetric(
                                                       horizontal: 13.h,
@@ -195,16 +194,16 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
                                                   decoration: AppDecoration
                                                       .outlineGray
                                                       .copyWith(
-                                                      borderRadius:
-                                                      BorderRadiusStyle
-                                                          .circleBorder15),
+                                                          borderRadius:
+                                                              BorderRadiusStyle
+                                                                  .circleBorder15),
                                                   child: Row(
                                                       mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
                                                       crossAxisAlignment:
-                                                      CrossAxisAlignment
-                                                          .start,
+                                                          CrossAxisAlignment
+                                                              .start,
                                                       children: [
                                                         Text("Написать отзыв",
                                                             style: CustomTextStyles
@@ -215,56 +214,13 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
                                                             height: 15.v,
                                                             width: 9.h,
                                                             margin:
-                                                            EdgeInsets.only(
-                                                                top: 2.v,
-                                                                bottom:
-                                                                5.v))
+                                                                EdgeInsets.only(
+                                                                    top: 2.v,
+                                                                    bottom:
+                                                                        5.v))
                                                       ]))),
-                                          SizedBox(height: 16.v), Row(children: [
-                                          Container(
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 13.h,
-                                                  vertical: 15.v),
-                                              decoration: AppDecoration
-                                                  .outlineGray
-                                                  .copyWith(
-                                                  borderRadius:
-                                                  BorderRadiusStyle
-                                                      .circleBorder15),
-                                              child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Text("Уведомления",
-                                                        style: CustomTextStyles
-                                                            .regular16Text),
-                                                    BlocSelector<
-                                                            AuthenticationBloc,
-                                                            AuthenticationState,
-                                                            bool?>(
-                                                        selector: (state) => state
-                                                            .isSelectedSwitch,
-                                                        builder: (context,
-                                                            isSelectedSwitch) {
-                                                          return CustomSwitch(
-                                                              height: 15.v,
-                                                              margin: EdgeInsets
-                                                                  .only(
-                                                                      top: 2.v),
-                                                              value:
-                                                                  isSelectedSwitch,
-                                                              onChange:
-                                                                  (value) {
-                                                                context
-                                                                    .read<
-                                                                        AuthenticationBloc>()
-                                                                    .add(ChangeSwitchEvent(
-                                                                        value:
-                                                                            value));
-                                                              });
-                                                        })
-                                                  ])),
+                                          SizedBox(height: 16.v),
+                                          Row(children: [
                                             Container(
                                                 padding: EdgeInsets.symmetric(
                                                     horizontal: 13.h,
@@ -272,52 +228,88 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
                                                 decoration: AppDecoration
                                                     .outlineGray
                                                     .copyWith(
-                                                    borderRadius:
-                                                    BorderRadiusStyle
-                                                        .circleBorder15),
+                                                        borderRadius:
+                                                            BorderRadiusStyle
+                                                                .circleBorder15),
                                                 child: Row(
                                                     mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
                                                     children: [
                                                       Text("Уведомления",
                                                           style: CustomTextStyles
                                                               .regular16Text),
-                                                      BlocSelector<
-                                                          AuthenticationBloc,
-                                                          AuthenticationState,
-                                                          bool?>(
-                                                          selector: (state) => state
-                                                              .isSelectedSwitch,
-                                                          builder: (context,
-                                                              isSelectedSwitch) {
-                                                            return CustomSwitch(
-                                                                height: 15.v,
-                                                                margin: EdgeInsets
-                                                                    .only(
-                                                                    top: 2.v),
-                                                                value:
-                                                                isSelectedSwitch,
-                                                                onChange:
-                                                                    (value) {
-                                                                  context
-                                                                      .read<
-                                                                      AuthenticationBloc>()
-                                                                      .add(ChangeSwitchEvent(
-                                                                      value:
-                                                                      value));
-                                                                });
+                                                      SizedBox(width: 22.h),
+                                                      CustomSwitch(
+                                                          height: 15.v,
+                                                          margin:
+                                                              EdgeInsets.only(
+                                                                  top: 2.v),
+                                                          value:
+                                                              isSelectedSwitch,
+                                                          onChange:
+                                                              (bool value) {
+                                                            setState(() {
+                                                              isSelectedSwitch =
+                                                                  value;
+                                                            });
                                                           })
+                                                    ])),
+                                            Spacer(),
+                                            Container(
+                                                padding: EdgeInsets.fromLTRB(
+                                                    13.h, 1.v, 0.h, 1.v),
+                                                decoration: isSelectedSwitch
+                                                    ? AppDecoration.outlineGray
+                                                        .copyWith(
+                                                            borderRadius:
+                                                                BorderRadiusStyle
+                                                                    .circleBorder15)
+                                                    : AppDecoration
+                                                        .outlineLightGray
+                                                        .copyWith(
+                                                            borderRadius:
+                                                                BorderRadiusStyle
+                                                                    .circleBorder15),
+                                                child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      Text("12:00",
+                                                          style: isSelectedSwitch
+                                                              ? CustomTextStyles
+                                                                  .regular16Text
+                                                              : CustomTextStyles
+                                                                  .regular16LightGray),
+                                                      IconButton(
+                                                        icon: FaIcon(
+                                                          FontAwesomeIcons.gear,
+                                                          size: 15.v,
+                                                          color: isSelectedSwitch
+                                                              ? appTheme.gray
+                                                              : appTheme
+                                                                  .lightGray,
+                                                        ),
+                                                        onPressed: () {},
+                                                      )
                                                     ])),
                                           ]),
                                           SizedBox(height: 200.v),
                                           CustomElevatedButton(
                                             text: "Выход из аккаунта",
-                                            buttonTextStyle: CustomTextStyles.semiBold18TextWhite,
-                                            buttonStyle: ElevatedButton.styleFrom(
-                                                backgroundColor: appTheme.gray,
-                                                shape: RoundedRectangleBorder(
-                                                    borderRadius: BorderRadius.circular(5))),
+                                            buttonTextStyle: CustomTextStyles
+                                                .semiBold18TextWhite,
+                                            buttonStyle:
+                                                ElevatedButton.styleFrom(
+                                                    backgroundColor:
+                                                        appTheme.gray,
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        5))),
                                             onTap: () {
                                               context
                                                   .read<AuthenticationBloc>()

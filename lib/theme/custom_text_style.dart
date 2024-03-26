@@ -45,6 +45,9 @@ class CustomTextStyles {
   static get regular16White => theme.textTheme.bodyMedium!
       .copyWith(color: appTheme.white, fontSize: 16.fSize);
 
+  static get regular16LightGray => theme.textTheme.bodyMedium!
+      .copyWith(color: appTheme.lightGray, fontSize: 16.fSize);
+
   static get semiBold14Primary => theme.textTheme.bodyMedium!
       .copyWith(color: theme.colorScheme.primary, fontWeight: FontWeight.w600);
 

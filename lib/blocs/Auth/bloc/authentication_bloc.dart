@@ -67,10 +67,5 @@ class AuthenticationBloc
     on<ChangeCheckBoxEvent>((event, emit){
       emit(state.copyWith(wantNewsInfo: event.value));
     });
-
-    on<ChangeSwitchEvent>((event, emit){
-      emit(state.copyWith(isSelectedSwitch: event.value));
-    }
-    );
     }
 }
