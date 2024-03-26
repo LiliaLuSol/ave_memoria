@@ -62,25 +62,26 @@ class _StoryState extends State<Story> with TickerProviderStateMixin {
               ),
               styleType: Style.bgFill),
           body: Container(
-            width: mediaQueryData.size.width,
-            height: mediaQueryData.size.height,
-            child: SizedBox(
-              width: double.maxFinite,
-              child: Column(
-                children: [
-                  SizedBox(height: 75.v),
-                  Divider(height: 1, color: appTheme.gray),
-                  Expanded(
-                      child: Padding(
-                          padding: EdgeInsets.only(left: 16.h, right: 16.h),
-                          child: SingleChildScrollView(
-                              child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [])))),
-                ],
-              ),
-            ),
-          ),
+              width: mediaQueryData.size.width,
+              height: mediaQueryData.size.height,
+              child: SizedBox(
+                  width: double.maxFinite,
+                  child: Column(children: [
+                    SizedBox(
+                      height: 75.v,
+                    ),
+                    Divider(height: 1, color: appTheme.gray),
+                    Expanded(
+                        child: Padding(
+                            padding: EdgeInsets.only(left: 16.h, right: 16.h),
+                            child: SingleChildScrollView(
+                                child: Column(
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.start,
+                                    children: [
+                                      
+                                    ]))))
+                  ])))
         ),
       ),
       //  )
