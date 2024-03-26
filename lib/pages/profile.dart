@@ -131,8 +131,8 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
                                             hintText: "Игрок",
                                             textInputType: TextInputType.text,
                                             validator: (value) {
-                                              return value!.length >= 1 &&
-                                                      value!.length <= 16
+                                              return value!.length < 1 &&
+                                                      value!.length > 16
                                                   ? "Длина имени от 1 до 16 символов"
                                                   : null;
                                             },
