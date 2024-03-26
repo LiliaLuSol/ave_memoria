@@ -20,6 +20,8 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
   bool isNameValid = false;
   bool isSelectedSwitch = false;
 
+  TimeOfDay selectedTime = TimeOfDay.now();
+
   String? getEmail() {
     final currentUser = supabase.auth.currentUser;
     if (currentUser != null) {
@@ -27,6 +29,18 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
       return email;
     } else {
       return "Ваш email скоро здесь появится...";
+    }
+  }
+
+  Future<void> _selectTime(BuildContext context) async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: selectedTime,
+    );
+    if (picked != null && picked != selectedTime) {
+      setState(() {
+        selectedTime = picked;
+      });
     }
   }
 
@@ -276,7 +290,8 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
                                                         MainAxisAlignment
                                                             .spaceBetween,
                                                     children: [
-                                                      Text("12:00",
+                                                      Text(
+                                                          "${selectedTime.hour}:${selectedTime.minute.toString().padLeft(2, '0')}",
                                                           style: isSelectedSwitch
                                                               ? CustomTextStyles
                                                                   .regular16Text
@@ -291,7 +306,12 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
                                                               : appTheme
                                                                   .lightGray,
                                                         ),
-                                                        onPressed: () {},
+                                                        onPressed: () {
+                                                          isSelectedSwitch
+                                                              ? _selectTime(
+                                                                  context)
+                                                              : null;
+                                                        },
                                                       )
                                                     ])),
                                           ]),
