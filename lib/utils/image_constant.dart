@@ -16,4 +16,17 @@ class ImageConstant {
 
   static String imgUilvk = '$imagePath/img_uil_vk.svg';
 
+  //games
+  static String imgHidden = '$imagePath/hidden.png';
+
+  static String imgCards_1_jug = '$imagePath/1_jug.png';
+
+  static String imgCards_2_jug = '$imagePath/2_jug.png';
+
+  static String imgCards_3_jug = '$imagePath/3_jug.png';
+
+  static String imgCards_4_jug = '$imagePath/4_jug.png';
+
+  static String imgCards_5_jug = '$imagePath/5_jug.png';
+
 }

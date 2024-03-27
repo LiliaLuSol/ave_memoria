@@ -9,6 +9,7 @@ import 'package:ave_memoria/pages/registration.dart';
 import 'package:ave_memoria/main.dart';
 import 'package:ave_memoria/pages/screen_layout.dart';
 import 'package:go_router/go_router.dart';
+import '../games/cards_game/gaming_cards.dart';
 import 'app_export.dart';
 
 class AppRoutes {
@@ -20,6 +21,7 @@ class AppRoutes {
   static const registration = '/regisrtration';
   static const homepage = '/homepage';
   static const support = '/support';
+  static const game_cards = '/gaming_cards';
 
   static final GoRouter _router = GoRouter(
     routes: <GoRoute>[
@@ -60,6 +62,10 @@ class AppRoutes {
       GoRoute(
         path: homepage,
         builder: (context, state) => const BaseScreen(),
+      ),
+      GoRoute(
+        path: game_cards,
+        builder: (context, state) => const CardsGame(),
       ),
      ],
     initialLocation: root,

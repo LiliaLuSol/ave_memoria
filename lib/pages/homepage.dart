@@ -80,7 +80,7 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                       Divider(height: 1, color: appTheme.gray),
                       Expanded(
                           child: Padding(
-                              padding: EdgeInsets.only(left: 16.h, right: 16.h),
+                              padding: EdgeInsets.symmetric(horizontal: 16.h),
                               child: SingleChildScrollView(
                                   child: Column(
                                       crossAxisAlignment:
@@ -97,7 +97,9 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                                               FontAwesomeIcons.circleQuestion,
                                               size: 25.h,
                                               color: theme.colorScheme.primary),
-                                          onPressed: () {},
+                                          onPressed: () {
+                                            null;
+                                          },
                                         )
                                       ],
                                     ),
@@ -133,6 +135,23 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                                         ),
                                       ],
                                     ),
+                                    SizedBox(height: 16.v),
+                                    GestureDetector(
+                                        child: Container(
+                                            width: 353.h,
+                                            height: 167.v,
+                                            decoration: BoxDecoration(
+                                              color: Colors.brown,
+                                              // image: DecorationImage(
+                                              //     image: AssetImage(
+                                              //         "assets/background_button.png"),
+                                              //     fit: BoxFit.cover
+                                              // ),
+                                            )),
+                                        onTap: () {
+                                          GoRouter.of(context)
+                                              .push(AppRoutes.game_cards);
+                                        }),
                                     SizedBox(height: 16.v),
                                     Container(
                                       color: appTheme.lightGray,

@@ -53,6 +53,14 @@ class CustomTextStyles {
 
   static get semiBold14Text => theme.textTheme.bodyMedium!.copyWith(
       color: theme.colorScheme.onPrimary, fontWeight: FontWeight.w600);
+
+  static get regular24Text => theme.textTheme.bodyMedium!
+      .copyWith(color: theme.colorScheme.onPrimary, fontSize: 24.fSize);
+
+  static get light20Text => theme.textTheme.bodyMedium!.copyWith(
+      color: theme.colorScheme.onPrimary,
+      fontSize: 20.fSize,
+      fontWeight: FontWeight.w300);
 }
 
 extension on TextStyle {
