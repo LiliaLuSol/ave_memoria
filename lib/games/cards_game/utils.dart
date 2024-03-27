@@ -19,6 +19,7 @@ class Game {
    ImageConstant.imgCards_5_jug,
   ];
   final int cardCount = 10;
+  List<Map<int, String>> matchCheck = [];
   
   void initGame() {
     gameColors = List.generate(cardCount, (index) => hiddenCard);
