@@ -16,6 +16,7 @@ export 'package:ave_memoria/widgets/custom_icon_button.dart';
 export 'package:ave_memoria/widgets/custom_elevated_button.dart';
 export 'package:ave_memoria/widgets/custom_checkbox_button.dart';
 export 'package:ave_memoria/widgets/custom_alert_dialog.dart';
+export 'package:ave_memoria/widgets/day_score.dart';
 export 'package:ave_memoria/widgets/app_bar/custom_app_bar.dart';
 export 'package:ave_memoria/widgets/app_bar/appbar_iconbutton.dart';
 export 'package:ave_memoria/widgets/app_bar/appbar_iconbutton_1.dart';

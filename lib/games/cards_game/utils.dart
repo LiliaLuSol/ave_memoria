@@ -20,7 +20,7 @@ class Game {
   ];
   final int cardCount = 10;
   List<Map<int, String>> matchCheck = [];
-  
+
   void initGame() {
     gameColors = List.generate(cardCount, (index) => hiddenCard);
     gameImg = List.generate(cardCount, (index) => hiddenCardpath);
