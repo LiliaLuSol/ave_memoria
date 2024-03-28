@@ -12,8 +12,6 @@ class GameRules extends StatefulWidget {
 class _GameRulesState extends State<GameRules> {
   @override
   Widget build(BuildContext context) {
-    mediaQueryData = MediaQuery.of(context);
-    bool isVolume = true;
     return SafeArea(
         child: Scaffold(
             backgroundColor: appTheme.black.withOpacity(0.2),
