@@ -232,7 +232,7 @@ class _AuthorizationState extends State<Authorization>
                                                       BorderRadius.circular(
                                                           5))),
                                       onTap: isEmailValid && isPasswordValid
-                                          ? () {
+                                          ? () async {
                                               if (_formKey.currentState!
                                                   .validate()) {
                                                 BlocProvider.of<
@@ -242,7 +242,9 @@ class _AuthorizationState extends State<Authorization>
                                                   _emailcontroller.text,
                                                   _passcontroller.text,
                                                 ));
-                                              }
+                                              };
+                                              await GoRouter.of(context)
+                                                  .push(AppRoutes.homepage);
                                             }
                                           : null,
                                     ),
