@@ -1,3 +1,4 @@
+import 'package:ave_memoria/widgets/pause_menu.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ave_memoria/other/app_export.dart';
@@ -60,7 +61,17 @@ class _CardsGameState extends State<CardsGame> {
                                   icon: FaIcon(FontAwesomeIcons.circlePause,
                                       size: 25.h,
                                       color: theme.colorScheme.primary),
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        PageRouteBuilder(
+                                            pageBuilder: (_, __, ___) => const PauseMenu(),
+                                            opaque: false,
+                                        fullscreenDialog: true));
+                                    // game.pauseEngine();
+                                    // game.overlays.add(PauseMenu.id);
+                                    // game.overlays.remove(PauseButton.id);
+                                  },
                                 )
                               ],
                             ),
