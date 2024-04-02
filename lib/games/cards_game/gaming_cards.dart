@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ave_memoria/other/app_export.dart';
 import 'utils.dart';
-import 'card.dart';
+import '../../widgets/info_card.dart';
 
 class CardsGame extends StatefulWidget {
   const CardsGame({super.key});

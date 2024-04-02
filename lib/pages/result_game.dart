@@ -13,6 +13,9 @@ class _ResultGameState extends State<ResultGame> {
   @override
   Widget build(BuildContext context) {
     mediaQueryData = MediaQuery.of(context);
+    int tries = 0;
+    int score = 0;
+    int time = 0;
     return SafeArea(
         child: Scaffold(
             backgroundColor: appTheme.black.withOpacity(0.2),
@@ -40,20 +43,11 @@ class _ResultGameState extends State<ResultGame> {
                           ]),
                           SizedBox(height: 45.v),
                           Row(children: [
-                            Container(
-                                width: 74,
-                                child: Text("Попытки 25",
-                                    style: CustomTextStyles.light20Text)),
+                            info_card("Попытки", "$tries"),
                             Spacer(),
-                            Container(
-                                width: 74,
-                                child: Text("Очки 420",
-                                    style: CustomTextStyles.light20Text)),
+                            info_card("Очки", "$score"),
                             Spacer(),
-                            Container(
-                                width: 74,
-                                child: Text("Попытки 25",
-                                    style: CustomTextStyles.light20Text))
+                            info_card("Время", "$time"),
                           ]),
                           SizedBox(height: 50.v),
                           CustomElevatedButton(

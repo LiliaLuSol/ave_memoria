@@ -6,7 +6,6 @@ import 'package:flutter/painting.dart';
 Widget info_card(String title, String info) {
   return Expanded(
     child: Container(
-      //margin: EdgeInsets.all(26.0),
       padding: EdgeInsets.symmetric(vertical: 8.v, horizontal: 26.h),
       child: Column(
         children: [
