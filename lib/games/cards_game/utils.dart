@@ -12,13 +12,15 @@ class Game {
     ImageConstant.imgCards_3_jug,
     ImageConstant.imgCards_4_jug,
     ImageConstant.imgCards_5_jug,
+    ImageConstant.imgCards_6_jug,
     ImageConstant.imgCards_1_jug,
     ImageConstant.imgCards_2_jug,
     ImageConstant.imgCards_3_jug,
     ImageConstant.imgCards_4_jug,
-   ImageConstant.imgCards_5_jug,
+    ImageConstant.imgCards_5_jug,
+    ImageConstant.imgCards_6_jug,
   ];
-  final int cardCount = 10;
+  final int cardCount = 12;
   List<Map<int, String>> matchCheck = [];
 
   void initGame() {

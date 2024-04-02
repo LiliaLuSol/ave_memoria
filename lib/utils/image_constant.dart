@@ -29,4 +29,6 @@ class ImageConstant {
 
   static String imgCards_5_jug = '$imagePath/5_jug.png';
 
+  static String imgCards_6_jug = '$imagePath/6_jug.png';
+
 }
