@@ -1,4 +1,4 @@
-import 'package:ave_memoria/widgets/pause_menu.dart';
+import 'package:ave_memoria/pages/pause_menu.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ave_memoria/other/app_export.dart';
