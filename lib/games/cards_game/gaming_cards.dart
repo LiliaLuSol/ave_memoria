@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:ave_memoria/pages/pause_menu.dart';
+import 'package:ave_memoria/pages/game_rules.dart';
 import 'package:ave_memoria/pages/result_game.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -99,148 +100,147 @@ class _CardsGameState extends State<CardsGame> {
 
     return _isFinished
         ? ResultGame(
-      // duration: gameDuration,
-    )
+            // duration: gameDuration,
+            )
         : SafeArea(
-      child: Scaffold(
-        body: Container(
-          width: mediaQueryData.size.width,
-          height: mediaQueryData.size.height,
-          child: Column(
-            children: [
-              Container(
-                  color: theme.colorScheme.onPrimaryContainer,
-                  child: Column(children: [
-                    SizedBox(
-                      height: 22.v,
-                    ),
-                    Row(
-                      children: [
-                        SizedBox(width: 49.h),
-                        Spacer(),
-                        Text("Легион памяти",
-                            style: CustomTextStyles.regular24Text),
-                        Spacer(),
-                        IconButton(
-                          icon: FaIcon(FontAwesomeIcons.circlePause,
-                              size: 25.h,
-                              color: theme.colorScheme.primary),
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                PageRouteBuilder(
-                                    pageBuilder: (_, __, ___) =>
-                                    const PauseMenu(),
-                                    opaque: false,
-                                    fullscreenDialog: true));
-                          },
-                        ),
-                        SizedBox(width: 16.h),
-                      ],
-                    ),
-                    SizedBox(width: 22.v),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        info_card("Попытки", "$tries"),
-                        info_card("Очки", "$score"),
-                        info_card("Время", time < 0 ? "0" : "$time"),
-                      ],
-                    ),
-                    SizedBox(width: 22.v),
-                    Divider(height: 1, color: appTheme.gray)
-                  ])),
-              Spacer(),
-              GridView.builder(
-                padding: const EdgeInsets.all(8),
-                shrinkWrap: true,
-                physics: const BouncingScrollPhysics(),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  crossAxisSpacing: 16.h,
-                  mainAxisSpacing: 16.h,
-                ),
-                itemBuilder: (context, index) =>
-                _start
-                    ? FlipCard(
-                    key: _cardStateKeys[index],
-                    onFlip: () {
-                      if (!_flip) {
-                        _flip = true;
-                        _previousIndex = index;
-                      } else {
-                        _flip = false;
-                        if (_previousIndex != index) {
-                          if (_data[_previousIndex] != _data[index]) {
-                            _wait = true;
-
-                            Future.delayed(
-                                const Duration(milliseconds: 1500),
-                                    () {
-                                  _cardStateKeys[_previousIndex]
-                                      .currentState!
-                                      .toggleCard();
+            child: Scaffold(
+              body: Container(
+                width: mediaQueryData.size.width,
+                height: mediaQueryData.size.height,
+                child: Column(
+                  children: [
+                    Container(
+                        color: theme.colorScheme.onPrimaryContainer,
+                        child: Column(children: [
+                          SizedBox(
+                            height: 22.v,
+                          ),
+                          Row(
+                            children: [
+                              SizedBox(width: 49.h),
+                              Spacer(),
+                              Text("Легион памяти",
+                                  style: CustomTextStyles.regular24Text),
+                              Spacer(),
+                              IconButton(
+                                icon: FaIcon(FontAwesomeIcons.circlePause,
+                                    size: 25.h,
+                                    color: theme.colorScheme.primary),
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      PageRouteBuilder(
+                                          pageBuilder: (_, __, ___) =>
+                                              const PauseMenu(),
+                                          opaque: false,
+                                          fullscreenDialog: true));
+                                },
+                              ),
+                              SizedBox(width: 16.h),
+                            ],
+                          ),
+                          SizedBox(width: 22.v),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              info_card("Попытки", "$tries"),
+                              info_card("Очки", "$score"),
+                              info_card("Время", time < 0 ? "0" : "$time"),
+                            ],
+                          ),
+                          SizedBox(width: 22.v),
+                          Divider(height: 1, color: appTheme.gray)
+                        ])),
+                    Spacer(),
+                    GridView.builder(
+                      padding: const EdgeInsets.all(8),
+                      shrinkWrap: true,
+                      physics: const BouncingScrollPhysics(),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        crossAxisSpacing: 16.h,
+                        mainAxisSpacing: 16.h,
+                      ),
+                      itemBuilder: (context, index) => _start
+                          ? FlipCard(
+                              key: _cardStateKeys[index],
+                              onFlip: () {
+                                if (!_flip) {
+                                  _flip = true;
                                   _previousIndex = index;
-                                  _cardStateKeys[_previousIndex]
-                                      .currentState!
-                                      .toggleCard();
+                                } else {
+                                  _flip = false;
+                                  if (_previousIndex != index) {
+                                    if (_data[_previousIndex] != _data[index]) {
+                                      _wait = true;
 
-                                  Future.delayed(
-                                      const Duration(milliseconds: 160),
+                                      Future.delayed(
+                                          const Duration(milliseconds: 1500),
                                           () {
-                                        setState(() {
-                                          tries++;
-                                          if (tries > 6 && score > 0) {
-                                            score -= 25;
-                                          }
-                                          _wait = false;
+                                        _cardStateKeys[_previousIndex]
+                                            .currentState!
+                                            .toggleCard();
+                                        _previousIndex = index;
+                                        _cardStateKeys[_previousIndex]
+                                            .currentState!
+                                            .toggleCard();
+
+                                        Future.delayed(
+                                            const Duration(milliseconds: 160),
+                                            () {
+                                          setState(() {
+                                            tries++;
+                                            if (tries > 6 && score > 0) {
+                                              score -= 25;
+                                            }
+                                            _wait = false;
+                                          });
                                         });
                                       });
-                                });
-                          } else {
-                            _cardFlips[_previousIndex] = false;
-                            _cardFlips[index] = false;
-                            setState(() {
-                              score += 100;
-                              tries++;
-                            });
-                            debugPrint("$_cardFlips");
-                            if (_cardFlips.every((t) => t == false)) {
-                              debugPrint("finish");
-                              Future.delayed(
-                                  const Duration(milliseconds: 160),
-                                      () {
-                                    setState(() {
-                                      _isFinished = true;
-                                      _start = false;
-                                    });
-                                    _timeTimer.cancel();
-                                  });
-                            }
-                          }
-                        }
-                      }
-                    },
-                    flipOnTouch: _wait ? false : _cardFlips[index],
-                    direction: FlipDirection.HORIZONTAL,
-                    front: Container(
-                        padding: EdgeInsets.all(5.h),
-                        decoration: BoxDecoration(
-                          color: Color(0xFF83B0C8),
-                          borderRadius: BorderRadius.circular(8.h),
-                        ),
-                        child: Image.asset(hiddenCardpath,
-                            fit: BoxFit.cover)),
-                    back: getItem(index))
-                    : getItem(index),
-                itemCount: _data.length,
+                                    } else {
+                                      _cardFlips[_previousIndex] = false;
+                                      _cardFlips[index] = false;
+                                      setState(() {
+                                        score += 100;
+                                        tries++;
+                                      });
+                                      debugPrint("$_cardFlips");
+                                      if (_cardFlips.every((t) => t == false)) {
+                                        debugPrint("finish");
+                                        Future.delayed(
+                                            const Duration(milliseconds: 160),
+                                            () {
+                                          setState(() {
+                                            _isFinished = true;
+                                            _start = false;
+                                          });
+                                          _timeTimer.cancel();
+                                        });
+                                      }
+                                    }
+                                  }
+                                }
+                              },
+                              flipOnTouch: _wait ? false : _cardFlips[index],
+                              direction: FlipDirection.HORIZONTAL,
+                              front: Container(
+                                  padding: EdgeInsets.all(5.h),
+                                  decoration: BoxDecoration(
+                                    color: Color(0xFF83B0C8),
+                                    borderRadius: BorderRadius.circular(8.h),
+                                  ),
+                                  child: Image.asset(hiddenCardpath,
+                                      fit: BoxFit.cover)),
+                              back: getItem(index))
+                          : getItem(index),
+                      itemCount: _data.length,
+                    ),
+                    Spacer(),
+                  ],
+                ),
               ),
-              Spacer(),
-            ],
-          ),
-        ),
-      ),
-    );
+            ),
+          );
   }
 }

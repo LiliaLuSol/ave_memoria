@@ -2,6 +2,8 @@ import 'package:ave_memoria/other/app_export.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'game_rules.dart';
+
 class PauseMenu extends StatefulWidget {
   static const String id = 'PauseMenu';
 
@@ -81,6 +83,23 @@ class _PauseMenuState extends State<PauseMenu> {
                                 backgroundColor: theme.colorScheme.primary,
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(5))),
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  PageRouteBuilder(
+                                      pageBuilder: (_, __, ___) => const GameRules(
+                                        firstTimes: false,
+                                        countRule: 3,
+                                        text1:
+                                        "Игровое поле состоит из карт, за каждой из которых скрыта картинка. Картинки ― парные, т.е. на игровом поле есть две карты, на которых находятся одинаковые картинки",
+                                        text2:
+                                        "В начале игры на несколько секунд показывают все картинки. Ваша задача запомнить как можно больше карт",
+                                        text3:
+                                        "А затем все карты перевернут рубашкой вверх. Надо с меньшим числом попыток найти и перевернуть парные карты, если картинки различаются, тогда они снова повернутся",
+                                      ),
+                                      opaque: false,
+                                      fullscreenDialog: true));
+                            },
                           ),
                           SizedBox(height: 24.v),
                           CustomElevatedButton(

@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:ave_memoria/other/app_export.dart';
 import 'package:ave_memoria/main.dart';
 
+import 'game_rules.dart';
+
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
 
@@ -12,6 +14,7 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
+  bool gameRulesFirst1 = true;
   late final TabController _tabController;
 
   @override
@@ -62,7 +65,9 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                       size: 25.h,
                       color: appTheme.yellow,
                     ),
-                    onPressed: () {null;},
+                    onPressed: () {
+                      null;
+                    },
                   )
                 ],
               ),
@@ -149,8 +154,26 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                                               // ),
                                             )),
                                         onTap: () {
-                                          GoRouter.of(context)
-                                              .push(AppRoutes.game_cards);
+                                          gameRulesFirst1
+                                              ? Navigator.push(
+                                                  context,
+                                                  PageRouteBuilder(
+                                                      pageBuilder: (_, __,
+                                                              ___) =>
+                                                          const GameRules(
+                                                            firstTimes: true,
+                                                            countRule: 3,
+                                                            text1:
+                                                                "Игровое поле состоит из карт, за каждой из которых скрыта картинка. Картинки ― парные, т.е. на игровом поле есть две карты, на которых находятся одинаковые картинки",
+                                                            text2:
+                                                                "В начале игры на несколько секунд показывают все картинки. Ваша задача запомнить как можно больше карт",
+                                                            text3:
+                                                                "А затем все карты перевернут рубашкой вверх. Надо с меньшим числом попыток найти и перевернуть парные карты, если картинки различаются, тогда они снова повернутся",
+                                                          ),
+                                                      opaque: false,
+                                                      fullscreenDialog: true))
+                                              : GoRouter.of(context)
+                                                  .push(AppRoutes.game_cards);
                                         }),
                                     SizedBox(height: 16.v),
                                     Container(
