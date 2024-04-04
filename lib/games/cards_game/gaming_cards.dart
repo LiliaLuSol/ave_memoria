@@ -108,8 +108,13 @@ class _CardsGameState extends State<CardsGame> {
 
     return _isFinished
         ? ResultGame(
-            // duration: gameDuration,
-            )
+            nameGame: "Легион памяти",
+            tries: tries,
+            score: score,
+            time: tries,
+            maxScore: 600,
+          )
+
         : SafeArea(
             child: Scaffold(
               body: Container(
@@ -156,9 +161,13 @@ class _CardsGameState extends State<CardsGame> {
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
+                              Spacer(),
                               info_card("Попытки", "$tries"),
+                              Spacer(),
                               info_card("Очки", "$score"),
+                              Spacer(),
                               info_card("Время", time < 0 ? "0" : "$time"),
+                              Spacer(),
                             ],
                           ),
                           SizedBox(width: 22.v),
@@ -203,7 +212,7 @@ class _CardsGameState extends State<CardsGame> {
                                             () {
                                           setState(() {
                                             tries++;
-                                            if (tries > 6 && score > 0) {
+                                            if (score > 0) {
                                               score -= 25;
                                             }
                                             _wait = false;

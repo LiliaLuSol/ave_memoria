@@ -3,7 +3,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ResultGame extends StatefulWidget {
-  const ResultGame({super.key});
+  final String nameGame;
+  final int? tries;
+  final int? score;
+  final int? time;
+  final int? maxScore;
+
+  const ResultGame(
+      {super.key,
+      required this.nameGame,
+      this.tries,
+      this.score,
+      this.time,
+      this.maxScore});
 
   @override
   State<ResultGame> createState() => _ResultGameState();
@@ -13,12 +25,36 @@ class _ResultGameState extends State<ResultGame> {
   @override
   Widget build(BuildContext context) {
     mediaQueryData = MediaQuery.of(context);
-    int tries = 0;
-    int score = 0;
-    int time = 0;
+    double percentage = widget.score != null && widget.maxScore != null
+        ? widget.score! / widget.maxScore!
+        : 0;
+    int filledStars = 0;
+
+    if (percentage >= 0.8) {
+      filledStars = 3;
+    } else if (percentage >= 0.6) {
+      filledStars = 2;
+    } else if (percentage >= 0.4) {
+      filledStars = 1;
+    }
+
+    List<Widget> stars = List.generate(3, (index) {
+      if (index < filledStars) {
+        return Padding(
+            padding: EdgeInsets.only(right: 12.h),
+            child: Icon(FontAwesomeIcons.solidStar,
+                color: theme.colorScheme.primary, size: 50.h));
+      } else {
+        return Padding(
+            padding: EdgeInsets.only(right: 12.h),
+            child: Icon(FontAwesomeIcons.star,
+                color: theme.colorScheme.primary, size: 50.h));
+      }
+    });
+
     return SafeArea(
         child: Scaffold(
-            backgroundColor: appTheme.black.withOpacity(0.2),
+            backgroundColor: Color(0xFFC0C0C0),
             body: Center(
                 child: Container(
                     width: 353.h,
@@ -27,66 +63,61 @@ class _ResultGameState extends State<ResultGame> {
                         borderRadius: BorderRadiusStyle.circleBorder15),
                     child: Padding(
                         padding: EdgeInsets.symmetric(horizontal: 16.h),
-                        child: Column(children: [
-                          SizedBox(height: 20.v),
-                          Text("Игра", style: CustomTextStyles.regular24Text),
-                          SizedBox(height: 44.v),
-                          Row(children: [
-                            Icon(FontAwesomeIcons.star,
-                                color: theme.colorScheme.primary, size: 25.h),
-                            SizedBox(width: 12.h),
-                            Icon(FontAwesomeIcons.star,
-                                color: theme.colorScheme.primary, size: 25.h),
-                            SizedBox(width: 12.h),
-                            Icon(FontAwesomeIcons.star,
-                                color: theme.colorScheme.primary, size: 25.h)
-                          ]),
-                          SizedBox(height: 45.v),
-                          Row(children: [
-                            info_card("Попытки", "$tries"),
-                            Spacer(),
-                            info_card("Очки", "$score"),
-                            Spacer(),
-                            info_card("Время", "$time"),
-                          ]),
-                          SizedBox(height: 50.v),
-                          CustomElevatedButton(
-                              text: "Продолжить",
-                              buttonTextStyle:
-                                  CustomTextStyles.semiBold18TextWhite,
-                              buttonStyle: ElevatedButton.styleFrom(
-                                  backgroundColor: theme.colorScheme.primary,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(5))),
-                              onTap: () {
-                                Navigator.pop(context);
-                              }),
-                          SizedBox(height: 24.v),
-                          CustomElevatedButton(
-                            text: "Переиграть",
-                            buttonTextStyle:
-                                CustomTextStyles.semiBold18TextWhite,
-                            buttonStyle: ElevatedButton.styleFrom(
-                                backgroundColor: theme.colorScheme.primary,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5))),
-                            onTap: () {
-                              GoRouter.of(context)
-                                  .push(AppRoutes.game_cards);
-                            },
-                          ),
-                          SizedBox(height: 24.v),
-                          CustomElevatedButton(
-                              text: "Выход",
-                              buttonTextStyle:
-                                  CustomTextStyles.semiBold18TextWhite,
-                              buttonStyle: ElevatedButton.styleFrom(
-                                  backgroundColor: theme.colorScheme.primary,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(5))),
-                              onTap: () {
-                                GoRouter.of(context).push(AppRoutes.homepage);
-                              })
-                        ]))))));
+                        child: Column(
+                            // mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(height: 35.v),
+                              Text(widget.nameGame,
+                                  style: CustomTextStyles.regular24Text),
+                              SizedBox(height: 60.v),
+                              Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Spacer(),
+                                    SizedBox(width: 12.h),
+                                    ...stars,
+                                    Spacer()
+                                  ]),
+                              SizedBox(height: 60.v),
+                              Row(children: [
+                                Spacer(),
+                                info_card("Попытки", "${widget.tries}"),
+                                Spacer(),
+                                info_card("Очки", "${widget.score}"),
+                                Spacer(),
+                                info_card("Время", "${widget.time}"),
+                                Spacer(),
+                              ]),
+                              SizedBox(height: 60.v),
+                              CustomElevatedButton(
+                                text: "Переиграть",
+                                buttonTextStyle:
+                                    CustomTextStyles.semiBold18TextWhite,
+                                buttonStyle: ElevatedButton.styleFrom(
+                                    backgroundColor: theme.colorScheme.primary,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(5))),
+                                onTap: () {
+                                  GoRouter.of(context)
+                                      .push(AppRoutes.game_cards);
+                                },
+                              ),
+                              SizedBox(height: 24.v),
+                              CustomElevatedButton(
+                                  text: "Выход",
+                                  buttonTextStyle:
+                                      CustomTextStyles.semiBold18TextWhite,
+                                  buttonStyle: ElevatedButton.styleFrom(
+                                      backgroundColor:
+                                          theme.colorScheme.primary,
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(5))),
+                                  onTap: () {
+                                    GoRouter.of(context)
+                                        .push(AppRoutes.homepage);
+                                  })
+                            ]))))));
   }
 }
