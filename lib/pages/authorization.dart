@@ -80,7 +80,7 @@ class _AuthorizationState extends State<Authorization>
                         child: Container(
                             width: double.maxFinite,
                             padding: EdgeInsets.symmetric(
-                                horizontal: 18.h, vertical: 30.v),
+                                horizontal: 16.h, vertical: 30.v),
                             child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -192,7 +192,10 @@ class _AuthorizationState extends State<Authorization>
                                   Align(
                                       alignment: Alignment.centerRight,
                                       child: TextButton(
-                                          onPressed: () {},
+                                          onPressed: () {
+                                            GoRouter.of(context)
+                                                .push(AppRoutes.forgetScreen);
+                                          },
                                           child: Text(
                                             "Забыли пароль?",
                                             style: CustomTextStyles
@@ -319,41 +322,28 @@ class _AuthorizationState extends State<Authorization>
                                                     .imgBrandicoyandexrect,
                                               ),
                                             ),
-                                            BlocBuilder<AuthenticationBloc,
-                                                    AuthenticationState>(
-                                                builder: (context, state) {
-                                              if (state
-                                                  is GoogleAuthLoadingState) {
-                                                return CircularProgressIndicator(
-                                                  color:
-                                                      theme.colorScheme.primary,
-                                                );
-                                              } else {
-                                                return CustomIconButton(
-                                                  height: 56.v,
-                                                  width: 108.h,
-                                                  padding: EdgeInsets.only(
-                                                      top: 12.h,
-                                                      bottom: 12.h,
-                                                      left: 42.h,
-                                                      right: 42.h),
-                                                  decoration:
-                                                      IconButtonStyleHelper
-                                                          .fillWhiteA,
-                                                  onTap: () {
-                                                    blocProvider.add(
-                                                        const GoogleAuthEvent());
-                                                    context.showsnackbar(
-                                                        title:
-                                                            'Аккаунт не для тестирования!');
-                                                  },
-                                                  child: CustomImageView(
-                                                    svgPath: ImageConstant
-                                                        .imgCevicongoogle,
-                                                  ),
-                                                );
-                                              }
-                                            }),
+                                            CustomIconButton(
+                                              height: 56.v,
+                                              width: 108.h,
+                                              padding: EdgeInsets.only(
+                                                  top: 12.h,
+                                                  bottom: 12.h,
+                                                  left: 42.h,
+                                                  right: 42.h),
+                                              decoration: IconButtonStyleHelper
+                                                  .fillWhiteA,
+                                              onTap: () {
+                                                blocProvider.add(
+                                                    const GoogleAuthEvent());
+                                                context.showsnackbar(
+                                                    title:
+                                                        'Аккаунт не для тестирования!');
+                                              },
+                                              child: CustomImageView(
+                                                svgPath: ImageConstant
+                                                    .imgCevicongoogle,
+                                              ),
+                                            ),
                                             CustomIconButton(
                                                 height: 56.v,
                                                 width: 108.h,
