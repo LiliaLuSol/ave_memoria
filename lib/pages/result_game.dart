@@ -70,6 +70,10 @@ class _ResultGameState extends State<ResultGame> {
                                 backgroundColor: theme.colorScheme.primary,
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(5))),
+                            onTap: () {
+                              GoRouter.of(context)
+                                  .push(AppRoutes.game_cards);
+                            },
                           ),
                           SizedBox(height: 24.v),
                           CustomElevatedButton(
