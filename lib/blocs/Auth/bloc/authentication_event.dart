@@ -30,6 +30,10 @@ class GoogleAuthEvent extends AuthenticationEvent {
   const GoogleAuthEvent();
 }
 
+class AnounymousAuthEvent extends AuthenticationEvent {
+  const AnounymousAuthEvent();
+}
+
 class SignOutEvent extends AuthenticationEvent {
   const SignOutEvent();
 }

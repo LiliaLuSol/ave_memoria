@@ -23,6 +23,15 @@ class AuthService {
     }
   }
 
+  Future<void> anounymousSignIn() async {
+    try {
+      await _auth.signInWithPassword(
+          email: 'omar@gmail.com', password: '123456');
+    } catch (e) {
+      throw e.toString();
+    }
+  }
+
   Future<void> signInWithGoogle() async {
     try {
       await _auth.signInWithOAuth(Provider.google);

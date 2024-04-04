@@ -85,6 +85,7 @@ class _AuthRegState extends State<AuthReg> {
                           borderRadius: BorderRadius.circular(5)),
                       side: BorderSide(width: 1, color: appTheme.gray)),
                   onTap: () {
+                    blocProvider.add(const AnounymousAuthEvent());
                     GoRouter.of(context).push(AppRoutes.homepage);
                   },
                 ),

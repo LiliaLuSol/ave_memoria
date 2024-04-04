@@ -83,7 +83,7 @@ class _OnboardState extends State<Onboard> {
     return BlocListener<AuthenticationBloc, AuthenticationState>(
         listener: (context, state) {
           if (state is AuthSuccessState) {
-            // GoRouter.of(context).go(AppRoutes.homepage);
+            GoRouter.of(context).go(AppRoutes.homepage);
           } else if (state is UnAuthenticatedState) {
             GoRouter.of(context).go(AppRoutes.onboard);
           } else if (state is AuthErrorState) {

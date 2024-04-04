@@ -44,6 +44,16 @@ class AuthenticationBloc
       }
     });
 
+    on<AnounymousAuthEvent>((event, emit) async {
+      emit(AuthLoadingState());
+      try {
+        await _authservice.anounymousSignIn();
+        emit(AuthSuccessState());
+      } catch (e) {
+        emit(AuthErrorState(e.toString()));
+      }
+    });
+
     on<SignOutEvent>((event, emit) async {
       try {
         await _authservice.signOut();
