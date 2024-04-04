@@ -5,10 +5,7 @@ import 'package:ave_memoria/other/app_export.dart';
 import 'package:page_view_indicators/page_view_indicators.dart';
 
 class Onboard extends StatefulWidget {
-  const Onboard({Key? key})
-      : super(
-          key: key,
-        );
+  const Onboard({super.key});
 
   @override
   State<Onboard> createState() => _OnboardState();
@@ -110,9 +107,7 @@ class _OnboardState extends State<Onboard> {
                                 "Вы уверены, что хотите пропустить данный раздел?",
                             descTextStyle: CustomTextStyles.regular16Text,
                             btnCancelText: "Нет",
-                            btnCancelOnPress: () {
-
-                            },
+                            btnCancelOnPress: () {},
                             btnOkText: "Да",
                             btnOkOnPress: () =>
                                 GoRouter.of(context).push(AppRoutes.authreg),

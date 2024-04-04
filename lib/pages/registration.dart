@@ -306,81 +306,90 @@ class _RegistrationState extends State<Registration>
                                   BlocBuilder<AuthenticationBloc,
                                           AuthenticationState>(
                                       builder: (context, state) {
-                                    return CustomElevatedButton(
-                                      text: "Создать аккаунт",
-                                      buttonTextStyle:
-                                          CustomTextStyles.semiBold18TextWhite,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(5)),
-                                      margin:
-                                          EdgeInsets.only(left: 3.h, top: 27.v),
-                                      buttonStyle: isEmailValid &&
-                                              isPasswordValid &&
-                                              isConfirmPasswordValid
-                                          ? ElevatedButton.styleFrom(
-                                              backgroundColor:
-                                                  theme.colorScheme.primary,
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(5)))
-                                          : ElevatedButton.styleFrom(
-                                              backgroundColor: appTheme.gray,
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          5))),
-                                      onTap: isEmailValid &&
-                                              isPasswordValid &&
-                                              isConfirmPasswordValid
-                                          ? () async {
-                                              if (_formKey.currentState!
-                                                  .validate()) {
-                                                try {
-                                                  BlocProvider.of<
-                                                              AuthenticationBloc>(
-                                                          context)
-                                                      .add(
-                                                    EmailSignUpAuthEvent(
-                                                        _emailcontroller.text,
-                                                        _passcontroller.text),
-                                                  );
-                                                  await AwesomeDialog(
-                                                    context: context,
-                                                    dialogType:
-                                                        DialogType.success,
-                                                    animType:
-                                                        AnimType.rightSlide,
-                                                    title: 'Почти всё!',
-                                                    desc:
-                                                        'Пожалуйста, не забудьте подтвердить Вашу почту для окончательного подтверждения регистрации',
-                                                  ).show();
-                                                  addNewUser();
-                                                  await GoRouter.of(context)
-                                                      .push(AppRoutes.homepage);
-                                                } catch (e) {
-                                                  AwesomeDialog(
-                                                          context: context,
-                                                          dialogType:
-                                                              DialogType.error,
-                                                          animType:
-                                                              AnimType.topSlide,
-                                                          title:
-                                                              "Упс! Что-то пошло не так...",
-                                                          titleTextStyle:
-                                                              CustomTextStyles
-                                                                  .semiBold32Text,
-                                                          desc:
-                                                              "Неудачная регистрация нового пользователя! Возможно уже есть пользователь с указанной почтой или есть другая проблема.",
-                                                          descTextStyle:
-                                                              CustomTextStyles
-                                                                  .regular16Text)
-                                                      .show();
+                                    if (state is AuthLoadingState) {
+                                      return CircularProgressIndicator(
+                                        color: theme.colorScheme.primary,
+                                      );
+                                    } else {
+                                      return CustomElevatedButton(
+                                        text: "Создать аккаунт",
+                                        buttonTextStyle: CustomTextStyles
+                                            .semiBold18TextWhite,
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(5)),
+                                        margin: EdgeInsets.only(
+                                            left: 3.h, top: 27.v),
+                                        buttonStyle: isEmailValid &&
+                                                isPasswordValid &&
+                                                isConfirmPasswordValid
+                                            ? ElevatedButton.styleFrom(
+                                                backgroundColor:
+                                                    theme.colorScheme.primary,
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            5)))
+                                            : ElevatedButton.styleFrom(
+                                                backgroundColor: appTheme.gray,
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            5))),
+                                        onTap: isEmailValid &&
+                                                isPasswordValid &&
+                                                isConfirmPasswordValid
+                                            ? () async {
+                                                if (_formKey.currentState!
+                                                    .validate()) {
+                                                  try {
+                                                    BlocProvider.of<
+                                                                AuthenticationBloc>(
+                                                            context)
+                                                        .add(
+                                                      EmailSignUpAuthEvent(
+                                                          _emailcontroller.text,
+                                                          _passcontroller.text),
+                                                    );
+                                                    await AwesomeDialog(
+                                                      context: context,
+                                                      dialogType:
+                                                          DialogType.success,
+                                                      animType:
+                                                          AnimType.rightSlide,
+                                                      title: 'Почти всё!',
+                                                      desc:
+                                                          'Пожалуйста, не забудьте подтвердить Вашу почту для окончательного подтверждения регистрации',
+                                                    ).show();
+                                                    addNewUser();
+                                                    await GoRouter.of(context)
+                                                        .push(
+                                                            AppRoutes.homepage);
+                                                  } catch (e) {
+                                                    AwesomeDialog(
+                                                            context: context,
+                                                            dialogType:
+                                                                DialogType
+                                                                    .error,
+                                                            animType: AnimType
+                                                                .topSlide,
+                                                            title:
+                                                                "Упс! Что-то пошло не так...",
+                                                            titleTextStyle:
+                                                                CustomTextStyles
+                                                                    .semiBold32Text,
+                                                            desc:
+                                                                "Неудачная регистрация нового пользователя! Возможно уже есть пользователь с указанной почтой или есть другая проблема.",
+                                                            descTextStyle:
+                                                                CustomTextStyles
+                                                                    .regular16Text)
+                                                        .show();
+                                                  }
                                                 }
                                               }
-                                            }
-                                          : null,
-                                    );
+                                            : null,
+                                      );
+                                    }
                                   }),
                                   Padding(
                                       padding: EdgeInsets.only(
@@ -438,28 +447,41 @@ class _RegistrationState extends State<Registration>
                                                     .imgBrandicoyandexrect,
                                               ),
                                             ),
-                                            CustomIconButton(
-                                              height: 56.v,
-                                              width: 108.h,
-                                              padding: EdgeInsets.only(
-                                                  top: 12.h,
-                                                  bottom: 12.h,
-                                                  left: 42.h,
-                                                  right: 42.h),
-                                              decoration: IconButtonStyleHelper
-                                                  .fillWhiteA,
-                                              onTap: () {
-                                                blocProvider.add(
-                                                    const GoogleAuthEvent());
-                                                context.showsnackbar(
-                                                    title:
-                                                        'Что-то пошло не так!');
-                                              },
-                                              child: CustomImageView(
-                                                svgPath: ImageConstant
-                                                    .imgCevicongoogle,
-                                              ),
-                                            ),
+                                            BlocBuilder<AuthenticationBloc,
+                                                    AuthenticationState>(
+                                                builder: (context, state) {
+                                              if (state
+                                                  is GoogleAuthLoadingState) {
+                                                return CircularProgressIndicator(
+                                                  color:
+                                                      theme.colorScheme.primary,
+                                                );
+                                              } else {
+                                                return CustomIconButton(
+                                                  height: 56.v,
+                                                  width: 108.h,
+                                                  padding: EdgeInsets.only(
+                                                      top: 12.h,
+                                                      bottom: 12.h,
+                                                      left: 42.h,
+                                                      right: 42.h),
+                                                  decoration:
+                                                      IconButtonStyleHelper
+                                                          .fillWhiteA,
+                                                  onTap: () {
+                                                    blocProvider.add(
+                                                        const GoogleAuthEvent());
+                                                    context.showsnackbar(
+                                                        title:
+                                                            'Аккаунт не для тестирования!');
+                                                  },
+                                                  child: CustomImageView(
+                                                    svgPath: ImageConstant
+                                                        .imgCevicongoogle,
+                                                  ),
+                                                );
+                                              }
+                                            }),
                                             CustomIconButton(
                                                 height: 56.v,
                                                 width: 108.h,

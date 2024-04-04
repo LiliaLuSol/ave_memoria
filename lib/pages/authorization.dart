@@ -212,42 +212,56 @@ class _AuthorizationState extends State<Authorization>
                                                 'Неверный email или пароль!');
                                       }
                                     },
-                                    child: CustomElevatedButton(
-                                      text: "Войти",
-                                      buttonTextStyle:
-                                          CustomTextStyles.semiBold18TextWhite,
-                                      margin: EdgeInsets.only(left: 2.h),
-                                      buttonStyle: isEmailValid &&
-                                              isPasswordValid
-                                          ? ElevatedButton.styleFrom(
-                                              backgroundColor:
-                                                  theme.colorScheme.primary,
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(5)))
-                                          : ElevatedButton.styleFrom(
-                                              backgroundColor: appTheme.gray,
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          5))),
-                                      onTap: isEmailValid && isPasswordValid
-                                          ? () async {
-                                              if (_formKey.currentState!
-                                                  .validate()) {
-                                                BlocProvider.of<
-                                                            AuthenticationBloc>(
-                                                        context)
-                                                    .add(EmailSignInAuthEvent(
-                                                  _emailcontroller.text,
-                                                  _passcontroller.text,
-                                                ));
-                                              };
-                                              await GoRouter.of(context)
-                                                  .push(AppRoutes.homepage);
-                                            }
-                                          : null,
-                                    ),
+                                    child: BlocBuilder<AuthenticationBloc,
+                                            AuthenticationState>(
+                                        builder: (context, state) {
+                                      if (state is AuthLoadingState) {
+                                        return CircularProgressIndicator(
+                                          color: theme.colorScheme.primary,
+                                        );
+                                      } else {
+                                        return CustomElevatedButton(
+                                          text: "Войти",
+                                          buttonTextStyle: CustomTextStyles
+                                              .semiBold18TextWhite,
+                                          margin: EdgeInsets.only(left: 2.h),
+                                          buttonStyle: isEmailValid &&
+                                                  isPasswordValid
+                                              ? ElevatedButton.styleFrom(
+                                                  backgroundColor:
+                                                      theme.colorScheme.primary,
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5)))
+                                              : ElevatedButton.styleFrom(
+                                                  backgroundColor:
+                                                      appTheme.gray,
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5))),
+                                          onTap: isEmailValid && isPasswordValid
+                                              ? () async {
+                                                  if (_formKey.currentState!
+                                                      .validate()) {
+                                                    BlocProvider.of<
+                                                                AuthenticationBloc>(
+                                                            context)
+                                                        .add(
+                                                            EmailSignInAuthEvent(
+                                                      _emailcontroller.text,
+                                                      _passcontroller.text,
+                                                    ));
+                                                  }
+                                                  ;
+                                                  await GoRouter.of(context)
+                                                      .push(AppRoutes.homepage);
+                                                }
+                                              : null,
+                                        );
+                                      }
+                                    }),
                                   ),
                                   Padding(
                                       padding:
@@ -305,28 +319,41 @@ class _AuthorizationState extends State<Authorization>
                                                     .imgBrandicoyandexrect,
                                               ),
                                             ),
-                                            CustomIconButton(
-                                              height: 56.v,
-                                              width: 108.h,
-                                              padding: EdgeInsets.only(
-                                                  top: 12.h,
-                                                  bottom: 12.h,
-                                                  left: 42.h,
-                                                  right: 42.h),
-                                              decoration: IconButtonStyleHelper
-                                                  .fillWhiteA,
-                                              onTap: () {
-                                                blocProvider.add(
-                                                    const GoogleAuthEvent());
-                                                context.showsnackbar(
-                                                    title:
-                                                        'Что-то пошло не так!');
-                                              },
-                                              child: CustomImageView(
-                                                svgPath: ImageConstant
-                                                    .imgCevicongoogle,
-                                              ),
-                                            ),
+                                            BlocBuilder<AuthenticationBloc,
+                                                    AuthenticationState>(
+                                                builder: (context, state) {
+                                              if (state
+                                                  is GoogleAuthLoadingState) {
+                                                return CircularProgressIndicator(
+                                                  color:
+                                                      theme.colorScheme.primary,
+                                                );
+                                              } else {
+                                                return CustomIconButton(
+                                                  height: 56.v,
+                                                  width: 108.h,
+                                                  padding: EdgeInsets.only(
+                                                      top: 12.h,
+                                                      bottom: 12.h,
+                                                      left: 42.h,
+                                                      right: 42.h),
+                                                  decoration:
+                                                      IconButtonStyleHelper
+                                                          .fillWhiteA,
+                                                  onTap: () {
+                                                    blocProvider.add(
+                                                        const GoogleAuthEvent());
+                                                    context.showsnackbar(
+                                                        title:
+                                                            'Аккаунт не для тестирования!');
+                                                  },
+                                                  child: CustomImageView(
+                                                    svgPath: ImageConstant
+                                                        .imgCevicongoogle,
+                                                  ),
+                                                );
+                                              }
+                                            }),
                                             CustomIconButton(
                                                 height: 56.v,
                                                 width: 108.h,
