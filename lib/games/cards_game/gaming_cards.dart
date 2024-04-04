@@ -1,7 +1,5 @@
 import 'dart:async';
-
 import 'package:ave_memoria/pages/pause_menu.dart';
-import 'package:ave_memoria/pages/game_rules.dart';
 import 'package:ave_memoria/pages/result_game.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -85,6 +83,16 @@ class _CardsGameState extends State<CardsGame> {
     _timeTimer.cancel();
   }
 
+  void pauseTimer() {
+    _timer.cancel();
+    _timeTimer.cancel();
+  }
+
+  void resumeTimer() {
+    startTimer();
+    startDuration();
+  }
+
   Widget getItem(int index) {
     return Container(
       padding: EdgeInsets.all(5.h),
@@ -127,13 +135,17 @@ class _CardsGameState extends State<CardsGame> {
                                     size: 25.h,
                                     color: theme.colorScheme.primary),
                                 onPressed: () {
+                                  pauseTimer();
                                   Navigator.push(
-                                      context,
-                                      PageRouteBuilder(
-                                          pageBuilder: (_, __, ___) =>
-                                              const PauseMenu(),
-                                          opaque: false,
-                                          fullscreenDialog: true));
+                                          context,
+                                          PageRouteBuilder(
+                                              pageBuilder: (_, __, ___) =>
+                                                  const PauseMenu(),
+                                              opaque: false,
+                                              fullscreenDialog: true))
+                                      .then((value) {
+                                    resumeTimer();
+                                  });
                                 },
                               ),
                               SizedBox(width: 16.h),
