@@ -26,6 +26,24 @@ class EmailSignUpAuthEvent extends AuthenticationEvent {
   List<Object> get props => [email, password];
 }
 
+class EmailResetPasswordEvent extends AuthenticationEvent {
+  final String email;
+
+  const EmailResetPasswordEvent(this.email);
+
+  @override
+  List<Object> get props => [email];
+}
+
+class UpdateUserPasswordEvent extends AuthenticationEvent {
+  final String password;
+
+  const UpdateUserPasswordEvent(this.password);
+
+  @override
+  List<Object> get props => [password];
+}
+
 class GoogleAuthEvent extends AuthenticationEvent {
   const GoogleAuthEvent();
 }

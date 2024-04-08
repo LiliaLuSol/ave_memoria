@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ave_memoria/other/app_export.dart';
 
+import '../blocs/Auth/bloc/authentication_bloc.dart';
 import '../utils/validator.dart';
 
 class ForgetScreen extends StatefulWidget {
@@ -73,8 +74,7 @@ class _ForgetScreenState extends State<ForgetScreen> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                        "Введите ваш email",
+                                    Text("Введите ваш email",
                                         style: theme.textTheme.bodyMedium),
                                     SizedBox(height: 4.v),
                                     CustomTextFormField(
@@ -96,77 +96,71 @@ class _ForgetScreenState extends State<ForgetScreen> {
                                       },
                                     ),
                                     SizedBox(height: 305.v),
-                                    CustomElevatedButton(
-                                        text: "Восстановить",
-                                        buttonTextStyle: CustomTextStyles
-                                            .semiBold18TextWhite,
-                                        margin: EdgeInsets.only(left: 2.h),
-                                        buttonStyle: isEmailValid
-                                            ? ElevatedButton.styleFrom(
-                                                backgroundColor:
-                                                    theme.colorScheme.primary,
+                                  BlocListener<AuthenticationBloc, AuthenticationState>(
+                                    listener: (context, state) {
+                                      if (state is AuthSuccessState) {
+                                        GoRouter.of(context).push(AppRoutes.new_password);
+                                      } else if (state is AuthErrorState) {
+                                        context.showsnackbar(
+                                            title: 'Что-то пошло не так! Повторите попытку позже'
+                                        );
+                                      }
+                                    },
+                                    child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+                                        builder: (context, state) {
+                                          if (state is AuthLoadingState) {
+                                            return CircularProgressIndicator(
+                                              color: theme.colorScheme.primary,
+                                            );
+                                          } else {
+                                            return CustomElevatedButton(
+                                              text: "Восстановить",
+                                              buttonTextStyle: CustomTextStyles.semiBold18TextWhite,
+                                              margin: EdgeInsets.only(left: 2.h),
+                                              buttonStyle: isEmailValid
+                                                  ? ElevatedButton.styleFrom(
+                                                backgroundColor: theme.colorScheme.primary,
                                                 shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            5)))
-                                            : ElevatedButton.styleFrom(
+                                                    borderRadius: BorderRadius.circular(5)
+                                                ),
+                                              )
+                                                  : ElevatedButton.styleFrom(
                                                 backgroundColor: appTheme.gray,
                                                 shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            5))),
-                                        onTap: () {
-                                          isEmailValid
-                                              ? () async {
-                                                  if (_formKey.currentState!
-                                                      .validate()) {
-                                                    try {
-                                                      ///
-                                                      AwesomeDialog(
-                                                        context: context,
-                                                        dialogType:
-                                                            DialogType.info,
-                                                        animType:
-                                                            AnimType.topSlide,
-                                                        title:
-                                                            'Восстановление пароля',
-                                                        titleTextStyle:
-                                                            CustomTextStyles
-                                                                .semiBold32Text,
-                                                        desc:
-                                                            'На Ваш email отправили письмо для продолжения процедуры',
-                                                        descTextStyle:
-                                                            CustomTextStyles
-                                                                .regular16Text,
-                                                      ).show();
-                                                    } catch (e) {
-                                                      if (e ==
-                                                          'user-not-found') {
-                                                        AwesomeDialog(
-                                                          context: context,
-                                                          dialogType:
-                                                              DialogType.error,
-                                                          animType:
-                                                              AnimType.topSlide,
-                                                          title: 'Ошибка!',
-                                                          titleTextStyle:
-                                                              CustomTextStyles
-                                                                  .semiBold32Text,
-                                                          desc:
-                                                              'Email не найден...',
-                                                          descTextStyle:
-                                                              CustomTextStyles
-                                                                  .regular16Text,
-                                                        ).show();
-                                                      } else {
-                                                        print(e);
-                                                      }
-                                                    }
+                                                    borderRadius: BorderRadius.circular(5)
+                                                ),
+                                              ),
+                                              onTap: () async {
+                                                if (_formKey.currentState!.validate()) {
+                                                  try {
+                                                    AwesomeDialog(
+                                                      context: context,
+                                                      dialogType: DialogType.info,
+                                                      animType: AnimType.topSlide,
+                                                      title: 'Восстановление пароля',
+                                                      titleTextStyle: CustomTextStyles.semiBold32Text,
+                                                      desc: 'На Ваш email отправили письмо для продолжения процедуры',
+                                                      descTextStyle: CustomTextStyles.regular16Text,
+                                                    ).show();
+                                                  } catch (e) {
+                                                    AwesomeDialog(
+                                                      context: context,
+                                                      dialogType: DialogType.error,
+                                                      animType: AnimType.topSlide,
+                                                      title: 'Ошибка!',
+                                                      titleTextStyle: CustomTextStyles.semiBold32Text,
+                                                      desc: 'Email не найден...',
+                                                      descTextStyle: CustomTextStyles.regular16Text,
+                                                    ).show();
+                                                    print(e);
                                                   }
-                                                  ;
                                                 }
-                                              : null;
-                                        }),
+                                              },
+                                            );
+                                          }
+                                        }
+                                    ),
+                                  ),
                                     SizedBox(),
                                     Padding(
                                         padding: EdgeInsets.only(

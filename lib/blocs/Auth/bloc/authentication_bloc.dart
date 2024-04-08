@@ -34,6 +34,28 @@ class AuthenticationBloc
       }
     });
 
+    on<EmailResetPasswordEvent>((event, emit) async {
+      emit(AuthLoadingState());
+      try {
+        await _authservice.resetPasswordForEmail(
+            email: event.email);
+        emit(AuthSuccessState());
+      } catch (e) {
+        emit(AuthErrorState(e.toString()));
+      }
+    });
+
+    on<UpdateUserPasswordEvent>((event, emit) async {
+      emit(AuthLoadingState());
+      try {
+        await _authservice.updateUserPassword(
+            password: event.password);
+        emit(AuthSuccessState());
+      } catch (e) {
+        emit(AuthErrorState(e.toString()));
+      }
+    });
+
     on<GoogleAuthEvent>((event, emit) async {
       emit(GoogleAuthLoadingState());
       try {

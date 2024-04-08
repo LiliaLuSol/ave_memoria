@@ -51,23 +51,6 @@ class _RegistrationState extends State<Registration>
     super.dispose();
   }
 
-  void addNewUser() async {
-    try {
-      final res = await supabase.from('UserChoice').select().execute();
-      String? email = _emailcontroller.text;
-      final count = res.data.length;
-      int countNew = count + 1;
-      email = email.toString();
-      supabase.from('UserChoice').upsert({
-        'id': countNew,
-        'email': email.toString(),
-        'news': _wantNewsInfoValue,
-      });
-    } catch (error) {
-      print('Ошибка при выполнении запроса: $error');
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     AuthenticationBloc blocProvider =
@@ -357,11 +340,43 @@ class _RegistrationState extends State<Registration>
                                                           DialogType.success,
                                                       animType:
                                                           AnimType.rightSlide,
-                                                      title: 'Почти всё!',
+                                                      title: 'Почти всё!',padding: EdgeInsets.symmetric(horizontal: 16.v),
                                                       desc:
                                                           'Пожалуйста, не забудьте подтвердить Вашу почту для окончательного подтверждения регистрации',
                                                     ).show();
-                                                    addNewUser();
+                                                    try {
+                                                      final res = await supabase
+                                                          .from('Users')
+                                                          .select()
+                                                          .execute();
+                                                      String? email =
+                                                          _emailcontroller.text;
+                                                      final count =
+                                                          res.data.length;
+                                                      int countNew = count + 1;
+                                                      email = email.toString();
+                                                      supabase
+                                                          .from('Users')
+                                                          .upsert({
+                                                        'id': countNew,
+                                                        'email':
+                                                            email.toString(),
+                                                        'date_start':
+                                                            DateTime.now(),
+                                                        'active_days': 1
+                                                      });
+                                                      supabase
+                                                          .from('Notifications')
+                                                          .upsert({
+                                                        'id': countNew,
+                                                        'user_id': countNew,
+                                                        'news':
+                                                            _wantNewsInfoValue,
+                                                      });
+                                                    } catch (error) {
+                                                      print(
+                                                          'Ошибка при выполнении запроса: $error');
+                                                    }                                                    ;
                                                     await GoRouter.of(context)
                                                         .push(
                                                             AppRoutes.homepage);

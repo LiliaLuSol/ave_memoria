@@ -23,10 +23,28 @@ class AuthService {
     }
   }
 
+  Future<void> resetPasswordForEmail({required String email}) async {
+    try {
+      await _auth.resetPasswordForEmail(email);
+    } catch (e) {
+      throw e.toString();
+    }
+  }
+
+  Future<void> updateUserPassword({required String password}) async {
+    try {
+      await _auth.updateUser(UserAttributes(
+        password: password,
+      ));
+    } catch (e) {
+      throw e.toString();
+    }
+  }
+
   Future<void> anounymousSignIn() async {
     try {
       await _auth.signInWithPassword(
-          email: 'omar@gmail.com', password: '123456');
+          email: 'anounymous@gmail.com', password: '123456');
     } catch (e) {
       throw e.toString();
     }

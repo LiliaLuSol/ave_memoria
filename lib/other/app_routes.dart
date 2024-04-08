@@ -1,3 +1,4 @@
+import 'package:ave_memoria/pages/new_password_screen.dart';
 import 'package:ave_memoria/pages/support.dart';
 import 'package:flutter/material.dart';
 import 'package:ave_memoria/pages/authorization.dart';
@@ -24,6 +25,7 @@ class AppRoutes {
   static const support = '/support';
   static const game_cards = '/gaming_cards';
   static const forgetScreen = '/forget_screen';
+  static const new_password = '/new_password_screen';
 
   static final GoRouter _router = GoRouter(
     routes: <GoRoute>[
@@ -68,6 +70,10 @@ class AppRoutes {
       GoRoute(
         path: forgetScreen,
         builder: (context, state) => const ForgetScreen(),
+      ),
+      GoRoute(
+        path: new_password,
+        builder: (context, state) => const NewPasswordScreen(),
       ),
       GoRoute(
         path: game_cards,
