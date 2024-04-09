@@ -4,6 +4,7 @@ import 'package:ave_memoria/other/app_export.dart';
 
 import '../blocs/Auth/bloc/authentication_bloc.dart';
 import '../utils/validator.dart';
+import 'new_password_screen.dart';
 
 class ForgetScreen extends StatefulWidget {
   const ForgetScreen({super.key});
@@ -97,8 +98,18 @@ class _ForgetScreenState extends State<ForgetScreen> {
                                     ),
                                     SizedBox(height: 305.v),
                                   BlocListener<AuthenticationBloc, AuthenticationState>(
-                                    listener: (context, state) {
+                                    listener: (context, state) async {
                                       if (state is AuthSuccessState) {
+                                        AwesomeDialog(
+                                          context: context,
+                                          dialogType: DialogType.info,
+                                          animType: AnimType.topSlide,
+                                          title: 'Восстановление пароля',
+                                          titleTextStyle: CustomTextStyles.semiBold32Text,
+                                          desc: 'На Ваш email отправили письмо для продолжения процедуры',
+                                          descTextStyle: CustomTextStyles.regular16Text,
+                                        ).show();
+                                        Future.delayed(Duration(seconds: 8));
                                         GoRouter.of(context).push(AppRoutes.new_password);
                                       } else if (state is AuthErrorState) {
                                         context.showsnackbar(
@@ -133,25 +144,14 @@ class _ForgetScreenState extends State<ForgetScreen> {
                                               onTap: () async {
                                                 if (_formKey.currentState!.validate()) {
                                                   try {
-                                                    AwesomeDialog(
-                                                      context: context,
-                                                      dialogType: DialogType.info,
-                                                      animType: AnimType.topSlide,
-                                                      title: 'Восстановление пароля',
-                                                      titleTextStyle: CustomTextStyles.semiBold32Text,
-                                                      desc: 'На Ваш email отправили письмо для продолжения процедуры',
-                                                      descTextStyle: CustomTextStyles.regular16Text,
-                                                    ).show();
+                                                    BlocProvider.of<
+                                                        AuthenticationBloc>(
+                                                        context)
+                                                        .add(
+                                                      EmailResetPasswordEvent(
+                                                          _emailcontroller.text),
+                                                    );
                                                   } catch (e) {
-                                                    AwesomeDialog(
-                                                      context: context,
-                                                      dialogType: DialogType.error,
-                                                      animType: AnimType.topSlide,
-                                                      title: 'Ошибка!',
-                                                      titleTextStyle: CustomTextStyles.semiBold32Text,
-                                                      desc: 'Email не найден...',
-                                                      descTextStyle: CustomTextStyles.regular16Text,
-                                                    ).show();
                                                     print(e);
                                                   }
                                                 }

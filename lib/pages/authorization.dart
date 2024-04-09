@@ -256,10 +256,7 @@ class _AuthorizationState extends State<Authorization>
                                                       _emailcontroller.text,
                                                       _passcontroller.text,
                                                     ));
-                                                  }
-                                                  ;
-                                                  await GoRouter.of(context)
-                                                      .push(AppRoutes.homepage);
+                                                  }                                                  ;
                                                 }
                                               : null,
                                         );

@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:ave_memoria/blocs/Auth/bloc/authentication_bloc.dart';
 import 'package:ave_memoria/main.dart';
 import 'package:ave_memoria/utils/validator.dart';
@@ -286,13 +284,72 @@ class _RegistrationState extends State<Registration>
                                             });
                                       }),
                                   Spacer(),
-                                  BlocBuilder<AuthenticationBloc,
+                                  BlocListener<AuthenticationBloc,
                                           AuthenticationState>(
-                                      builder: (context, state) {
+                                      listener: (context, state) async {
+                                    if (state is AuthSuccessState) {
+                                      try {
+                                        final res = await supabase
+                                            .from('Users')
+                                            .select()
+                                            .execute();
+                                        String? email = _emailcontroller.text;
+                                        final count = res.data.length;
+                                        int countNew = count + 1;
+                                        email = email.toString();
+                                        supabase.from('Users').upsert({
+                                          'id': countNew,
+                                          'email': email.toString(),
+                                          'date_start': DateTime.now(),
+                                          'active_days': 1
+                                        });
+                                        supabase.from('Notifications').upsert({
+                                          'id': countNew,
+                                          'user_id': countNew,
+                                          'news': _wantNewsInfoValue,
+                                        });
+                                      } catch (error) {
+                                        print(
+                                            'Ошибка при выполнении запроса: $error');
+                                      }
+                                      ;
+                                      await AwesomeDialog(
+                                        context: context,
+                                        dialogType: DialogType.success,
+                                        animType: AnimType.topSlide,
+                                        title: 'Почти всё!',
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 16.v),
+                                        desc:
+                                            'Пожалуйста, не забудьте подтвердить Вашу почту для окончательного подтверждения регистрации',
+                                      ).show();
+                                      await Future.delayed(
+                                          Duration(seconds: 8));
+                                      await GoRouter.of(context)
+                                          .push(AppRoutes.homepage);
+                                    } else if (state is AuthErrorState) {
+                                      AwesomeDialog(
+                                              context: context,
+                                              dialogType: DialogType.error,
+                                              animType: AnimType.topSlide,
+                                              title:
+                                                  "Упс! Что-то пошло не так...",
+                                              titleTextStyle: CustomTextStyles
+                                                  .semiBold32Text,
+                                              desc:
+                                                  "Неудачная регистрация нового пользователя! Возможно уже есть пользователь с указанной почтой или есть другая проблема.",
+                                              descTextStyle: CustomTextStyles
+                                                  .regular16Text)
+                                          .show();
+                                    }
+                                  }, child: BlocBuilder<AuthenticationBloc,
+                                              AuthenticationState>(
+                                          builder: (context, state) {
                                     if (state is AuthLoadingState) {
-                                      return CircularProgressIndicator(
+                                      return Center(
+                                          child: CircularProgressIndicator(
                                         color: theme.colorScheme.primary,
-                                      );
+                                      ));
                                     } else {
                                       return CustomElevatedButton(
                                         text: "Создать аккаунт",
@@ -334,78 +391,15 @@ class _RegistrationState extends State<Registration>
                                                           _emailcontroller.text,
                                                           _passcontroller.text),
                                                     );
-                                                    await AwesomeDialog(
-                                                      context: context,
-                                                      dialogType:
-                                                          DialogType.success,
-                                                      animType:
-                                                          AnimType.rightSlide,
-                                                      title: 'Почти всё!',padding: EdgeInsets.symmetric(horizontal: 16.v),
-                                                      desc:
-                                                          'Пожалуйста, не забудьте подтвердить Вашу почту для окончательного подтверждения регистрации',
-                                                    ).show();
-                                                    try {
-                                                      final res = await supabase
-                                                          .from('Users')
-                                                          .select()
-                                                          .execute();
-                                                      String? email =
-                                                          _emailcontroller.text;
-                                                      final count =
-                                                          res.data.length;
-                                                      int countNew = count + 1;
-                                                      email = email.toString();
-                                                      supabase
-                                                          .from('Users')
-                                                          .upsert({
-                                                        'id': countNew,
-                                                        'email':
-                                                            email.toString(),
-                                                        'date_start':
-                                                            DateTime.now(),
-                                                        'active_days': 1
-                                                      });
-                                                      supabase
-                                                          .from('Notifications')
-                                                          .upsert({
-                                                        'id': countNew,
-                                                        'user_id': countNew,
-                                                        'news':
-                                                            _wantNewsInfoValue,
-                                                      });
-                                                    } catch (error) {
-                                                      print(
-                                                          'Ошибка при выполнении запроса: $error');
-                                                    }                                                    ;
-                                                    await GoRouter.of(context)
-                                                        .push(
-                                                            AppRoutes.homepage);
                                                   } catch (e) {
-                                                    AwesomeDialog(
-                                                            context: context,
-                                                            dialogType:
-                                                                DialogType
-                                                                    .error,
-                                                            animType: AnimType
-                                                                .topSlide,
-                                                            title:
-                                                                "Упс! Что-то пошло не так...",
-                                                            titleTextStyle:
-                                                                CustomTextStyles
-                                                                    .semiBold32Text,
-                                                            desc:
-                                                                "Неудачная регистрация нового пользователя! Возможно уже есть пользователь с указанной почтой или есть другая проблема.",
-                                                            descTextStyle:
-                                                                CustomTextStyles
-                                                                    .regular16Text)
-                                                        .show();
+                                                    print(e);
                                                   }
                                                 }
                                               }
                                             : null,
                                       );
                                     }
-                                  }),
+                                  })),
                                   Padding(
                                       padding: EdgeInsets.only(
                                           left: 3.h, top: 19.4.v),

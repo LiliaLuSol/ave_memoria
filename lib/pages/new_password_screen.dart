@@ -23,7 +23,6 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
   bool isPasswordValid = false;
   bool isConfirmPasswordValid = false;
 
-
   @override
   void initState() {
     _passwordcontroller = TextEditingController();
@@ -82,139 +81,139 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text("Введите ваш новый пароль",
-                                        style:
-                                        theme.textTheme.bodyMedium),
+                                        style: theme.textTheme.bodyMedium),
                                     SizedBox(height: 4.v),
                                     BlocBuilder<AuthenticationBloc,
-                                        AuthenticationState>(
+                                            AuthenticationState>(
                                         builder: (context, state) {
-                                          return CustomTextFormField(
-                                            controller: _passwordcontroller,
-                                            focusNode:
-                                            inputfieldoneFocusNode,
-                                            autofocus: false,
-                                            textInputAction:
-                                            TextInputAction.done,
-                                            hintText: "Password",
-                                            onChanged: (value) {
-                                              setState(() {
-                                                isPasswordValid =
-                                                    value.length >= 6;
-                                              });
+                                      return CustomTextFormField(
+                                        controller: _passwordcontroller,
+                                        focusNode: inputfieldoneFocusNode,
+                                        autofocus: false,
+                                        textInputAction: TextInputAction.done,
+                                        hintText: "Password",
+                                        onChanged: (value) {
+                                          setState(() {
+                                            isPasswordValid = value.length >= 6;
+                                          });
+                                        },
+                                        suffix: InkWell(
+                                            onTap: () {
+                                              context
+                                                  .read<AuthenticationBloc>()
+                                                  .add(
+                                                      ChangePasswordVisibilityEvent(
+                                                          value: !state
+                                                              .isShowPassword));
                                             },
-                                            suffix: InkWell(
-                                                onTap: () {
-                                                  context
-                                                      .read<
-                                                      AuthenticationBloc>()
-                                                      .add(ChangePasswordVisibilityEvent(
-                                                      value: !state
-                                                          .isShowPassword));
-                                                },
-                                                child: Container(
-                                                    margin:
-                                                    EdgeInsets.fromLTRB(
-                                                        30.h,
-                                                        21.v,
-                                                        18.h,
-                                                        22.v),
-                                                    child: CustomImageView(
-                                                      svgPath: state
-                                                          .isShowPassword
-                                                          ? ImageConstant
-                                                          .imgEye
-                                                          : ImageConstant
-                                                          .imgEye,
-                                                    ))),
-                                            suffixConstraints:
-                                            BoxConstraints(
-                                                maxHeight: 56.v),
-                                            obscureText:
-                                            state.isShowPassword,
-                                            validator: (value) {
-                                              return value!.length < 6
-                                                  ? "Введите действительный пароль"
-                                                  : null;
-                                            },
-                                          );
-                                        }),
+                                            child: Container(
+                                                margin: EdgeInsets.fromLTRB(
+                                                    30.h, 21.v, 18.h, 22.v),
+                                                child: CustomImageView(
+                                                  svgPath: state.isShowPassword
+                                                      ? ImageConstant.imgEye
+                                                      : ImageConstant.imgEye,
+                                                ))),
+                                        suffixConstraints:
+                                            BoxConstraints(maxHeight: 56.v),
+                                        obscureText: state.isShowPassword,
+                                        validator: (value) {
+                                          return value!.length < 6
+                                              ? "Введите действительный пароль"
+                                              : null;
+                                        },
+                                      );
+                                    }),
                                     Padding(
-                                        padding:
-                                        EdgeInsets.only(left: 4.h, top: 22.v),
+                                        padding: EdgeInsets.only(
+                                            left: 4.h, top: 22.v),
                                         child: Column(
                                             crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                                CrossAxisAlignment.start,
                                             children: [
                                               Text("Повторите новый пароль",
-                                                  style:
-                                                  theme.textTheme.bodyMedium),
+                                                  style: theme
+                                                      .textTheme.bodyMedium),
                                               SizedBox(height: 3.v),
                                               BlocBuilder<AuthenticationBloc,
-                                                  AuthenticationState>(
+                                                      AuthenticationState>(
                                                   builder: (context, state) {
-                                                    return CustomTextFormField(
-                                                      controller:
+                                                return CustomTextFormField(
+                                                  controller:
                                                       _confirmpasscontroller,
-                                                      focusNode: inputfieldFocusNode,
-                                                      autofocus: false,
-                                                      textInputAction:
+                                                  focusNode:
+                                                      inputfieldFocusNode,
+                                                  autofocus: false,
+                                                  textInputAction:
                                                       TextInputAction.done,
-                                                      hintText: "Password",
-                                                      onChanged: (value) {
-                                                        setState(() {
-                                                          isConfirmPasswordValid =
-                                                              value.length >= 6 &&
-                                                                  value ==
-                                                                      _passwordcontroller
-                                                                          .text;
-                                                        });
-                                                      },
-                                                      suffix: InkWell(
-                                                          onTap: () {
-                                                            context
-                                                                .read<
+                                                  hintText: "Password",
+                                                  onChanged: (value) {
+                                                    setState(() {
+                                                      isConfirmPasswordValid =
+                                                          value.length >= 6 &&
+                                                              value ==
+                                                                  _passwordcontroller
+                                                                      .text;
+                                                    });
+                                                  },
+                                                  suffix: InkWell(
+                                                      onTap: () {
+                                                        context
+                                                            .read<
                                                                 AuthenticationBloc>()
-                                                                .add(ChangePassword1VisibilityEvent(
+                                                            .add(ChangePassword1VisibilityEvent(
                                                                 value: !state
                                                                     .isShowPassword1));
-                                                          },
-                                                          child: Container(
-                                                              margin:
-                                                              EdgeInsets.fromLTRB(
+                                                      },
+                                                      child: Container(
+                                                          margin: EdgeInsets
+                                                              .fromLTRB(
                                                                   30.h,
                                                                   21.v,
                                                                   18.h,
                                                                   22.v),
-                                                              child: CustomImageView(
-                                                                svgPath: state
-                                                                    .isShowPassword1
-                                                                    ? ImageConstant
+                                                          child:
+                                                              CustomImageView(
+                                                            svgPath: state.isShowPassword1
+                                                                ? ImageConstant
                                                                     .imgEye
-                                                                    : ImageConstant
+                                                                : ImageConstant
                                                                     .imgEye,
-                                                              ))),
-                                                      suffixConstraints:
+                                                          ))),
+                                                  suffixConstraints:
                                                       BoxConstraints(
                                                           maxHeight: 56.v),
-                                                      obscureText:
+                                                  obscureText:
                                                       state.isShowPassword1,
-                                                      validator: (value) {
-                                                        return value!.length < 6
-                                                            ? "Введите действительный пароль"
-                                                            : value !=
-                                                            _passwordcontroller
-                                                                .text
+                                                  validator: (value) {
+                                                    return value!.length < 6
+                                                        ? "Введите действительный пароль"
+                                                        : value !=
+                                                                _passwordcontroller
+                                                                    .text
                                                             ? "Пароли не совпадают"
                                                             : null;
-                                                      },
-                                                    );
-                                                  })
+                                                  },
+                                                );
+                                              })
                                             ])),
                                     SizedBox(height: 305.v),
                                     BlocListener<AuthenticationBloc,
                                             AuthenticationState>(
                                         listener: (context, state) {
                                       if (state is AuthSuccessState) {
+                                        AwesomeDialog(
+                                          context: context,
+                                          dialogType: DialogType.success,
+                                          animType: AnimType.topSlide,
+                                          title: 'Успех!',
+                                          titleTextStyle:
+                                              CustomTextStyles.semiBold32Text,
+                                          desc: 'Пароль успешно восстановлен',
+                                          descTextStyle:
+                                              CustomTextStyles.regular16Text,
+                                        ).show();
+                                        Future.delayed(Duration(seconds: 8));
                                         GoRouter.of(context)
                                             .push(AppRoutes.authorization);
                                       } else if (state is AuthErrorState) {
@@ -258,42 +257,16 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                                                       if (_formKey.currentState!
                                                           .validate()) {
                                                         try {
-                                                          AwesomeDialog(
-                                                            context: context,
-                                                            dialogType:
-                                                                DialogType.success,
-                                                            animType: AnimType
-                                                                .topSlide,
-                                                            title:
-                                                                'Успех!',
-                                                            titleTextStyle:
-                                                                CustomTextStyles
-                                                                    .semiBold32Text,
-                                                            desc:
-                                                                'Пароль успешно восстановлен',
-                                                            descTextStyle:
-                                                                CustomTextStyles
-                                                                    .regular16Text,
-                                                          ).show();
+                                                          BlocProvider.of<
+                                                                      AuthenticationBloc>(
+                                                                  context)
+                                                              .add(
+                                                            UpdateUserPasswordEvent(
+                                                                _passwordcontroller
+                                                                    .text),
+                                                          );
                                                         } catch (e) {
-                                                            AwesomeDialog(
-                                                              context: context,
-                                                              dialogType:
-                                                                  DialogType
-                                                                      .error,
-                                                              animType: AnimType
-                                                                  .topSlide,
-                                                              title: 'Ошибка!',
-                                                              titleTextStyle:
-                                                                  CustomTextStyles
-                                                                      .semiBold32Text,
-                                                              desc:
-                                                                  'Что-то пошло нет...',
-                                                              descTextStyle:
-                                                                  CustomTextStyles
-                                                                      .regular16Text,
-                                                            ).show();
-                                                            print(e);
+                                                          print(e);
                                                         }
                                                       }
                                                       ;
