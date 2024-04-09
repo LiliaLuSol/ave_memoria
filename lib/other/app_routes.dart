@@ -32,7 +32,7 @@ class AppRoutes {
       GoRoute(
         path: root,
         builder: (context, state) {
-          if (supabase.auth.currentUser != null) {
+          if (supabase.auth.currentUser != null && supabase.auth.currentUser != "anounymous@gmail.com") {
             return const BaseScreen();
           } else {
             return const Onboard();

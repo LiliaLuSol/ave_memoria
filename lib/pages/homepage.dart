@@ -1,8 +1,6 @@
-import 'dart:async';
 import 'package:ave_memoria/theme/custom_text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:ave_memoria/other/app_export.dart';
-import 'package:ave_memoria/main.dart';
 
 import 'game_rules.dart';
 
