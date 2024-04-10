@@ -16,6 +16,9 @@ class ImageConstant {
 
   static String imgUilvk = '$imagePath/img_uil_vk.svg';
 
+  //home
+  static String imgGame1 = '$imagePath/cards_game.png';
+
   //games
   static String imgHidden = '$imagePath/hidden.png';
 

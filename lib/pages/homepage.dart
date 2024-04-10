@@ -140,17 +140,32 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                                     ),
                                     SizedBox(height: 16.v),
                                     GestureDetector(
-                                        child: Container(
-                                            width: 353.h,
-                                            height: 167.v,
-                                            decoration: BoxDecoration(
-                                              color: Colors.brown,
-                                              // image: DecorationImage(
-                                              //     image: AssetImage(
-                                              //         "assets/background_button.png"),
-                                              //     fit: BoxFit.cover
-                                              // ),
-                                            )),
+                                        child: Stack(children: [
+                                          Container(
+                                              width: 353.h,
+                                              height: 167.v,
+                                              decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                  image: AssetImage(
+                                                      'assets/images/cards_game.png'),
+                                                  fit: BoxFit.fill,
+                                                ),
+                                              )),
+                                          Positioned(
+                                            top: 10.h,
+                                            left: 28.h,
+                                            child: Text(
+                                              'Карточная игра\n'
+                                              '"Легион памяти"',
+                                              style: TextStyle(
+                                                color: Colors.brown,
+                                                fontSize: 16.h,
+                                                fontFamily: 'fSize',
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          )
+                                        ]),
                                         onTap: () {
                                           gameRulesFirst1
                                               ? Navigator.push(
