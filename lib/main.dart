@@ -16,6 +16,7 @@ void main() async {
   await initializeDateFormatting('ru', null);
   await PrefUtils().init();
   await Supabase.initialize(
+    url:
     anonKey:
     authOptions: const FlutterAuthClientOptions(
       authFlowType: AuthFlowType.pkce,
