@@ -1,6 +1,7 @@
 import 'package:ave_memoria/other/app_export.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:page_view_indicators/circle_page_indicator.dart';
 
 class GameRules extends StatefulWidget {
   final bool firstTimes;
@@ -30,6 +31,47 @@ class GameRules extends StatefulWidget {
 }
 
 class _GameRulesState extends State<GameRules> {
+  final PageController pageController = PageController();
+  final _currentPageNotifier = ValueNotifier<int>(0);
+  late List<Widget> pages;
+
+  @override
+  void initState() {
+    super.initState();
+    pages = [
+      RulePage(text: widget.text1),
+    ];
+    if (widget.text2 != null) {
+      pages.add(RulePage(text: widget.text2!));
+    }
+    if (widget.text3 != null) {
+      pages.add(RulePage(text: widget.text3!));
+    }
+  }
+
+  @override
+  void dispose() {
+    pageController.dispose();
+    _currentPageNotifier.dispose();
+    super.dispose();
+  }
+
+  int currentPageIndex = 0;
+  final String namebuttonC = "Продолжить";
+  final String namebuttonF = "Завершить";
+
+  ValueNotifier<String> buttonTextNotifier =
+      ValueNotifier<String>("Продолжить");
+
+  String getLabel(int page) {
+    if (page == pages.length - 1) {
+      buttonTextNotifier.value = namebuttonF;
+    } else {
+      buttonTextNotifier.value = namebuttonC;
+    }
+    return buttonTextNotifier.value;
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -61,51 +103,108 @@ class _GameRulesState extends State<GameRules> {
                               onPressed: () {
                                 widget.firstTimes
                                     ? GoRouter.of(context)
-                                        .push(AppRoutes.game_cards)
+                                        .push(widget.goRoute)
                                     : Navigator.pop(context);
                               },
                             ),
                           ]),
-                          SizedBox(height: 49.v),
-                          Container(
-                            height: 205.v,
-                            width: 260.h,
-                            color: appTheme.lightGray,
+                          SizedBox(height: 40.v),
+                          Expanded(
+                            child: PageView.builder(
+                              controller: pageController,
+                              itemCount: pages.length,
+                              itemBuilder: (context, index) {
+                                return pages[index];
+                              },
+                              onPageChanged: (int page) {
+                                _currentPageNotifier.value = page;
+                                currentPageIndex = page;
+                                getLabel(page);
+                              },
+                            ),
                           ),
-                          SizedBox(height: 49.v),
-                          Text(widget.text1,
-                              style: CustomTextStyles.semiBold18Text,
-                              maxLines: 6,
-                              textAlign: TextAlign.center),
-                          SizedBox(height: 49.v),
-                          widget.firstTimes
-                              ? CustomElevatedButton(
-                                  text: "Начать",
-                                  buttonTextStyle:
-                                      CustomTextStyles.semiBold18TextWhite,
-                                  buttonStyle: ElevatedButton.styleFrom(
-                                      backgroundColor:
-                                          theme.colorScheme.primary,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(5))),
-                                  onTap: () {
-                                    GoRouter.of(context)
-                                        .push(widget.goRoute);
-                                  })
-                              : CustomElevatedButton(
-                                  text: "Продолжить",
-                                  buttonTextStyle:
-                                      CustomTextStyles.semiBold18TextWhite,
-                                  buttonStyle: ElevatedButton.styleFrom(
-                                      backgroundColor:
-                                          theme.colorScheme.primary,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(5))),
-                                  onTap: () {
-                                    Navigator.pop(context);
-                                  })
+                          SizedBox(height: 4.v),
+                          Positioned(
+                            left: 0.0,
+                            right: 0.0,
+                            bottom: 0.0,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: CirclePageIndicator(
+                                itemCount: widget.countRule,
+                                currentPageNotifier: _currentPageNotifier,
+                              ),
+                            ),
+                          ),
+                           SizedBox(height: 40.v),
+                          ValueListenableBuilder<String>(
+                              valueListenable: buttonTextNotifier,
+                              builder: (context, label, child) {
+                                return CustomElevatedButton(
+                                    text: label,
+                                    buttonTextStyle:
+                                        CustomTextStyles.semiBold18TextWhite,
+                                    buttonStyle: ElevatedButton.styleFrom(
+                                        backgroundColor:
+                                            theme.colorScheme.primary,
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(5))),
+                                    onTap: () {
+                                      if (getLabel(currentPageIndex) ==
+                                          namebuttonC) {
+                                        if (currentPageIndex <
+                                            pages.length - 1) {
+                                          pageController.animateToPage(
+                                              currentPageIndex + 1,
+                                              duration:
+                                                  Duration(milliseconds: 500),
+                                              curve: Curves.ease);
+                                        }
+                                      } else {
+                                        widget.firstTimes
+                                            ? GoRouter.of(context)
+                                                .push(widget.goRoute)
+                                            : Navigator.pop(context);
+                                      }
+                                    });
+                              }),
+                          SizedBox(height: 25.v)
                         ]))))));
+  }
+}
+
+class RulePage extends StatelessWidget {
+  final String? image;
+  final String text;
+
+  RulePage({
+    this.image,
+    required this.text,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          height: 205.v,
+          width: 260.h,
+          color: appTheme.lightGray,
+          // decoration: BoxDecoration(
+          //   image: DecorationImage(
+          //     image: AssetImage(
+          //         'assets/images/cards_game.png'),
+          //     fit: BoxFit.fill,
+          //   ),
+          // )
+        ),
+        SizedBox(height: 40.v),
+        Text(text,
+            style: CustomTextStyles.semiBold18Text,
+            maxLines: 6,
+            textAlign: TextAlign.center),
+      ],
+    );
   }
 }
