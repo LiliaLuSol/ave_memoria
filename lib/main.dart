@@ -16,10 +16,10 @@ void main() async {
   await initializeDateFormatting('ru', null);
   await PrefUtils().init();
   await Supabase.initialize(
-    url: 'https://url.supabase.co',
     anonKey:
-        'anonKey',
-    authFlowType: AuthFlowType.pkce,
+    authOptions: const FlutterAuthClientOptions(
+      authFlowType: AuthFlowType.pkce,
+    ),
     debug: false,
   );
   Bloc.observer = MyBlocObserver();

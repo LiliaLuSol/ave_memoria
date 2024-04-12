@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 class GameRules extends StatefulWidget {
   final bool firstTimes;
+  final String goRoute;
   final int countRule;
   final String text1;
   final String? text2;
@@ -14,6 +15,7 @@ class GameRules extends StatefulWidget {
 
   const GameRules(
       {super.key,
+      required this.goRoute,
       required this.firstTimes,
       required this.countRule,
       required this.text1,
@@ -32,9 +34,8 @@ class _GameRulesState extends State<GameRules> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-            backgroundColor: widget.firstTimes
-                ? Color(0xFFC0C0C0)
-                : Colors.transparent,
+            backgroundColor:
+                widget.firstTimes ? Color(0xFFC0C0C0) : Colors.transparent,
             body: Center(
                 child: Container(
                     width: 353.h,
@@ -90,7 +91,7 @@ class _GameRulesState extends State<GameRules> {
                                               BorderRadius.circular(5))),
                                   onTap: () {
                                     GoRouter.of(context)
-                                        .push(AppRoutes.game_cards);
+                                        .push(widget.goRoute);
                                   })
                               : CustomElevatedButton(
                                   text: "Продолжить",

@@ -83,9 +83,10 @@ class _AuthRegState extends State<AuthReg> {
                 BlocBuilder<AuthenticationBloc, AuthenticationState>(
                     builder: (context, state) {
                   if (state is AuthLoadingState) {
-                    return CircularProgressIndicator(
-                      color: theme.colorScheme.primary,
-                    );
+                    return Center(
+                        child: CircularProgressIndicator(
+                          color: theme.colorScheme.primary,
+                        ));
                   } else {
                     return CustomElevatedButton(
                       text: "Продолжить без регистрации",

@@ -219,9 +219,10 @@ class _AuthorizationState extends State<Authorization>
                                             AuthenticationState>(
                                         builder: (context, state) {
                                       if (state is AuthLoadingState) {
-                                        return CircularProgressIndicator(
-                                          color: theme.colorScheme.primary,
-                                        );
+                                        return Center(
+                                            child: CircularProgressIndicator(
+                                              color: theme.colorScheme.primary,
+                                            ));
                                       } else {
                                         return CustomElevatedButton(
                                           text: "Войти",

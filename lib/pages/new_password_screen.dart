@@ -200,9 +200,10 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                                     SizedBox(height: 305.v),
                                     BlocListener<AuthenticationBloc,
                                             AuthenticationState>(
-                                        listener: (context, state) {
+                                        listener: (context, state) async {
                                       if (state is AuthSuccessState) {
-                                        AwesomeDialog(
+                                        print(2);
+                                        await AwesomeDialog(
                                           context: context,
                                           dialogType: DialogType.success,
                                           animType: AnimType.topSlide,
@@ -212,10 +213,9 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                                           desc: 'Пароль успешно восстановлен',
                                           descTextStyle:
                                               CustomTextStyles.regular16Text,
-                                        ).show();
-                                        Future.delayed(Duration(seconds: 8));
-                                        GoRouter.of(context)
-                                            .push(AppRoutes.authorization);
+                                        ).show().then((value) {
+                                          GoRouter.of(context).push(AppRoutes.authorization);
+                                        });
                                       } else if (state is AuthErrorState) {
                                         context.showsnackbar(
                                             title:
@@ -225,16 +225,18 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                                                 AuthenticationState>(
                                             builder: (context, state) {
                                       if (state is AuthLoadingState) {
-                                        return CircularProgressIndicator(
+                                        return Center(
+                                            child: CircularProgressIndicator(
                                           color: theme.colorScheme.primary,
-                                        );
+                                        ));
                                       } else {
                                         return CustomElevatedButton(
                                             text: "Восстановить",
                                             buttonTextStyle: CustomTextStyles
                                                 .semiBold18TextWhite,
                                             margin: EdgeInsets.only(left: 2.h),
-                                            buttonStyle: isPasswordValid
+                                            buttonStyle: isPasswordValid &&
+                                                isConfirmPasswordValid
                                                 ? ElevatedButton.styleFrom(
                                                     backgroundColor: theme
                                                         .colorScheme.primary,
@@ -252,19 +254,19 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                                                                     .circular(
                                                                         5))),
                                             onTap: () {
-                                              isPasswordValid
-                                                  ? () async {
+                                              isPasswordValid &&
+                                                  isConfirmPasswordValid
+                                                  ? () {
+                                                print("1.1");
                                                       if (_formKey.currentState!
                                                           .validate()) {
                                                         try {
-                                                          BlocProvider.of<
-                                                                      AuthenticationBloc>(
-                                                                  context)
-                                                              .add(
+                                                          BlocProvider.of<AuthenticationBloc>(context).add(
                                                             UpdateUserPasswordEvent(
                                                                 _passwordcontroller
                                                                     .text),
                                                           );
+                                                          print("1");
                                                         } catch (e) {
                                                           print(e);
                                                         }

@@ -93,6 +93,7 @@ class _PauseMenuState extends State<PauseMenu> {
                                       pageBuilder: (_, __, ___) =>
                                           const GameRules(
                                             firstTimes: false,
+                                            goRoute: "",
                                             countRule: 3,
                                             text1:
                                                 "Игровое поле состоит из карт, за каждой из которых скрыта картинка. Картинки ― парные, т.е. на игровом поле есть две карты, на которых находятся одинаковые картинки",

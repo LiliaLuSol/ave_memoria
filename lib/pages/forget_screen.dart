@@ -100,7 +100,7 @@ class _ForgetScreenState extends State<ForgetScreen> {
                                   BlocListener<AuthenticationBloc, AuthenticationState>(
                                     listener: (context, state) async {
                                       if (state is AuthSuccessState) {
-                                        AwesomeDialog(
+                                       await AwesomeDialog(
                                           context: context,
                                           dialogType: DialogType.info,
                                           animType: AnimType.topSlide,
@@ -108,9 +108,9 @@ class _ForgetScreenState extends State<ForgetScreen> {
                                           titleTextStyle: CustomTextStyles.semiBold32Text,
                                           desc: 'На Ваш email отправили письмо для продолжения процедуры',
                                           descTextStyle: CustomTextStyles.regular16Text,
-                                        ).show();
-                                        Future.delayed(Duration(seconds: 8));
-                                        GoRouter.of(context).push(AppRoutes.new_password);
+                                        ).show().then((value) {
+                                         GoRouter.of(context).push(AppRoutes.new_password);
+                                       });
                                       } else if (state is AuthErrorState) {
                                         context.showsnackbar(
                                             title: 'Что-то пошло не так! Повторите попытку позже'
@@ -120,9 +120,10 @@ class _ForgetScreenState extends State<ForgetScreen> {
                                     child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
                                         builder: (context, state) {
                                           if (state is AuthLoadingState) {
-                                            return CircularProgressIndicator(
-                                              color: theme.colorScheme.primary,
-                                            );
+                                            return Center(
+                                                child: CircularProgressIndicator(
+                                                  color: theme.colorScheme.primary,
+                                                ));
                                           } else {
                                             return CustomElevatedButton(
                                               text: "Восстановить",

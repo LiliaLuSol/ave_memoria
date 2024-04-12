@@ -11,6 +11,7 @@ import 'package:ave_memoria/main.dart';
 import 'package:ave_memoria/pages/screen_layout.dart';
 import 'package:go_router/go_router.dart';
 import '../games/cards_game/gaming_cards.dart';
+import '../games/sequence_game/gaming_sequence.dart';
 import '../pages/forget_screen.dart';
 import 'app_export.dart';
 
@@ -24,6 +25,7 @@ class AppRoutes {
   static const homepage = '/homepage';
   static const support = '/support';
   static const game_cards = '/gaming_cards';
+  static const game_sequence = '/gaming_sequence';
   static const forgetScreen = '/forget_screen';
   static const new_password = '/new_password_screen';
 
@@ -32,7 +34,7 @@ class AppRoutes {
       GoRoute(
         path: root,
         builder: (context, state) {
-          if (supabase.auth.currentUser != null && supabase.auth.currentUser != "anounymous@gmail.com") {
+          if (supabase.auth.currentUser != null && supabase.auth.currentUser?.email != "anounymous@gmail.com") {
             return const BaseScreen();
           } else {
             return const Onboard();
@@ -64,10 +66,6 @@ class AppRoutes {
         builder: (context, state) => const Support(),
       ),
       GoRoute(
-        path: homepage,
-        builder: (context, state) => const BaseScreen(),
-      ),
-      GoRoute(
         path: forgetScreen,
         builder: (context, state) => const ForgetScreen(),
       ),
@@ -76,8 +74,16 @@ class AppRoutes {
         builder: (context, state) => const NewPasswordScreen(),
       ),
       GoRoute(
+        path: homepage,
+        builder: (context, state) => const BaseScreen(),
+      ),
+      GoRoute(
         path: game_cards,
         builder: (context, state) => const CardsGame(),
+      ),
+      GoRoute(
+        path: game_sequence,
+        builder: (context, state) => const SequenceGame(),
       ),
      ],
     initialLocation: root,

@@ -52,7 +52,7 @@ class AuthService {
 
   Future<void> signInWithGoogle() async {
     try {
-      await _auth.signInWithOAuth(Provider.google);
+      await _auth.signInWithOAuth(OAuthProvider.google);
     } catch (e) {
       throw e.toString();
     }

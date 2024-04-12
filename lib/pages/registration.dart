@@ -3,6 +3,7 @@ import 'package:ave_memoria/main.dart';
 import 'package:ave_memoria/utils/validator.dart';
 import 'package:flutter/material.dart';
 import 'package:ave_memoria/other/app_export.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class Registration extends StatefulWidget {
   const Registration({super.key});
@@ -47,6 +48,34 @@ class _RegistrationState extends State<Registration>
     _confirmpasscontroller = TextEditingController();
     _controller.dispose();
     super.dispose();
+  }
+
+  void addUser() async {
+    try {
+      final res = await supabase.from('Users').select().count(CountOption.exact);
+      print(res);
+      String? email = _emailcontroller.text;
+      final count = res.count;
+      print(count);
+      int countNew = count + 1;
+      email = email.toString();
+      supabase.from('Users').upsert({
+        'id': countNew,
+        'email': email.toString(),
+        'date_start': DateTime.now(),
+        'active_days': 1
+      });
+      supabase.from('Notifications').upsert({
+        'id': countNew + 1,
+        'user_id': countNew,
+        'news': _wantNewsInfoValue,
+        'notification': bool,
+        'notification_time': "12:00:00"
+      });
+    } catch (error) {
+      print('Ошибка при выполнении запроса: $error');
+    }
+    ;
   }
 
   @override
@@ -289,12 +318,13 @@ class _RegistrationState extends State<Registration>
                                       listener: (context, state) async {
                                     if (state is AuthSuccessState) {
                                       try {
+                                        addUser();
                                         final res = await supabase
                                             .from('Users')
                                             .select()
-                                            .execute();
+                                            .count(CountOption.exact);
                                         String? email = _emailcontroller.text;
-                                        final count = res.data.length;
+                                        final count = res.count;
                                         int countNew = count + 1;
                                         email = email.toString();
                                         supabase.from('Users').upsert({
@@ -304,9 +334,16 @@ class _RegistrationState extends State<Registration>
                                           'active_days': 1
                                         });
                                         supabase.from('Notifications').upsert({
-                                          'id': countNew,
+                                          'id': countNew + 1,
                                           'user_id': countNew,
                                           'news': _wantNewsInfoValue,
+                                        });
+                                        supabase.from('Characters').upsert({
+                                          'id': countNew + 1,
+                                          'user_id': countNew,
+                                          'news': _wantNewsInfoValue,
+                                          'person_name': 'Игрок',
+                                          'money': 0
                                         });
                                       } catch (error) {
                                         print(
@@ -322,11 +359,12 @@ class _RegistrationState extends State<Registration>
                                             horizontal: 16.v),
                                         desc:
                                             'Пожалуйста, не забудьте подтвердить Вашу почту для окончательного подтверждения регистрации',
+                                        btnOkText: "Да",
+                                        btnOkOnPress: () => GoRouter.of(context)
+                                            .push(AppRoutes.homepage),
+                                        buttonsTextStyle:
+                                            CustomTextStyles.regular16White,
                                       ).show();
-                                      await Future.delayed(
-                                          Duration(seconds: 8));
-                                      await GoRouter.of(context)
-                                          .push(AppRoutes.homepage);
                                     } else if (state is AuthErrorState) {
                                       AwesomeDialog(
                                               context: context,
@@ -379,7 +417,7 @@ class _RegistrationState extends State<Registration>
                                         onTap: isEmailValid &&
                                                 isPasswordValid &&
                                                 isConfirmPasswordValid
-                                            ? () async {
+                                            ? () {
                                                 if (_formKey.currentState!
                                                     .validate()) {
                                                   try {
