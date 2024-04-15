@@ -316,7 +316,6 @@ class _RegistrationState extends State<Registration>
                                               .upsert({
                                             'characters_id': count,
                                             'user_id': count,
-                                            'news': _wantNewsInfoValue,
                                             'money': 10
                                           });
                                           await supabase
