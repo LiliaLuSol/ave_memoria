@@ -66,6 +66,12 @@ class _MyAppState extends State<MyApp> {
                       theme: ThemeData(
                           scaffoldBackgroundColor:
                               theme.colorScheme.background),
+                              theme.colorScheme.background,
+                        textSelectionTheme: TextSelectionThemeData(
+                          selectionColor: theme.colorScheme.primary.withOpacity(0.5),
+                          cursorColor: theme.colorScheme.primary,
+                          selectionHandleColor: theme.colorScheme.primary
+                        ),),
                       title: 'ave_memoria',
                       debugShowCheckedModeBanner: false,
                       routeInformationProvider:

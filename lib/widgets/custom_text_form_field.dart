@@ -94,6 +94,7 @@ class CustomTextFormField extends StatelessWidget {
           textCapitalization: TextCapitalization.sentences,
           enableInteractiveSelection: enableInteractiveSelection,
           enabled: enabled,
+          cursorColor: theme.colorScheme.primary
         ),
       );
 
