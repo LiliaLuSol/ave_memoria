@@ -365,7 +365,7 @@ class _RegistrationState extends State<Registration>
                                             'Ошибка при выполнении запроса: $error');
                                       }
                                       ;
-                                      await AwesomeDialog(
+                                      AwesomeDialog(
                                         context: context,
                                         dialogType: DialogType.success,
                                         animType: AnimType.topSlide,
