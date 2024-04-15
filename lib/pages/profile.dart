@@ -3,6 +3,7 @@ import 'package:ave_memoria/main.dart';
 
 import 'package:flutter/material.dart';
 import 'package:ave_memoria/other/app_export.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -21,6 +22,21 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
   bool isSelectedSwitch = false;
 
   TimeOfDay selectedTime = TimeOfDay.now();
+
+  late TextEditingController messageplaceholController;
+  final msgFocusNode = FocusNode();
+
+  @override
+  void initState() {
+    messageplaceholController = TextEditingController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    messageplaceholController.dispose();
+    super.dispose();
+  }
 
   String? getEmail() {
     final currentUser = supabase.auth.currentUser;
@@ -47,6 +63,7 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     mediaQueryData = MediaQuery.of(context);
+    double rating = 3;
 
     return BlocListener<AuthenticationBloc, AuthenticationState>(
         listener: (context, state) {
@@ -213,7 +230,132 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
                                                           ]))),
                                               SizedBox(height: 16.v),
                                               GestureDetector(
-                                                  onTap: () {},
+                                                  onTap: () {
+                                                    showDialog(
+                                                        context: context,
+                                                        builder: (BuildContext
+                                                            context) {
+                                                          return AlertDialog(
+                                                            backgroundColor: theme
+                                                                .colorScheme
+                                                                .onPrimaryContainer,
+                                                            title: Text(
+                                                                'Оценка',
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center),
+                                                            titleTextStyle:
+                                                                CustomTextStyles
+                                                                    .semiBold32Text,
+                                                            shape: RoundedRectangleBorder(
+                                                                borderRadius:
+                                                                    BorderRadiusStyle
+                                                                        .circleBorder15),
+                                                            content: Column(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .start,
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .center,
+                                                                mainAxisSize:
+                                                                    MainAxisSize
+                                                                        .min,
+                                                                children: [
+                                                                  StatefulBuilder(
+                                                                    builder: (BuildContext
+                                                                            context,
+                                                                        StateSetter
+                                                                            setState) {
+                                                                      return RatingBar
+                                                                          .builder(
+                                                                        initialRating:
+                                                                            rating,
+                                                                        minRating:
+                                                                            1,
+                                                                        direction:
+                                                                            Axis.horizontal,
+                                                                        allowHalfRating:
+                                                                            true,
+                                                                        itemCount:
+                                                                            5,
+                                                                        itemPadding:
+                                                                            EdgeInsets.symmetric(horizontal: 4.h),
+                                                                        itemBuilder: (context, _) => Icon(
+                                                                            Icons
+                                                                                .star,
+                                                                            color:
+                                                                                theme.colorScheme.primary),
+                                                                        onRatingUpdate:
+                                                                            (newRating) {
+                                                                          setState(
+                                                                              () {
+                                                                            rating =
+                                                                                newRating;
+                                                                          });
+                                                                        },
+                                                                      );
+                                                                    },
+                                                                  ),
+                                                                  SizedBox(
+                                                                      height:
+                                                                          4.v),
+                                                                  Divider(
+                                                                      height: 1,
+                                                                      color: appTheme
+                                                                          .gray),
+                                                                  SizedBox(
+                                                                      height:
+                                                                          4.v),
+                                                                  SingleChildScrollView(
+                                                                      child: CustomTextFormField(
+                                                                          controller:
+                                                                              messageplaceholController,
+                                                                          focusNode:
+                                                                              msgFocusNode,
+                                                                          maxLines:
+                                                                              5,
+                                                                          autofocus:
+                                                                              false,
+                                                                          hintText:
+                                                                              "Отзыв...",
+                                                                          borderDecoration: InputBorder
+                                                                              .none,
+                                                                          textInputAction: TextInputAction
+                                                                              .done,
+                                                                          fillColor:
+                                                                              Colors.transparent)),
+                                                                  SizedBox(
+                                                                      height:
+                                                                          8.v),
+                                                                  CustomElevatedButton(
+                                                                    text:
+                                                                        "Оценить",
+                                                                    buttonTextStyle:
+                                                                        CustomTextStyles
+                                                                            .semiBold18TextWhite,
+                                                                    buttonStyle: ElevatedButton.styleFrom(
+                                                                        backgroundColor: theme
+                                                                            .colorScheme
+                                                                            .primary,
+                                                                        shape: RoundedRectangleBorder(
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(5))),
+                                                                    onTap: () {
+                                                                      context.showsnackbar(
+                                                                          title:
+                                                                              'Спасибо за оценку!',
+                                                                          color:
+                                                                              Colors.grey);
+                                                                      Navigator.of(
+                                                                              context)
+                                                                          .pop();
+                                                                    },
+                                                                  ),
+                                                                ]),
+                                                          );
+                                                        });
+                                                  },
                                                   child: Container(
                                                       padding:
                                                           EdgeInsets.symmetric(
@@ -233,8 +375,7 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
                                                               CrossAxisAlignment
                                                                   .start,
                                                           children: [
-                                                            Text(
-                                                                "Написать отзыв",
+                                                            Text("Оценить",
                                                                 style: CustomTextStyles
                                                                     .regular16Text),
                                                             CustomImageView(

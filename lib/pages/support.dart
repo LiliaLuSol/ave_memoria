@@ -104,8 +104,7 @@ class _SupportState extends State<Support> {
                                             context.showsnackbar(
                                                 title: 'Сообщение отправлено!',
                                                 color: Colors.grey);
-                                            GoRouter.of(context)
-                                                .push(AppRoutes.homepage);
+                                            Navigator.of(context).pop();
                                           },
                                         ),
                                       ]))
