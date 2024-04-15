@@ -121,9 +121,10 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                                           height: 104.v,
                                         ),onTap: () async {
                                             try {
-                                              final res = await supabase.from('org').select();
-                                              supabase.from('org').upsert({
-                                                'name': "wow",
+                                              final res = await supabase.from('ogr').select().count(CountOption.exact);
+                                               await supabase.from('ogr').upsert({
+                                                'id': res.count+1,
+                                                 'name': 'false'
                                               });
                                             } catch (error) {
                                               print('Ошибка при выполнении запроса: $error');

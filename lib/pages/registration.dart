@@ -324,26 +324,41 @@ class _RegistrationState extends State<Registration>
                                             .select()
                                             .count(CountOption.exact);
                                         String? email = _emailcontroller.text;
-                                        final count = res.count;
-                                        int countNew = count + 1;
+                                        final count = res.count+1;
                                         email = email.toString();
-                                        supabase.from('Users').upsert({
-                                          'id': countNew,
+                                        await supabase.from('Users').upsert({
+                                          'user_id': count,
                                           'email': email.toString(),
-                                          'date_start': DateTime.now(),
                                           'active_days': 1
                                         });
-                                        supabase.from('Notifications').upsert({
-                                          'id': countNew + 1,
-                                          'user_id': countNew,
+                                        await supabase.from('Notifications').upsert({
+                                          'id': count,
+                                          'user_id': count,
                                           'news': _wantNewsInfoValue,
                                         });
-                                        supabase.from('Characters').upsert({
-                                          'id': countNew + 1,
-                                          'user_id': countNew,
+                                        await supabase.from('Characters').upsert({
+                                          'characters_id': count,
+                                          'user_id': count,
                                           'news': _wantNewsInfoValue,
-                                          'person_name': 'Игрок',
-                                          'money': 0
+                                          'money': 10
+                                        });
+                                        await supabase.from('GameRule').upsert({
+                                          'user_id': count,
+                                          'game': 'cards',
+                                          'is_new': true
+                                        });
+                                        await supabase.from('GameRule').upsert({
+                                          'user_id': count,
+                                          'game': 'sequence',
+                                          'is_new': true
+                                        });
+                                        await supabase.from('Levels').upsert({
+                                          'user_id': count,
+                                          'number': 1.1
+                                        });
+                                        await supabase.from('Levels').upsert({
+                                          'user_id': count,
+                                          'number': 1.2
                                         });
                                       } catch (error) {
                                         print(
