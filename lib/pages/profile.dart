@@ -4,6 +4,7 @@ import 'package:ave_memoria/main.dart';
 import 'package:flutter/material.dart';
 import 'package:ave_memoria/other/app_export.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -20,6 +21,7 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
 
   bool isNameValid = false;
   bool isSelectedSwitch = false;
+  bool isSelectedSwitch1 = false;
 
   TimeOfDay selectedTime = TimeOfDay.now();
 
@@ -48,17 +50,28 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
     }
   }
 
+  Future<String> getMoney() async {
+    return await supabase
+        .from('profileusergame')
+        .select('money')
+        .eq('email',
+            getEmail == "Ваш email скоро здесь появится..." ? 0 : getEmail)
+        .toString();
+  }
+
   Future<void> _selectTime(BuildContext context) async {
     final TimeOfDay? picked = await showTimePicker(
       context: context,
       builder: (context, child) {
         return Theme(
-          data: ThemeData.light().copyWith(
-            colorScheme: ColorScheme.light(
-              primary: theme.colorScheme.primary,
-              onSurface: theme.colorScheme.primary,
+            data: ThemeData.light().copyWith(
+              colorScheme: ColorScheme.light(
+                primary: theme.colorScheme.primary,
+                onSurface: theme.colorScheme.primary,
+              ),
             ),
-          ), child: child!);},
+            child: child!);
+      },
       initialTime: selectedTime,
       cancelText: 'Отмена',
     );
@@ -66,6 +79,10 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
       setState(() {
         selectedTime = picked;
       });
+      // await supabase.from('Notifications')
+      //     .update({
+      //   'notification_time': selectedTime
+      // }).eq('email', 'email', getEmail == "Ваш email скоро здесь появится..." ? 0:getEmail );
     }
   }
 
@@ -73,6 +90,10 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     mediaQueryData = MediaQuery.of(context);
     double rating = 3;
+    // final data = await supabase
+    //     .from('profileusergame')
+    //     .select('money, person_name, notification_time')
+    //     .single();
 
     return BlocListener<AuthenticationBloc, AuthenticationState>(
         listener: (context, state) {
@@ -108,7 +129,8 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
                           bottom: 9.v,
                         ),
                         child: Text(
-                          "0",
+                          // "0",
+                          getMoney().toString(),
                           style: CustomTextStyles.semiBold18Text,
                         ),
                       ),
@@ -400,6 +422,42 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
                                                                         bottom:
                                                                             5.v))
                                                           ]))),
+                                              SizedBox(height: 16.v),
+                                              Container(
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 13.h,
+                                                      vertical: 15.v),
+                                                  decoration: AppDecoration
+                                                      .outlineGray
+                                                      .copyWith(
+                                                          borderRadius:
+                                                              BorderRadiusStyle
+                                                                  .circleBorder15),
+                                                  child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        Text(
+                                                            "Получение рассылок",
+                                                            style: CustomTextStyles
+                                                                .regular16Text),
+                                                        SizedBox(width: 22.h),
+                                                        CustomSwitch(
+                                                            height: 15.v,
+                                                            margin:
+                                                                EdgeInsets.only(
+                                                                    top: 2.v),
+                                                            value:
+                                                                isSelectedSwitch1,
+                                                            onChange:
+                                                                (bool value) {
+                                                              setState(() {
+                                                                isSelectedSwitch1 =
+                                                                    value;
+                                                              });
+                                                            })
+                                                      ])),
                                               SizedBox(height: 16.v),
                                               Row(children: [
                                                 Container(
