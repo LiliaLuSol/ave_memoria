@@ -28,6 +28,7 @@ class _RegistrationState extends State<Registration>
   bool isPasswordValid = false;
   bool isConfirmPasswordValid = false;
   bool _wantNewsInfoValue = false;
+  bool is_reg = true;
 
   @override
   void initState() {
@@ -48,34 +49,6 @@ class _RegistrationState extends State<Registration>
     _confirmpasscontroller = TextEditingController();
     _controller.dispose();
     super.dispose();
-  }
-
-  void addUser() async {
-    try {
-      final res = await supabase.from('Users').select().count(CountOption.exact);
-      print(res);
-      String? email = _emailcontroller.text;
-      final count = res.count;
-      print(count);
-      int countNew = count + 1;
-      email = email.toString();
-      supabase.from('Users').upsert({
-        'id': countNew,
-        'email': email.toString(),
-        'date_start': DateTime.now(),
-        'active_days': 1
-      });
-      supabase.from('Notifications').upsert({
-        'id': countNew + 1,
-        'user_id': countNew,
-        'news': _wantNewsInfoValue,
-        'notification': bool,
-        'notification_time': "12:00:00"
-      });
-    } catch (error) {
-      print('Ошибка при выполнении запроса: $error');
-    }
-    ;
   }
 
   @override
@@ -317,69 +290,79 @@ class _RegistrationState extends State<Registration>
                                           AuthenticationState>(
                                       listener: (context, state) async {
                                     if (state is AuthSuccessState) {
-                                      try {
-                                        addUser();
-                                        final res = await supabase
-                                            .from('Users')
-                                            .select()
-                                            .count(CountOption.exact);
-                                        String? email = _emailcontroller.text;
-                                        final count = res.count+1;
-                                        email = email.toString();
-                                        await supabase.from('Users').upsert({
-                                          'user_id': count,
-                                          'email': email.toString(),
-                                          'active_days': 1
-                                        });
-                                        await supabase.from('Notifications').upsert({
-                                          'id': count,
-                                          'user_id': count,
-                                          'news': _wantNewsInfoValue,
-                                        });
-                                        await supabase.from('Characters').upsert({
-                                          'characters_id': count,
-                                          'user_id': count,
-                                          'news': _wantNewsInfoValue,
-                                          'money': 10
-                                        });
-                                        await supabase.from('GameRule').upsert({
-                                          'user_id': count,
-                                          'game': 'cards',
-                                          'is_new': true
-                                        });
-                                        await supabase.from('GameRule').upsert({
-                                          'user_id': count,
-                                          'game': 'sequence',
-                                          'is_new': true
-                                        });
-                                        await supabase.from('Levels').upsert({
-                                          'user_id': count,
-                                          'number': 1.1
-                                        });
-                                        await supabase.from('Levels').upsert({
-                                          'user_id': count,
-                                          'number': 1.2
-                                        });
-                                      } catch (error) {
-                                        print(
-                                            'Ошибка при выполнении запроса: $error');
+                                      if (is_reg) {
+                                        try {
+                                          final res = await supabase
+                                              .from('Users')
+                                              .select()
+                                              .count(CountOption.exact);
+                                          String? email = _emailcontroller.text;
+                                          final count = res.count + 1;
+                                          email = email.toString();
+                                          await supabase.from('Users').upsert({
+                                            'user_id': count,
+                                            'email': email.toString(),
+                                            'active_days': 1
+                                          });
+                                          await supabase
+                                              .from('Notifications')
+                                              .upsert({
+                                            'notifications_id': count,
+                                            'user_id': count,
+                                            'news': _wantNewsInfoValue,
+                                          });
+                                          await supabase
+                                              .from('Characters')
+                                              .upsert({
+                                            'characters_id': count,
+                                            'user_id': count,
+                                            'news': _wantNewsInfoValue,
+                                            'money': 10
+                                          });
+                                          await supabase
+                                              .from('GameRule')
+                                              .upsert({
+                                            'user_id': count,
+                                            'game': 'cards',
+                                            'is_new': true
+                                          });
+                                          await supabase
+                                              .from('GameRule')
+                                              .upsert({
+                                            'user_id': count,
+                                            'game': 'sequence',
+                                            'is_new': true
+                                          });
+                                          await supabase.from('Levels').upsert({
+                                            'user_id': count,
+                                            'number': 1.1
+                                          });
+                                          await supabase.from('Levels').upsert({
+                                            'user_id': count,
+                                            'number': 1.2
+                                          });
+                                        } catch (error) {
+                                          print(
+                                              'Ошибка при выполнении запроса: $error');
+                                        }
+                                        ;
+                                        AwesomeDialog(
+                                          context: context,
+                                          dialogType: DialogType.success,
+                                          animType: AnimType.topSlide,
+                                          title: 'Почти всё!',
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 16.v),
+                                          desc:
+                                              'Пожалуйста, не забудьте подтвердить Вашу почту для окончательного подтверждения регистрации',
+                                          btnOkText: "Да",
+                                          btnOkOnPress: () =>
+                                              GoRouter.of(context)
+                                                  .push(AppRoutes.homepage),
+                                          buttonsTextStyle:
+                                              CustomTextStyles.regular16White,
+                                        ).show();
                                       }
-                                      ;
-                                      AwesomeDialog(
-                                        context: context,
-                                        dialogType: DialogType.success,
-                                        animType: AnimType.topSlide,
-                                        title: 'Почти всё!',
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 16.v),
-                                        desc:
-                                            'Пожалуйста, не забудьте подтвердить Вашу почту для окончательного подтверждения регистрации',
-                                        btnOkText: "Да",
-                                        btnOkOnPress: () => GoRouter.of(context)
-                                            .push(AppRoutes.homepage),
-                                        buttonsTextStyle:
-                                            CustomTextStyles.regular16White,
-                                      ).show();
                                     } else if (state is AuthErrorState) {
                                       AwesomeDialog(
                                               context: context,
