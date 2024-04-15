@@ -51,7 +51,16 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
   Future<void> _selectTime(BuildContext context) async {
     final TimeOfDay? picked = await showTimePicker(
       context: context,
+      builder: (context, child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            colorScheme: ColorScheme.light(
+              primary: theme.colorScheme.primary,
+              onSurface: theme.colorScheme.primary,
+            ),
+          ), child: child!);},
       initialTime: selectedTime,
+      cancelText: 'Отмена',
     );
     if (picked != null && picked != selectedTime) {
       setState(() {
