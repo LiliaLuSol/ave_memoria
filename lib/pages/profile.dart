@@ -27,15 +27,19 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
 
   late TextEditingController messageplaceholController;
   final msgFocusNode = FocusNode();
+  late List<dynamic> moneyList;
 
   @override
   void initState() {
+    moneyList = [];
+    getMoney();
     messageplaceholController = TextEditingController();
     super.initState();
   }
 
   @override
   void dispose() {
+    moneyList.clear();
     messageplaceholController.dispose();
     super.dispose();
   }
@@ -50,13 +54,19 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
     }
   }
 
-  Future<String> getMoney() async {
-    return await supabase
+  void getMoney() async {
+    String? email = getEmail();
+    email = email.toString();
+    final res = await supabase
         .from('profileusergame')
         .select('money')
         .eq('email',
-            getEmail == "Ваш email скоро здесь появится..." ? 0 : getEmail)
-        .toString();
+        email)
+        .count(CountOption.exact);
+    final data = res.data;
+    setState(() {
+      moneyList.add(data[0]['money']);
+    });
   }
 
   Future<void> _selectTime(BuildContext context) async {
@@ -90,10 +100,6 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     mediaQueryData = MediaQuery.of(context);
     double rating = 3;
-    // final data = await supabase
-    //     .from('profileusergame')
-    //     .select('money, person_name, notification_time')
-    //     .single();
 
     return BlocListener<AuthenticationBloc, AuthenticationState>(
         listener: (context, state) {
@@ -129,10 +135,10 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
                           bottom: 9.v,
                         ),
                         child: Text(
-                          // "0",
-                          getMoney().toString(),
-                          style: CustomTextStyles.semiBold18Text,
-                        ),
+                            moneyList.isNotEmpty
+                                ? moneyList.first.toString()
+                                : '0',
+                            style: CustomTextStyles.semiBold18Text)
                       ),
                       IconButton(
                         icon: FaIcon(

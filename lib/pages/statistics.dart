@@ -2,6 +2,9 @@ import 'package:ave_memoria/blocs/Auth/bloc/authentication_bloc.dart';
 
 import 'package:flutter/material.dart';
 import 'package:ave_memoria/other/app_export.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+import '../main.dart';
 
 class Statistics extends StatefulWidget {
   const Statistics({super.key});
@@ -11,6 +14,45 @@ class Statistics extends StatefulWidget {
 }
 
 class _StatisticsState extends State<Statistics> with TickerProviderStateMixin {
+  late List<dynamic> moneyList;
+
+  @override
+  void initState() {
+    moneyList = [];
+    getMoney();
+    super.initState();
+  }
+  String? getEmail() {
+    final currentUser = supabase.auth.currentUser;
+    if (currentUser != null) {
+      final email = currentUser.email!;
+      return email;
+    } else {
+      return "Ваш email скоро здесь появится...";
+    }
+  }
+
+  void getMoney() async {
+    String? email = getEmail();
+    email = email.toString();
+    final res = await supabase
+        .from('profileusergame')
+        .select('money')
+        .eq('email',
+        email)
+        .count(CountOption.exact);
+    final data = res.data;
+    setState(() {
+      moneyList.add(data[0]['money']);
+    });
+  }
+
+  @override
+  void dispose() {
+    moneyList.clear();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     mediaQueryData = MediaQuery.of(context);
@@ -45,9 +87,10 @@ class _StatisticsState extends State<Statistics> with TickerProviderStateMixin {
                       bottom: 9.v,
                     ),
                     child: Text(
-                      "0",
-                      style: CustomTextStyles.semiBold18Text,
-                    ),
+                        moneyList.isNotEmpty
+                            ? moneyList.first.toString()
+                            : '0',
+                        style: CustomTextStyles.semiBold18Text)
                   ),
                   IconButton(
                     icon: FaIcon(

@@ -42,7 +42,6 @@ class MyApp extends StatefulWidget {
   @override
   State<MyApp> createState() => _MyAppState();
 }
-
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
@@ -65,7 +64,6 @@ class _MyAppState extends State<MyApp> {
                     MaterialApp.router(
                       theme: ThemeData(
                           scaffoldBackgroundColor:
-                              theme.colorScheme.background),
                               theme.colorScheme.background,
                         textSelectionTheme: TextSelectionThemeData(
                           selectionColor: theme.colorScheme.primary.withOpacity(0.5),

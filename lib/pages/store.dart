@@ -3,6 +3,7 @@ import 'package:ave_memoria/main.dart';
 
 import 'package:flutter/material.dart';
 import 'package:ave_memoria/other/app_export.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class Store extends StatefulWidget {
   const Store({super.key});
@@ -13,15 +14,44 @@ class Store extends StatefulWidget {
 
 class _StoreState extends State<Store> with TickerProviderStateMixin {
   late final TabController _tabController;
+  late List<dynamic> moneyList;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 4, vsync: this);
+    moneyList = [];
+    getMoney();
+  }
+
+  String? getEmail() {
+    final currentUser = supabase.auth.currentUser;
+    if (currentUser != null) {
+      final email = currentUser.email!;
+      return email;
+    } else {
+      return "Ваш email скоро здесь появится...";
+    }
+  }
+
+  void getMoney() async {
+    String? email = getEmail();
+    email = email.toString();
+    final res = await supabase
+        .from('profileusergame')
+        .select('money')
+        .eq('email',
+        email)
+        .count(CountOption.exact);
+    final data = res.data;
+    setState(() {
+      moneyList.add(data[0]['money']);
+    });
   }
 
   @override
   void dispose() {
+    moneyList.clear();
     _tabController.dispose();
     super.dispose();
   }
@@ -60,9 +90,10 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
                         bottom: 9.v,
                       ),
                       child: Text(
-                        "0",
-                        style: CustomTextStyles.semiBold18Text,
-                      ),
+                          moneyList.isNotEmpty
+                              ? moneyList.first.toString()
+                              : '0',
+                          style: CustomTextStyles.semiBold18Text)
                     ),
                     IconButton(
                       icon: FaIcon(
