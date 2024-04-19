@@ -11,6 +11,7 @@ import 'package:ave_memoria/main.dart';
 import 'package:ave_memoria/pages/screen_layout.dart';
 import 'package:go_router/go_router.dart';
 import '../games/cards_game/gaming_cards.dart';
+import '../games/image_game/gaming_image.dart';
 import '../games/sequence_game/gaming_sequence.dart';
 import '../pages/forget_screen.dart';
 import 'app_export.dart';
@@ -26,6 +27,7 @@ class AppRoutes {
   static const support = '/support';
   static const game_cards = '/gaming_cards';
   static const game_sequence = '/gaming_sequence';
+  static const game_image = '/gaming_image';
   static const forgetScreen = '/forget_screen';
   static const new_password = '/new_password_screen';
 
@@ -84,6 +86,10 @@ class AppRoutes {
       GoRoute(
         path: game_sequence,
         builder: (context, state) => const SequenceGame(),
+      ),
+      GoRoute(
+        path: game_image,
+        builder: (context, state) => const ImageGame(),
       ),
      ],
     initialLocation: root,

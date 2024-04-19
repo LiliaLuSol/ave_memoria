@@ -237,7 +237,7 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                                             top: 10.h,
                                             left: 28.h,
                                             child: Text(
-                                              'Римские мозаики',
+                                              'Римские картинки',
                                               style: TextStyle(
                                                 color: Colors.brown,
                                                 fontSize: 16.h,
@@ -256,9 +256,9 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                                                               ___) =>
                                                           const GameRules(
                                                             firstTimes: true,
-                                                            countRule: 3,
+                                                            countRule: 2,
                                                             goRoute: AppRoutes
-                                                                .game_cards,
+                                                                .game_image,
                                                             text1:
                                                                 "В начале вам показывается картинка, вы должны запомнить как можно больше подробнее его",
                                                             text2:
@@ -267,7 +267,7 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                                                       opaque: false,
                                                       fullscreenDialog: true))
                                               : GoRouter.of(context)
-                                                  .push(AppRoutes.game_cards);
+                                                  .push(AppRoutes.game_image);
                                         }),
                                     SizedBox(height: 16.v)
                                   ]))))

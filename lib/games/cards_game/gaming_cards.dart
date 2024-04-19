@@ -16,11 +16,6 @@ class CardsGame extends StatefulWidget {
 }
 
 class _CardsGameState extends State<CardsGame> {
-  Map<int, String> numberImageMap = {
-    1: "assets/images/image1.png",
-    2: "assets/images/image2.png",
-
-  };
   int time = -3;
   int _previousIndex = -1;
   int _time = 3;
