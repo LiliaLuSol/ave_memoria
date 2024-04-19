@@ -16,6 +16,11 @@ class CardsGame extends StatefulWidget {
 }
 
 class _CardsGameState extends State<CardsGame> {
+  Map<int, String> numberImageMap = {
+    1: "assets/images/image1.png",
+    2: "assets/images/image2.png",
+
+  };
   int time = -3;
   int _previousIndex = -1;
   int _time = 3;
@@ -165,7 +170,7 @@ class _CardsGameState extends State<CardsGame> {
                               SizedBox(width: 16.h),
                             ],
                           ),
-                          SizedBox(width: 22.v),
+                          SizedBox(height: 22.v),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -179,7 +184,7 @@ class _CardsGameState extends State<CardsGame> {
                               Spacer(),
                             ],
                           ),
-                          SizedBox(width: 22.v),
+                          SizedBox(height: 22.v),
                           Divider(height: 1, color: appTheme.gray)
                         ])),
                     Spacer(),

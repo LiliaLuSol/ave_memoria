@@ -554,7 +554,7 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
                                                           )
                                                         ])),
                                               ]),
-                                              SizedBox(height: 200.v),
+                                              SizedBox(height: 155.v),
                                               CustomElevatedButton(
                                                 text: "Выход из аккаунта",
                                                 buttonTextStyle:

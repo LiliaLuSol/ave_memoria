@@ -1,7 +1,8 @@
 import 'dart:async';
+import 'dart:math';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ave_memoria/other/app_export.dart';
-
 import '../../pages/pause_menu.dart';
 import '../../pages/result_game.dart';
 
@@ -13,6 +14,17 @@ class SequenceGame extends StatefulWidget {
 }
 
 class _SequenceGameState extends State<SequenceGame> {
+  Map<int, String> numberImageMap = {
+    1: "assets/images/image1.png",
+    2: "assets/images/image2.png",
+    3: "assets/images/image2.png",
+    4: "assets/images/image2.png",
+    5: "assets/images/image2.png",
+    6: "assets/images/image2.png",
+    7: "assets/images/image2.png",
+    8: "assets/images/image2.png"
+  };
+
   List<int> sequence = [];
   int currentIndex = 0;
   bool canPlay = false;
@@ -20,9 +32,11 @@ class _SequenceGameState extends State<SequenceGame> {
   int time = -3;
   int _time = 3;
   int roundTime = 5;
+  int life = 3;
   late Timer _timer;
   late Timer _timeTimer;
   late bool _isFinished;
+  late int score;
 
   void startTimer() {
     _timer = Timer.periodic(const Duration(seconds: 1), (t) {
@@ -51,6 +65,8 @@ class _SequenceGameState extends State<SequenceGame> {
 
   void initializeGameData() {
     _time = -3;
+    life = 3;
+    score = 0;
     _isFinished = false;
   }
 
@@ -61,7 +77,6 @@ class _SequenceGameState extends State<SequenceGame> {
     startGameAfterDelay();
     initializeGameData();
     super.initState();
-    startRound();
   }
 
   @override
@@ -81,59 +96,25 @@ class _SequenceGameState extends State<SequenceGame> {
     startDuration();
   }
 
-  void startRound() {
-    setState(() {
-      sequence.clear();
-      currentIndex = 0;
-      canPlay = false;
-    });
-
-    // // Generate new sequence
-    // generateSequence();
-
-    // Start timer
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
-      if (roundTime == 0) {
-        timer.cancel();
+  void handleButtonClick(int number) {
+    if (sequence[currentIndex] == number) {
+      setState(() {
+        score++;
+        currentIndex++;
+      });
+      if (currentIndex == sequence.length) {
         setState(() {
-          canPlay = true;
-        });
-      } else {
-        setState(() {
-          roundTime--;
-        });
-      }
-    });
-
-    // Reset round time
-    roundTime += 5;
-  }
-
-  void generateSequence() {
-    int sequenceLength = sequence.length + 1;
-    for (int i = 0; i < sequenceLength; i++) {
-      sequence.add(i);
-    }
-    sequence.shuffle();
-  }
-
-  void checkSequence(int index) {
-    if (index == sequence[currentIndex]) {
-      if (currentIndex == sequence.length - 1) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text('Round completed!'),
-        ));
-        startRound();
-      } else {
-        setState(() {
-          currentIndex++;
+          sequence.add(Random().nextInt(8) + 1);
+          currentIndex = 0;
         });
       }
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('Wrong sequence!'),
-      ));
-      startRound();
+      setState(() {
+        life--;
+      });
+      if (life == 0) {
+        _isFinished = true;
+      }
     }
   }
 
@@ -198,40 +179,150 @@ class _SequenceGameState extends State<SequenceGame> {
                           SizedBox(width: 16.h),
                         ],
                       ),
-                      SizedBox(width: 22.v),
+                      SizedBox(height: 22.v),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Spacer(),
+                          info_card("Время", time < 0 ? "0" : "$time"),
+                          Spacer(),
+                          info_card("Очки", "$score"),
+                          Spacer(),
+                          info_card("Жизни", "$life"),
+                          Spacer(),
+                        ],
+                      ),
+                      SizedBox(height: 22.v),
                       Divider(height: 1, color: appTheme.gray)
                     ])),
-                Spacer(),
-                SizedBox(height: 20),
-                Wrap(
-                  alignment: WrapAlignment.center,
-                  children: sequence.map((index) {
-                    return GestureDetector(
-                      onTap: () {
-                        if (!canPlay) return;
-                        checkSequence(index);
-                      },
-                      child: Container(
-                        margin: EdgeInsets.all(8),
-                        width: 50,
-                        height: 50,
-                        color: Colors.blueAccent,
-                        child: Center(
-                          child: Text(
-                            index.toString(),
-                            style: TextStyle(fontSize: 20, color: Colors.white),
-                          ),
+                SizedBox(height: 22.v),
+                Align(
+                    alignment: Alignment.center,
+                    child: Container(
+                      color: Colors.blue,
+                      width: 353.h,
+                      height: 353.v,
+                      child: Center(
+                        child: Text(
+                          "0",
+                          style: CustomTextStyles.bold30Text,
                         ),
                       ),
-                    );
-                  }).toList(),
-                ),
-                SizedBox(height: 20),
-                // Show timer
-                Text(
-                  'Time left: $roundTime seconds',
-                  style: TextStyle(fontSize: 20),
-                ),
+                    )),
+                Spacer(),
+                Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16.v),
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  // Handle Button 1
+                                },
+                                child: Container(
+                                    color: Colors.orangeAccent,
+                                    width: 115.h,
+                                    height: 80.v,
+                                    child: Text("Кнопка 1")),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  // Handle Button 2
+                                },
+                                child: Container(
+                                    color: Colors.orangeAccent,
+                                    width: 115.h,
+                                    height: 80.v,
+                                    child: Text("Кнопка 2")),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  // Handle Button 3
+                                },
+                                child: Container(
+                                    color: Colors.orangeAccent,
+                                    width: 115.h,
+                                    height: 80.v,
+                                    child: Text("Кнопка 3")),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 9.v),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  // Handle Button 4
+                                },
+                                child: Container(
+                                    color: Colors.orangeAccent,
+                                    width: 115.h,
+                                    height: 60.v,
+                                    child: Text("Кнопка 4")),
+                              ),
+                              Container(
+                                  width: 115.h,
+                                  height: 60.v,
+                                  child: Center(
+                                      child: Text(
+                                    canPlay ? "Нажимай!" : "Стой!",
+                                    style: CustomTextStyles.light20Text,
+                                    textAlign: TextAlign.center,
+                                  ))),
+                              GestureDetector(
+                                onTap: () {
+                                  // Handle Button 5
+                                },
+                                child: Container(
+                                    color: Colors.orangeAccent,
+                                    width: 115.h,
+                                    height: 60.v,
+                                    child: Text("Кнопка 5")),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 9.v),
+                          Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    // Handle Button 6
+                                  },
+                                  child: Container(
+                                      color: Colors.orangeAccent,
+                                      width: 115.h,
+                                      height: 80.v,
+                                      child: Text("Кнопка 6")),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    // Handle Button 7
+                                  },
+                                  child: Container(
+                                      color: Colors.orangeAccent,
+                                      width: 115.h,
+                                      height: 80.v,
+                                      child: Text("Кнопка 7")),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    // Handle Button 8
+                                  },
+                                  child: Container(
+                                      color: Colors.orangeAccent,
+                                      width: 115.h,
+                                      height: 80.v,
+                                      child: Text("Кнопка 8")),
+                                ),
+                              ]),
+                          SizedBox(height: 16.v),
+                        ]))
               ],
             ),
           )));

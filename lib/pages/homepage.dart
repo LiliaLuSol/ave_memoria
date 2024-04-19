@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:core';
 import 'package:ave_memoria/theme/custom_text_style.dart';
 import 'package:flutter/cupertino.dart';
@@ -22,10 +21,11 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
 
   @override
   void initState() {
-   moneyList = [];
-   getMoney();
+    moneyList = [];
+    getMoney();
     super.initState();
   }
+
   String? getEmail() {
     final currentUser = supabase.auth.currentUser;
     if (currentUser != null) {
@@ -42,12 +42,11 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
     final res = await supabase
         .from('profileusergame')
         .select('money')
-        .eq('email',
-        email)
+        .eq('email', email)
         .count(CountOption.exact);
     final data = res.data;
     setState(() {
-    moneyList.add(data[0]['money']);
+      moneyList.add(data[0]['money']);
     });
   }
 
@@ -118,69 +117,6 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                    Row(
-                                      children: [
-                                        Text("Быстрые ежедневные игры:",
-                                            style:
-                                                CustomTextStyles.regular16Text),
-                                        Spacer(),
-                                        IconButton(
-                                          icon: FaIcon(
-                                              FontAwesomeIcons.circleQuestion,
-                                              size: 25.h,
-                                              color: theme.colorScheme.primary),
-                                          onPressed: () {
-                                            null;
-                                          },
-                                        )
-                                      ],
-                                    ),
-                                    SizedBox(height: 16.v),
-                                    Row(
-                                      children: [
-                                        Container(
-                                          color: appTheme.lightGray,
-                                          width: 170.h,
-                                          height: 104.v,
-                                        ),
-                                        SizedBox(width: 13.h),
-                                        GestureDetector(
-                                          child: Container(
-                                            color: appTheme.lightGray,
-                                            width: 170.h,
-                                            height: 104.v,
-                                          ),
-                                          onTap: () async {
-                                            // try {
-                                            //   final res = await supabase.from('ogr').select().count(CountOption.exact);
-                                            //    await supabase.from('ogr').upsert({
-                                            //     'id': res.count+1,
-                                            //      'name': 'false'
-                                            //   });
-                                            // } catch (error) {
-                                            //   print('Ошибка при выполнении запроса: $error');
-                                            // }
-                                            // ;
-                                          },
-                                        )
-                                      ],
-                                    ),
-                                    SizedBox(height: 13.v),
-                                    Row(
-                                      children: [
-                                        Container(
-                                          color: appTheme.lightGray,
-                                          width: 170.h,
-                                          height: 104.v,
-                                        ),
-                                        SizedBox(width: 13.h),
-                                        Container(
-                                          color: appTheme.lightGray,
-                                          width: 170.h,
-                                          height: 104.v,
-                                        ),
-                                      ],
-                                    ),
                                     SizedBox(height: 16.v),
                                     GestureDetector(
                                         child: Stack(children: [
@@ -285,18 +221,55 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                                                   AppRoutes.game_sequence);
                                         }),
                                     SizedBox(height: 16.v),
-                                    Container(
-                                      color: appTheme.lightGray,
-                                      width: 353.h,
-                                      height: 167.v,
-                                    ),
-                                    SizedBox(height: 16.v),
-                                    Container(
-                                      color: appTheme.lightGray,
-                                      width: 353.h,
-                                      height: 167.v,
-                                    ),
-                                    SizedBox(height: 16.h),
+                                    GestureDetector(
+                                        child: Stack(children: [
+                                          Container(
+                                              width: 353.h,
+                                              height: 167.v,
+                                              decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                  image: AssetImage(
+                                                      'assets/images/cards_game.png'),
+                                                  fit: BoxFit.fill,
+                                                ),
+                                              )),
+                                          Positioned(
+                                            top: 10.h,
+                                            left: 28.h,
+                                            child: Text(
+                                              'Римские мозаики',
+                                              style: TextStyle(
+                                                color: Colors.brown,
+                                                fontSize: 16.h,
+                                                fontFamily: 'fSize',
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          )
+                                        ]),
+                                        onTap: () {
+                                          gameRulesFirst1
+                                              ? Navigator.push(
+                                                  context,
+                                                  PageRouteBuilder(
+                                                      pageBuilder: (_, __,
+                                                              ___) =>
+                                                          const GameRules(
+                                                            firstTimes: true,
+                                                            countRule: 3,
+                                                            goRoute: AppRoutes
+                                                                .game_cards,
+                                                            text1:
+                                                                "В начале вам показывается картинка, вы должны запомнить как можно больше подробнее его",
+                                                            text2:
+                                                                "Затем задается ряд вопросов по картинке на которые Вам предстоит ответить по памяти",
+                                                          ),
+                                                      opaque: false,
+                                                      fullscreenDialog: true))
+                                              : GoRouter.of(context)
+                                                  .push(AppRoutes.game_cards);
+                                        }),
+                                    SizedBox(height: 16.v)
                                   ]))))
                     ])))));
   }
