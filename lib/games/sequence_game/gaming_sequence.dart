@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:ave_memoria/games/sequence_game/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ave_memoria/other/app_export.dart';
@@ -15,19 +16,25 @@ class SequenceGame extends StatefulWidget {
 
 class _SequenceGameState extends State<SequenceGame> {
   Map<int, String> numberImageMap = {
-    1: "assets/images/image1.png",
-    2: "assets/images/image2.png",
-    3: "assets/images/image2.png",
-    4: "assets/images/image2.png",
-    5: "assets/images/image2.png",
-    6: "assets/images/image2.png",
-    7: "assets/images/image2.png",
-    8: "assets/images/image2.png"
+    0: "0",
+    1: "1",
+    2: "2",
+    3: "3",
+    4: "4",
+    5: "5",
+    6: "6",
+    7: "7",
+    8: "8",
+    9: "9",
   };
 
   List<int> sequence = [];
+  List<int> sequenceUser = [];
   int currentIndex = 0;
-  bool canPlay = false;
+  String currentCountdownValue = '';
+  List<String> countdown = ["3", '2', '1', 'НАЧАЛИ'];
+  bool _countdown = false;
+  bool _canPlay = false;
   bool _start = false;
   int time = -3;
   int _time = 3;
@@ -55,7 +62,7 @@ class _SequenceGameState extends State<SequenceGame> {
   }
 
   void startGameAfterDelay() {
-    Future.delayed(const Duration(seconds: 3), () {
+    Future.delayed(const Duration(seconds: 4), () {
       setState(() {
         _start = true;
         _timer.cancel();
@@ -64,10 +71,23 @@ class _SequenceGameState extends State<SequenceGame> {
   }
 
   void initializeGameData() {
-    _time = -3;
+    _time = -4;
     life = 3;
     score = 0;
+    _countdown = true;
     _isFinished = false;
+    _canPlay = false;
+    sequence.clear();
+    sequence.add(0);
+    for (int i = 0; i < 3; i++) {
+      int randomNumber = Random().nextInt(8) + 1;
+      sequence.add(randomNumber);
+      sequence.add(0);
+    }
+    startCountdown();
+    // sequence.add(9);
+    // sequenceUser.clear();
+    // sequenceUser.add(9);
   }
 
   @override
@@ -83,6 +103,7 @@ class _SequenceGameState extends State<SequenceGame> {
   void dispose() {
     _timer.cancel();
     _timeTimer.cancel();
+    sequence.clear();
     super.dispose();
   }
 
@@ -101,29 +122,45 @@ class _SequenceGameState extends State<SequenceGame> {
       setState(() {
         score++;
         currentIndex++;
-      });
-      if (currentIndex == sequence.length) {
-        setState(() {
+        if (currentIndex == sequence.length) {
           sequence.add(Random().nextInt(8) + 1);
           currentIndex = 0;
-        });
-      }
+          _canPlay = false;
+        }
+      });
     } else {
       setState(() {
         life--;
+        _canPlay = false;
+        if (life == 0) {
+          _isFinished = true;
+          _start = false;
+        }
       });
-      if (life == 0) {
-        _isFinished = true;
-      }
     }
+  }
+
+  void startCountdown() async {
+    for (String value in countdown) {
+      setState(() {
+        currentCountdownValue = value;
+      });
+      await Future.delayed(Duration(seconds: 1));
+    }
+    setState(() {
+      _countdown = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     mediaQueryData = MediaQuery.of(context);
-    return _isFinished
+    return _countdown ?
+        Center(child: Text(currentCountdownValue,style: CustomTextStyles.extraBold32Primary, textAlign: TextAlign.center,))
+        :
+      _isFinished
         ? ResultGame(
-            nameGame: "Гладиаторский поединок памяти",
+            nameGame: "Гладиаторская тренировка памяти",
             tries: 0,
             score: 0,
             time: 0,
@@ -146,7 +183,7 @@ class _SequenceGameState extends State<SequenceGame> {
                         children: [
                           SizedBox(width: 49.h),
                           Spacer(),
-                          Text("  Гладиаторский\nпоединок памяти",
+                          Text("    Гладиаторская\nтренировка памяти",
                               style: CustomTextStyles.regular24Text),
                           Spacer(),
                           IconButton(
@@ -204,9 +241,16 @@ class _SequenceGameState extends State<SequenceGame> {
                       width: 353.h,
                       height: 353.v,
                       child: Center(
-                        child: Text(
-                          "0",
+                        child:
+                        _canPlay
+                            ? Text(
+                          "${sequenceUser.isNotEmpty ? numberImageMap[sequenceUser.last] : '0'}", // Показываем последнее введенное значение
                           style: CustomTextStyles.bold30Text,
+                        )
+                            : NumberDisplay(
+                          sequence: sequence,
+                          numberImageMap: numberImageMap,
+                          delay: const Duration(seconds: 2),
                         ),
                       ),
                     )),
@@ -221,7 +265,9 @@ class _SequenceGameState extends State<SequenceGame> {
                             children: [
                               GestureDetector(
                                 onTap: () {
-                                  // Handle Button 1
+                                  if (_start && _canPlay) {
+                                    handleButtonClick(1);
+                                  }
                                 },
                                 child: Container(
                                     color: Colors.orangeAccent,
@@ -231,7 +277,9 @@ class _SequenceGameState extends State<SequenceGame> {
                               ),
                               GestureDetector(
                                 onTap: () {
-                                  // Handle Button 2
+                                  if (_start && _canPlay) {
+                                    handleButtonClick(2);
+                                  }
                                 },
                                 child: Container(
                                     color: Colors.orangeAccent,
@@ -241,7 +289,9 @@ class _SequenceGameState extends State<SequenceGame> {
                               ),
                               GestureDetector(
                                 onTap: () {
-                                  // Handle Button 3
+                                  if (_start && _canPlay) {
+                                    handleButtonClick(3);
+                                  }
                                 },
                                 child: Container(
                                     color: Colors.orangeAccent,
@@ -257,7 +307,9 @@ class _SequenceGameState extends State<SequenceGame> {
                             children: [
                               GestureDetector(
                                 onTap: () {
-                                  // Handle Button 4
+                                  if (_start && _canPlay) {
+                                    handleButtonClick(4);
+                                  }
                                 },
                                 child: Container(
                                     color: Colors.orangeAccent,
@@ -270,13 +322,15 @@ class _SequenceGameState extends State<SequenceGame> {
                                   height: 60.v,
                                   child: Center(
                                       child: Text(
-                                    canPlay ? "Нажимай!" : "Стой!",
+                                    _canPlay ? "Нажимай!" : "Стой!",
                                     style: CustomTextStyles.light20Text,
                                     textAlign: TextAlign.center,
                                   ))),
                               GestureDetector(
                                 onTap: () {
-                                  // Handle Button 5
+                                  if (_start && _canPlay) {
+                                    handleButtonClick(5);
+                                  }
                                 },
                                 child: Container(
                                     color: Colors.orangeAccent,
@@ -292,7 +346,9 @@ class _SequenceGameState extends State<SequenceGame> {
                               children: [
                                 GestureDetector(
                                   onTap: () {
-                                    // Handle Button 6
+                                    if (_start && _canPlay) {
+                                      handleButtonClick(6);
+                                    }
                                   },
                                   child: Container(
                                       color: Colors.orangeAccent,
@@ -302,7 +358,9 @@ class _SequenceGameState extends State<SequenceGame> {
                                 ),
                                 GestureDetector(
                                   onTap: () {
-                                    // Handle Button 7
+                                    if (_start && _canPlay) {
+                                      handleButtonClick(7);
+                                    }
                                   },
                                   child: Container(
                                       color: Colors.orangeAccent,
@@ -312,7 +370,9 @@ class _SequenceGameState extends State<SequenceGame> {
                                 ),
                                 GestureDetector(
                                   onTap: () {
-                                    // Handle Button 8
+                                    if (_start && _canPlay) {
+                                      handleButtonClick(8);
+                                    }
                                   },
                                   child: Container(
                                       color: Colors.orangeAccent,

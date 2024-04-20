@@ -186,7 +186,7 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                                             top: 10.h,
                                             left: 28.h,
                                             child: Text(
-                                              'Гладиаторский поединок памяти',
+                                              'Гладиаторская тренировка памяти',
                                               style: TextStyle(
                                                 color: Colors.brown,
                                                 fontSize: 16.h,
