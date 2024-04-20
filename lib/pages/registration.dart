@@ -3,7 +3,6 @@ import 'package:ave_memoria/main.dart';
 import 'package:ave_memoria/utils/validator.dart';
 import 'package:flutter/material.dart';
 import 'package:ave_memoria/other/app_export.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 class Registration extends StatefulWidget {
   const Registration({super.key});
@@ -291,60 +290,6 @@ class _RegistrationState extends State<Registration>
                                       listener: (context, state) async {
                                     if (state is AuthSuccessState) {
                                       if (is_reg) {
-                                        try {
-                                          final res = await supabase
-                                              .from('Users')
-                                              .select()
-                                              .count(CountOption.exact);
-                                          String? email = _emailcontroller.text;
-                                          final count = res.count + 1;
-                                          email = email.toString();
-                                          await supabase.from('Users').upsert({
-                                            'user_id': count,
-                                            'email': email.toString(),
-                                            'active_days': 1
-                                          });
-                                          await supabase
-                                              .from('Notifications')
-                                              .upsert({
-                                            'notifications_id': count,
-                                            'user_id': count,
-                                            'news': _wantNewsInfoValue,
-                                          });
-                                          await supabase
-                                              .from('Characters')
-                                              .upsert({
-                                            'characters_id': count,
-                                            'user_id': count,
-                                            'money': 10
-                                          });
-                                          await supabase
-                                              .from('GameRule')
-                                              .upsert({
-                                            'user_id': count,
-                                            'game': 'cards',
-                                            'is_new': true
-                                          });
-                                          await supabase
-                                              .from('GameRule')
-                                              .upsert({
-                                            'user_id': count,
-                                            'game': 'sequence',
-                                            'is_new': true
-                                          });
-                                          await supabase.from('Levels').upsert({
-                                            'user_id': count,
-                                            'number': 1.1
-                                          });
-                                          await supabase.from('Levels').upsert({
-                                            'user_id': count,
-                                            'number': 1.2
-                                          });
-                                        } catch (error) {
-                                          print(
-                                              'Ошибка при выполнении запроса: $error');
-                                        }
-                                        ;
                                         AwesomeDialog(
                                           context: context,
                                           dialogType: DialogType.success,
