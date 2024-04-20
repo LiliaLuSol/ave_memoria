@@ -29,7 +29,6 @@ class _SequenceGameState extends State<SequenceGame> {
   };
 
   List<int> sequence = [];
-  List<int> sequenceUser = [];
   int currentIndex = 0;
   String currentCountdownValue = '';
   List<String> countdown = ["3", '2', '1', 'НАЧАЛИ'];
@@ -85,9 +84,6 @@ class _SequenceGameState extends State<SequenceGame> {
       sequence.add(0);
     }
     startCountdown();
-    // sequence.add(9);
-    // sequenceUser.clear();
-    // sequenceUser.add(9);
   }
 
   @override
@@ -117,12 +113,17 @@ class _SequenceGameState extends State<SequenceGame> {
     startDuration();
   }
 
+  void newRounde() {}
+
   void handleButtonClick(int number) {
+    if (sequence[currentIndex] == 0) {
+      currentIndex++;
+    }
     if (sequence[currentIndex] == number) {
       setState(() {
         score++;
         currentIndex++;
-        if (currentIndex == sequence.length) {
+        if (currentIndex == sequence.length - 1) {
           sequence.add(Random().nextInt(8) + 1);
           currentIndex = 0;
           _canPlay = false;
@@ -155,236 +156,250 @@ class _SequenceGameState extends State<SequenceGame> {
   @override
   Widget build(BuildContext context) {
     mediaQueryData = MediaQuery.of(context);
-    return _countdown ?
-        Center(child: Text(currentCountdownValue,style: CustomTextStyles.extraBold32Primary, textAlign: TextAlign.center,))
-        :
-      _isFinished
-        ? ResultGame(
-            nameGame: "Гладиаторская тренировка памяти",
-            tries: 0,
-            score: 0,
-            time: 0,
-            maxScore: 600,
-          )
-        : SafeArea(
+    return _countdown
+        ? SafeArea(
             child: Scaffold(
-                body: Container(
-            width: mediaQueryData.size.width,
-            height: mediaQueryData.size.height,
-            child: Column(
-              children: [
-                Container(
-                    color: theme.colorScheme.onPrimaryContainer,
-                    child: Column(children: [
-                      SizedBox(
-                        height: 22.v,
-                      ),
-                      Row(
-                        children: [
-                          SizedBox(width: 49.h),
-                          Spacer(),
-                          Text("    Гладиаторская\nтренировка памяти",
-                              style: CustomTextStyles.regular24Text),
-                          Spacer(),
-                          IconButton(
-                            icon: FaIcon(FontAwesomeIcons.circlePause,
-                                size: 25.h, color: theme.colorScheme.primary),
-                            onPressed: () {
-                              pauseTimer();
-                              Navigator.push(
-                                      context,
-                                      PageRouteBuilder(
-                                          pageBuilder: (_, __, ___) =>
-                                              const PauseMenu(
-                                                goRoute:
-                                                    AppRoutes.game_sequence,
-                                                countRule: 3,
-                                                text1:
-                                                    "В каждом раунде, гладиатор показывает последовательность движений.",
-                                                text2:
-                                                    "Ваша задача запоинить и воспроизвести эти движения за определенное время, не допуская ошибок.",
-                                                text3:
-                                                    "С каждым раундом времени на раздумья будет все меньше, а за ошибку вы теярете по одной жизни.",
-                                              ),
-                                          opaque: false,
-                                          fullscreenDialog: true))
-                                  .then((value) {
-                                resumeTimer();
-                              });
-                            },
+                body: Center(
+                    child: Text(
+            currentCountdownValue,
+            style: CustomTextStyles.extraBold32Primary,
+            textAlign: TextAlign.center,
+          ))))
+        : _isFinished
+            ? ResultGame(
+                nameGame: "Гладиаторская тренировка памяти",
+                tries: 0,
+                score: 0,
+                time: 0,
+                maxScore: 600,
+              )
+            : SafeArea(
+                child: Scaffold(
+                    body: Container(
+                width: mediaQueryData.size.width,
+                height: mediaQueryData.size.height,
+                child: Column(
+                  children: [
+                    Container(
+                        color: theme.colorScheme.onPrimaryContainer,
+                        child: Column(children: [
+                          SizedBox(
+                            height: 22.v,
                           ),
-                          SizedBox(width: 16.h),
-                        ],
-                      ),
-                      SizedBox(height: 22.v),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Spacer(),
-                          info_card("Время", time < 0 ? "0" : "$time"),
-                          Spacer(),
-                          info_card("Очки", "$score"),
-                          Spacer(),
-                          info_card("Жизни", "$life"),
-                          Spacer(),
-                        ],
-                      ),
-                      SizedBox(height: 22.v),
-                      Divider(height: 1, color: appTheme.gray)
-                    ])),
-                SizedBox(height: 22.v),
-                Align(
-                    alignment: Alignment.center,
-                    child: Container(
-                      color: Colors.blue,
-                      width: 353.h,
-                      height: 353.v,
-                      child: Center(
-                        child:
-                        _canPlay
-                            ? Text(
-                          "${sequenceUser.isNotEmpty ? numberImageMap[sequenceUser.last] : '0'}", // Показываем последнее введенное значение
-                          style: CustomTextStyles.bold30Text,
-                        )
-                            : NumberDisplay(
-                          sequence: sequence,
-                          numberImageMap: numberImageMap,
-                          delay: const Duration(seconds: 2),
-                        ),
-                      ),
-                    )),
-                Spacer(),
-                Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.v),
-                    child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              GestureDetector(
-                                onTap: () {
-                                  if (_start && _canPlay) {
-                                    handleButtonClick(1);
-                                  }
+                              SizedBox(width: 49.h),
+                              Spacer(),
+                              Text("    Гладиаторская\nтренировка памяти",
+                                  style: CustomTextStyles.regular24Text),
+                              Spacer(),
+                              IconButton(
+                                icon: FaIcon(FontAwesomeIcons.circlePause,
+                                    size: 25.h,
+                                    color: theme.colorScheme.primary),
+                                onPressed: () {
+                                  pauseTimer();
+                                  Navigator.push(
+                                          context,
+                                          PageRouteBuilder(
+                                              pageBuilder: (_, __, ___) =>
+                                                  const PauseMenu(
+                                                    goRoute:
+                                                        AppRoutes.game_sequence,
+                                                    countRule: 3,
+                                                    text1:
+                                                        "В каждом раунде, гладиатор показывает последовательность движений.",
+                                                    text2:
+                                                        "Ваша задача запоинить и воспроизвести эти движения за определенное время, не допуская ошибок.",
+                                                    text3:
+                                                        "С каждым раундом времени на раздумья будет все меньше, а за ошибку вы теярете по одной жизни.",
+                                                  ),
+                                              opaque: false,
+                                              fullscreenDialog: true))
+                                      .then((value) {
+                                    resumeTimer();
+                                  });
                                 },
-                                child: Container(
-                                    color: Colors.orangeAccent,
-                                    width: 115.h,
-                                    height: 80.v,
-                                    child: Text("Кнопка 1")),
                               ),
-                              GestureDetector(
-                                onTap: () {
-                                  if (_start && _canPlay) {
-                                    handleButtonClick(2);
-                                  }
-                                },
-                                child: Container(
-                                    color: Colors.orangeAccent,
-                                    width: 115.h,
-                                    height: 80.v,
-                                    child: Text("Кнопка 2")),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  if (_start && _canPlay) {
-                                    handleButtonClick(3);
-                                  }
-                                },
-                                child: Container(
-                                    color: Colors.orangeAccent,
-                                    width: 115.h,
-                                    height: 80.v,
-                                    child: Text("Кнопка 3")),
-                              ),
+                              SizedBox(width: 16.h),
                             ],
                           ),
-                          SizedBox(height: 9.v),
+                          SizedBox(height: 22.v),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              GestureDetector(
-                                onTap: () {
-                                  if (_start && _canPlay) {
-                                    handleButtonClick(4);
-                                  }
-                                },
-                                child: Container(
-                                    color: Colors.orangeAccent,
-                                    width: 115.h,
-                                    height: 60.v,
-                                    child: Text("Кнопка 4")),
-                              ),
-                              Container(
-                                  width: 115.h,
-                                  height: 60.v,
-                                  child: Center(
-                                      child: Text(
-                                    _canPlay ? "Нажимай!" : "Стой!",
-                                    style: CustomTextStyles.light20Text,
-                                    textAlign: TextAlign.center,
-                                  ))),
-                              GestureDetector(
-                                onTap: () {
-                                  if (_start && _canPlay) {
-                                    handleButtonClick(5);
-                                  }
-                                },
-                                child: Container(
-                                    color: Colors.orangeAccent,
-                                    width: 115.h,
-                                    height: 60.v,
-                                    child: Text("Кнопка 5")),
-                              ),
+                              Spacer(),
+                              info_card("Время", time < 0 ? "0" : "$time"),
+                              Spacer(),
+                              info_card("Очки", "$score"),
+                              Spacer(),
+                              info_card("Жизни", "$life"),
+                              Spacer(),
                             ],
                           ),
-                          SizedBox(height: 9.v),
-                          Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                GestureDetector(
-                                  onTap: () {
-                                    if (_start && _canPlay) {
-                                      handleButtonClick(6);
-                                    }
-                                  },
-                                  child: Container(
-                                      color: Colors.orangeAccent,
+                          SizedBox(height: 22.v),
+                          Divider(height: 1, color: appTheme.gray)
+                        ])),
+                    SizedBox(height: 22.v),
+                    Align(
+                        alignment: Alignment.center,
+                        child: Container(
+                          color: Colors.blue,
+                          width: 353.h,
+                          height: 353.v,
+                          child: Center(
+                            child: _canPlay
+                                ? Text(
+                                    "${sequence.isNotEmpty ? numberImageMap[sequence.last] : '0'}",
+                                    style: CustomTextStyles.bold30Text,
+                                  )
+                                : NumberDisplay(
+                                    sequence: sequence,
+                                    numberImageMap: numberImageMap,
+                                    delay: const Duration(seconds: 2),
+                                    onSequenceDisplayed: () {
+                                      setState(() {
+                                        _canPlay = true;
+                                      });
+                                    },
+                                  ),
+                          ),
+                        )),
+                    Spacer(),
+                    Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16.v),
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      if (_start && _canPlay) {
+                                        handleButtonClick(1);
+                                      }
+                                    },
+                                    child: Container(
+                                        color: Colors.orangeAccent,
+                                        width: 115.h,
+                                        height: 80.v,
+                                        child: Text("Кнопка 1")),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      if (_start && _canPlay) {
+                                        handleButtonClick(2);
+                                      }
+                                    },
+                                    child: Container(
+                                        color: Colors.orangeAccent,
+                                        width: 115.h,
+                                        height: 80.v,
+                                        child: Text("Кнопка 2")),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      if (_start && _canPlay) {
+                                        handleButtonClick(3);
+                                      }
+                                    },
+                                    child: Container(
+                                        color: Colors.orangeAccent,
+                                        width: 115.h,
+                                        height: 80.v,
+                                        child: Text("Кнопка 3")),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 9.v),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      if (_start && _canPlay) {
+                                        handleButtonClick(4);
+                                      }
+                                    },
+                                    child: Container(
+                                        color: Colors.orangeAccent,
+                                        width: 115.h,
+                                        height: 60.v,
+                                        child: Text("Кнопка 4")),
+                                  ),
+                                  Container(
                                       width: 115.h,
-                                      height: 80.v,
-                                      child: Text("Кнопка 6")),
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    if (_start && _canPlay) {
-                                      handleButtonClick(7);
-                                    }
-                                  },
-                                  child: Container(
-                                      color: Colors.orangeAccent,
-                                      width: 115.h,
-                                      height: 80.v,
-                                      child: Text("Кнопка 7")),
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    if (_start && _canPlay) {
-                                      handleButtonClick(8);
-                                    }
-                                  },
-                                  child: Container(
-                                      color: Colors.orangeAccent,
-                                      width: 115.h,
-                                      height: 80.v,
-                                      child: Text("Кнопка 8")),
-                                ),
-                              ]),
-                          SizedBox(height: 16.v),
-                        ]))
-              ],
-            ),
-          )));
+                                      height: 60.v,
+                                      child: Center(
+                                          child: Text(
+                                        _canPlay ? "Нажимай!" : "Стой!",
+                                        style: CustomTextStyles.light20Text,
+                                        textAlign: TextAlign.center,
+                                      ))),
+                                  GestureDetector(
+                                    onTap: () {
+                                      if (_start && _canPlay) {
+                                        handleButtonClick(5);
+                                      }
+                                    },
+                                    child: Container(
+                                        color: Colors.orangeAccent,
+                                        width: 115.h,
+                                        height: 60.v,
+                                        child: Text("Кнопка 5")),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 9.v),
+                              Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () {
+                                        if (_start && _canPlay) {
+                                          handleButtonClick(6);
+                                        }
+                                      },
+                                      child: Container(
+                                          color: Colors.orangeAccent,
+                                          width: 115.h,
+                                          height: 80.v,
+                                          child: Text("Кнопка 6")),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        if (_start && _canPlay) {
+                                          handleButtonClick(7);
+                                        }
+                                      },
+                                      child: Container(
+                                          color: Colors.orangeAccent,
+                                          width: 115.h,
+                                          height: 80.v,
+                                          child: Text("Кнопка 7")),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        if (_start && _canPlay) {
+                                          handleButtonClick(8);
+                                        }
+                                      },
+                                      child: Container(
+                                          color: Colors.orangeAccent,
+                                          width: 115.h,
+                                          height: 80.v,
+                                          child: Text("Кнопка 8")),
+                                    ),
+                                  ]),
+                              SizedBox(height: 16.v),
+                            ]))
+                  ],
+                ),
+              )));
   }
 }

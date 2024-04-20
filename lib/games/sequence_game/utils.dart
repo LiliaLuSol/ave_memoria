@@ -7,11 +7,13 @@ class NumberDisplay extends StatefulWidget {
   final List<int> sequence;
   final Map<int, String> numberImageMap;
   final Duration delay;
+  final Function()? onSequenceDisplayed;
 
   const NumberDisplay({
     required this.sequence,
     required this.numberImageMap,
     required this.delay,
+    this.onSequenceDisplayed,
     Key? key,
   }) : super(key: key);
 
@@ -33,8 +35,12 @@ class _NumberDisplayState extends State<NumberDisplay> {
         });
       } else {
         timer.cancel();
+        if (widget.onSequenceDisplayed != null) {
+          widget.onSequenceDisplayed!();
+        }
       }
     });
+
   }
 
   @override
