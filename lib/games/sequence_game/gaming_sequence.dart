@@ -44,44 +44,23 @@ class _SequenceGameState extends State<SequenceGame> {
   bool _countdown = false;
   bool _canPlay = false;
   bool _start = false;
-  int time = -3;
-  int _time = 3;
-  int roundTime = 5;
   int life = 3;
-  late Timer _timer;
-  late Timer _timeTimer;
   late bool _isFinished;
   late int score;
-
-  void startTimer() {
-    _timer = Timer.periodic(const Duration(seconds: 1), (t) {
-      setState(() {
-        _time = (_time - 1);
-      });
-    });
-  }
-
-  void startDuration() {
-    _timeTimer = Timer.periodic(const Duration(seconds: 1), (t) {
-      setState(() {
-        time = (time + 1);
-      });
-    });
-  }
+  late int rounde;
 
   void startGameAfterDelay() {
     Future.delayed(const Duration(seconds: 4), () {
       setState(() {
         _start = true;
-        _timer.cancel();
       });
     });
   }
 
   void initializeGameData() {
-    _time = -4;
     life = 3;
     score = 0;
+    rounde = 1;
     _countdown = true;
     _isFinished = false;
     _canPlay = false;
@@ -99,8 +78,6 @@ class _SequenceGameState extends State<SequenceGame> {
 
   @override
   void initState() {
-    startTimer();
-    startDuration();
     startGameAfterDelay();
     initializeGameData();
     super.initState();
@@ -108,21 +85,9 @@ class _SequenceGameState extends State<SequenceGame> {
 
   @override
   void dispose() {
-    _timer.cancel();
-    _timeTimer.cancel();
     sequence.clear();
     sequenceUser.clear();
     super.dispose();
-  }
-
-  void pauseTimer() {
-    _timer.cancel();
-    _timeTimer.cancel();
-  }
-
-  void resumeTimer() {
-    startTimer();
-    startDuration();
   }
 
   void newRounde() {}
@@ -133,11 +98,18 @@ class _SequenceGameState extends State<SequenceGame> {
     }
     if (sequence[currentIndex] == number) {
       setState(() {
-        score++;
+        score += 10;
         currentIndex++;
-        sequenceUser.add(number);
+        sequenceUser.add(number + 10);
+        Future.delayed(Duration(seconds: 1), () {
+          setState(() {
+            sequenceUser.add(10);
+          });
+        });
         if (currentIndex == sequence.length - 1) {
+          rounde++;
           sequence.add(Random().nextInt(8) + 1);
+          sequence.add(0);
           sequenceUser.clear();
           currentIndex = 0;
           _canPlay = false;
@@ -215,27 +187,23 @@ class _SequenceGameState extends State<SequenceGame> {
                                     size: 25.h,
                                     color: theme.colorScheme.primary),
                                 onPressed: () {
-                                  pauseTimer();
                                   Navigator.push(
-                                          context,
-                                          PageRouteBuilder(
-                                              pageBuilder: (_, __, ___) =>
-                                                  const PauseMenu(
-                                                    goRoute:
-                                                        AppRoutes.game_sequence,
-                                                    countRule: 3,
-                                                    text1:
-                                                        "В каждом раунде, гладиатор показывает последовательность движений.",
-                                                    text2:
-                                                        "Ваша задача запоинить и воспроизвести эти движения за определенное время, не допуская ошибок.",
-                                                    text3:
-                                                        "С каждым раундом времени на раздумья будет все меньше, а за ошибку вы теярете по одной жизни.",
-                                                  ),
-                                              opaque: false,
-                                              fullscreenDialog: true))
-                                      .then((value) {
-                                    resumeTimer();
-                                  });
+                                      context,
+                                      PageRouteBuilder(
+                                          pageBuilder: (_, __, ___) =>
+                                              const PauseMenu(
+                                                goRoute:
+                                                    AppRoutes.game_sequence,
+                                                countRule: 3,
+                                                text1:
+                                                    "В каждом раунде, гладиатор показывает последовательность движений.",
+                                                text2:
+                                                    "Ваша задача запоинить и воспроизвести эти движения за определенное время, не допуская ошибок.",
+                                                text3:
+                                                    "С каждым раундом времени на раздумья будет все меньше, а за ошибку вы теярете по одной жизни.",
+                                              ),
+                                          opaque: false,
+                                          fullscreenDialog: true));
                                 },
                               ),
                               SizedBox(width: 16.h),
@@ -247,7 +215,7 @@ class _SequenceGameState extends State<SequenceGame> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Spacer(),
-                              info_card("Время", time < 0 ? "0" : "$time"),
+                              info_card("Раунд", "$rounde"),
                               Spacer(),
                               info_card("Очки", "$score"),
                               Spacer(),
