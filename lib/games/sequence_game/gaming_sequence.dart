@@ -25,10 +25,19 @@ class _SequenceGameState extends State<SequenceGame> {
     6: "6",
     7: "7",
     8: "8",
-    9: "9",
+    10: "10",
+    11: "11",
+    12: "12",
+    13: "13",
+    14: "14",
+    15: "15",
+    16: "16",
+    17: "17",
+    18: "18"
   };
 
   List<int> sequence = [];
+  List<int> sequenceUser = [];
   int currentIndex = 0;
   String currentCountdownValue = '';
   List<String> countdown = ["3", '2', '1', 'НАЧАЛИ'];
@@ -76,6 +85,8 @@ class _SequenceGameState extends State<SequenceGame> {
     _countdown = true;
     _isFinished = false;
     _canPlay = false;
+    sequenceUser.clear();
+    sequenceUser.add(10);
     sequence.clear();
     sequence.add(0);
     for (int i = 0; i < 3; i++) {
@@ -100,6 +111,7 @@ class _SequenceGameState extends State<SequenceGame> {
     _timer.cancel();
     _timeTimer.cancel();
     sequence.clear();
+    sequenceUser.clear();
     super.dispose();
   }
 
@@ -123,6 +135,7 @@ class _SequenceGameState extends State<SequenceGame> {
       setState(() {
         score++;
         currentIndex++;
+        sequenceUser.add(number);
         if (currentIndex == sequence.length - 1) {
           sequence.add(Random().nextInt(8) + 1);
           currentIndex = 0;
@@ -133,6 +146,7 @@ class _SequenceGameState extends State<SequenceGame> {
       setState(() {
         life--;
         _canPlay = false;
+        sequenceUser.clear();
         if (life == 0) {
           _isFinished = true;
           _start = false;
@@ -251,13 +265,13 @@ class _SequenceGameState extends State<SequenceGame> {
                           child: Center(
                             child: _canPlay
                                 ? Text(
-                                    "${sequence.isNotEmpty ? numberImageMap[sequence.last] : '0'}",
+                                    "${sequenceUser.isNotEmpty ? numberImageMap[sequenceUser.last] : '10'}",
                                     style: CustomTextStyles.bold30Text,
                                   )
                                 : NumberDisplay(
                                     sequence: sequence,
                                     numberImageMap: numberImageMap,
-                                    delay: const Duration(seconds: 2),
+                                    delay: const Duration(seconds: 1),
                                     onSequenceDisplayed: () {
                                       setState(() {
                                         _canPlay = true;

@@ -53,8 +53,8 @@ class _NumberDisplayState extends State<NumberDisplay> {
   Widget build(BuildContext context) {
     return Text(
       currentIndex < widget.sequence.length
-          ? widget.numberImageMap[widget.sequence[currentIndex]] ?? ''
-          : '',
+          ? widget.numberImageMap[widget.sequence[currentIndex]] ?? '0'
+          : '0',
       style: CustomTextStyles.bold30Text
     );
   }
