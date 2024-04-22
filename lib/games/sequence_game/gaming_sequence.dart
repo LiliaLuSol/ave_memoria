@@ -138,6 +138,7 @@ class _SequenceGameState extends State<SequenceGame> {
         sequenceUser.add(number);
         if (currentIndex == sequence.length - 1) {
           sequence.add(Random().nextInt(8) + 1);
+          sequenceUser.clear();
           currentIndex = 0;
           _canPlay = false;
         }
@@ -146,6 +147,7 @@ class _SequenceGameState extends State<SequenceGame> {
       setState(() {
         life--;
         _canPlay = false;
+        currentIndex = 0;
         sequenceUser.clear();
         if (life == 0) {
           _isFinished = true;
@@ -182,6 +184,7 @@ class _SequenceGameState extends State<SequenceGame> {
         : _isFinished
             ? ResultGame(
                 nameGame: "Гладиаторская тренировка памяти",
+                goRoute: AppRoutes.game_sequence,
                 tries: 0,
                 score: 0,
                 time: 0,

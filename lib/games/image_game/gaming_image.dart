@@ -98,6 +98,8 @@ class _ImageGameState extends State<ImageGame> {
     return _isFinished
         ? ResultGame(
       nameGame: "Римские картинки",
+      goRoute:
+      AppRoutes.game_image,
       tries: tries,
       score: score,
       time: tries,

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 class ResultGame extends StatefulWidget {
   final String nameGame;
+  final String goRoute;
   final int? tries;
   final int? score;
   final int? time;
@@ -12,6 +13,7 @@ class ResultGame extends StatefulWidget {
   const ResultGame(
       {super.key,
       required this.nameGame,
+      required this.goRoute,
       this.tries,
       this.score,
       this.time,
@@ -99,8 +101,7 @@ class _ResultGameState extends State<ResultGame> {
                                         borderRadius:
                                             BorderRadius.circular(5))),
                                 onTap: () {
-                                  GoRouter.of(context)
-                                      .push(AppRoutes.game_cards);
+                                  GoRouter.of(context).push(widget.goRoute);
                                 },
                               ),
                               SizedBox(height: 24.v),
