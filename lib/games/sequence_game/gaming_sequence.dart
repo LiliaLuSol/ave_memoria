@@ -157,10 +157,9 @@ class _SequenceGameState extends State<SequenceGame> {
             ? ResultGame(
                 nameGame: "Гладиаторская тренировка памяти",
                 goRoute: AppRoutes.game_sequence,
-                tries: 0,
-                score: 0,
-                time: 0,
-                maxScore: 600,
+                rounde: rounde,
+                score: score,
+                isGameSequence: true,
               )
             : SafeArea(
                 child: Scaffold(

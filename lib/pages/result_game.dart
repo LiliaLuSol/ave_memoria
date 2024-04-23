@@ -6,18 +6,27 @@ class ResultGame extends StatefulWidget {
   final String nameGame;
   final String goRoute;
   final int? tries;
+  final int? rounde;
   final int? score;
   final int? time;
   final int? maxScore;
+  final bool? isGameCards;
+  final bool? isGameSequence;
+  final bool? isGameImage;
 
-  const ResultGame(
-      {super.key,
-      required this.nameGame,
-      required this.goRoute,
-      this.tries,
-      this.score,
-      this.time,
-      this.maxScore});
+  const ResultGame({
+    super.key,
+    required this.nameGame,
+    required this.goRoute,
+    this.tries,
+    this.rounde,
+    this.score,
+    this.time,
+    this.maxScore,
+    this.isGameCards,
+    this.isGameSequence,
+    this.isGameImage,
+  });
 
   @override
   State<ResultGame> createState() => _ResultGameState();
@@ -72,6 +81,7 @@ class _ResultGameState extends State<ResultGame> {
                               Text(widget.nameGame,
                                   style: CustomTextStyles.regular24Text),
                               SizedBox(height: 60.v),
+                              if (widget.isGameCards ?? false)
                               Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -83,11 +93,20 @@ class _ResultGameState extends State<ResultGame> {
                               SizedBox(height: 60.v),
                               Row(children: [
                                 Spacer(),
+                                if (widget.isGameSequence ?? false)
+                                  info_card("Раунд", "${widget.rounde}"),
+                                if (widget.isGameCards ?? false)
                                 info_card("Попытки", "${widget.tries}"),
                                 Spacer(),
+                                if ((widget.isGameCards ?? false) ||
+                                    (widget.isGameSequence ?? false))
                                 info_card("Очки", "${widget.score}"),
+                                if ((widget.isGameCards ?? false) ||
+                                    (widget.isGameSequence ?? false))
                                 Spacer(),
+                                if (widget.isGameCards ?? false)
                                 info_card("Время", "${widget.time}"),
+                                if (widget.isGameCards ?? false)
                                 Spacer(),
                               ]),
                               SizedBox(height: 60.v),
