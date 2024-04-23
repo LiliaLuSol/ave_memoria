@@ -84,7 +84,7 @@ class _ResultGameState extends State<ResultGame> {
                             children: [
                               SizedBox(height: 35.v),
                               Text(widget.nameGame,
-                                  style: CustomTextStyles.regular24Text),
+                                  style: CustomTextStyles.regular24Text, textAlign: TextAlign.center),
                               SizedBox(height: 60.v),
                               if (widget.isGameCards ?? false)
                               Row(
