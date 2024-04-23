@@ -114,6 +114,7 @@ class _CardsGameState extends State<CardsGame> {
             tries: tries,
             score: score,
             time: tries,
+            minTries: 6,
             maxScore: 600,
       isGameCards: true,
           )

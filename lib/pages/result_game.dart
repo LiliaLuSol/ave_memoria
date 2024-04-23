@@ -9,6 +9,7 @@ class ResultGame extends StatefulWidget {
   final int? rounde;
   final int? score;
   final int? time;
+  final int? minTries;
   final int? maxScore;
   final bool? isGameCards;
   final bool? isGameSequence;
@@ -22,6 +23,7 @@ class ResultGame extends StatefulWidget {
     this.rounde,
     this.score,
     this.time,
+    this.minTries,
     this.maxScore,
     this.isGameCards,
     this.isGameSequence,
@@ -36,11 +38,14 @@ class _ResultGameState extends State<ResultGame> {
   @override
   Widget build(BuildContext context) {
     mediaQueryData = MediaQuery.of(context);
-    double percentage = widget.score != null && widget.maxScore != null
+    double scorePercentage = widget.score != null && widget.maxScore != null
         ? widget.score! / widget.maxScore!
         : 0;
+    double triesPercentage = widget.tries != null && widget.minTries != null
+        ? (widget.tries! - widget.minTries!) / widget.minTries!
+        : 0;
     int filledStars = 0;
-
+    double percentage = (scorePercentage + triesPercentage)/2;
     if (percentage >= 0.8) {
       filledStars = 3;
     } else if (percentage >= 0.6) {
