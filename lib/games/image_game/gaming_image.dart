@@ -18,10 +18,9 @@ class ImageGame extends StatefulWidget {
 class _ImageGameState extends State<ImageGame> {
   int correctAnswers = 0;
   int currentQuestionIndex = 0;
+  int questionNumber = 0;
   late bool _isFinished;
   late bool _isStart;
-  late int score;
-  late int tries;
   late int randomIndex;
   late Timer _timer;
 
@@ -39,20 +38,57 @@ class _ImageGameState extends State<ImageGame> {
           options: ['2', '4', '6', '8'],
           correctIndex: 1,
         ),
+        Question(
+          text: 'Сколько лап у этого животного?',
+          options: ['0', '0', '0', '0'],
+          correctIndex: 0,
+        ),
+        Question(
+          text: 'Сколько лап у этого животного?',
+          options: ['1', '1', '1', '1'],
+          correctIndex: 1,
+        ),
+        Question(
+          text: 'Сколько лап у этого животного?',
+          options: ['2', '2', '2', '2'],
+          correctIndex: 2,
+        ),
+        Question(
+          text: 'Сколько лап у этого животного?',
+          options: ['3', '3', '3', '3'],
+          correctIndex: 3,
+        ),
+        Question(
+          text: 'Сколько лап у этого животного?',
+          options: ['4', '4', '4', '4'],
+          correctIndex: 3,
+        ),
+        Question(
+          text: 'Сколько лап у этого животного?',
+          options: ['5', '5', '5', '5'],
+          correctIndex: 3
+        ),
+        Question(
+          text: 'Сколько лап у этого животного?',
+          options: ['6', '6', '6', '6'],
+          correctIndex: 3,
+        ),
+        Question(
+          text: 'Сколько лап у этого животного?',
+          options: ['8', '8', '8', '8'],
+          correctIndex: 3,
+        ),
       ],
     ),
-    //  другие картинки и вопросы...
+    
   ];
 
   void initializeGameData() {
     correctAnswers = 0;
     currentQuestionIndex = 0;
-    tries = 0;
-    score = 0;
+    questionNumber = 1;
     _isStart = true;
     _isFinished = false;
-    randomIndex = Random().nextInt(imageQuestions.length);
-    ImageQuestion randomImageQuestion = imageQuestions[randomIndex];
   }
 
   void startGameIfTrue() {
@@ -65,9 +101,20 @@ class _ImageGameState extends State<ImageGame> {
     });
   }
 
+  List<Question> getQuestionsForCurrentImage() {
+    randomIndex = Random().nextInt(imageQuestions.length);
+    ImageQuestion randomImageQuestion = imageQuestions[randomIndex];
+    imageQuestions.forEach((imageQuestion) {
+      imageQuestion.questions.shuffle();
+    });
+    List<Question> questions = imageQuestions[currentQuestionIndex].questions;
+    return questions.sublist(0, min(5, questions.length));
+  }
+
   @override
   void initState() {
     initializeGameData();
+    getQuestionsForCurrentImage();
     startGameIfTrue();
     super.initState();
   }
@@ -119,10 +166,6 @@ class _ImageGameState extends State<ImageGame> {
             ? ResultGame(
                 nameGame: "Римские картинки",
                 goRoute: AppRoutes.game_image,
-                tries: tries,
-                score: score,
-                time: tries,
-                maxScore: 600,
               )
             : SafeArea(
                 child: Scaffold(
@@ -175,11 +218,7 @@ class _ImageGameState extends State<ImageGame> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Spacer(),
-                                  info_card("Попытки", "$tries"),
-                                  Spacer(),
-                                  info_card("Очки", "$score"),
-                                  Spacer(),
-                                  info_card("Время", "0"),
+                                  info_card("Вопрос", "$questionNumber"),
                                   Spacer(),
                                 ],
                               ),
@@ -187,18 +226,23 @@ class _ImageGameState extends State<ImageGame> {
                               Divider(height: 1, color: appTheme.gray)
                             ])),
                         Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 16.v),
-                            child:
-                            Column(children: [
+                            padding: EdgeInsets.symmetric(horizontal: 16.h),
+                            child: Column(children: [
                               // Spacer(),
-                              SizedBox(height: 22.v),
-                              Text(questions[currentQuestionIndex].text, style: CustomTextStyles.regular16Text,),
-                        //       Spacer(),
-                              SizedBox(height: 22.v),
+                              SizedBox(height: 150.v),
+                              Text(
+                                questions[currentQuestionIndex].text,
+                                style: CustomTextStyles.regular16Text,
+                              ),
+                              //       Spacer(),
+                              SizedBox(height: 150.v),
                               Column(
                                 children: questions[currentQuestionIndex]
                                     .options
-                                    .map((option) => CustomElevatedButton(
+                                    .map((option) => Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 8.v),
+                                        child: CustomElevatedButton(
                                           onTap: () {
                                             if (option ==
                                                 questions[currentQuestionIndex]
@@ -210,9 +254,10 @@ class _ImageGameState extends State<ImageGame> {
                                               });
                                             }
                                             if (currentQuestionIndex <
-                                                questions.length - 1) {
+                                                5) {
                                               setState(() {
                                                 currentQuestionIndex++;
+                                                questionNumber++;
                                               });
                                             } else {
                                               setState(() {
@@ -221,12 +266,10 @@ class _ImageGameState extends State<ImageGame> {
                                             }
                                           },
                                           text: option,
-                                        ))
+                                        )))
                                     .toList(),
-                              ),
-                        //       Spacer(),
-                            ])
-                        )
+                              )
+                            ]))
                       ],
                     ),
                   ),
