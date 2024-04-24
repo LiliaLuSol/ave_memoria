@@ -64,10 +64,9 @@ class _ImageGameState extends State<ImageGame> {
           correctIndex: 3,
         ),
         Question(
-          text: 'Сколько лап у этого животного?',
-          options: ['5', '5', '5', '5'],
-          correctIndex: 3
-        ),
+            text: 'Сколько лап у этого животного?',
+            options: ['5', '5', '5', '5'],
+            correctIndex: 3),
         Question(
           text: 'Сколько лап у этого животного?',
           options: ['6', '6', '6', '6'],
@@ -80,7 +79,114 @@ class _ImageGameState extends State<ImageGame> {
         ),
       ],
     ),
-    
+    ImageQuestion(
+      imagePath: 'assets/image2.png',
+      questions: [
+        Question(
+          text: 'Какое животное изображено на картинке?',
+          options: ['Собака', 'Кошка', 'Лев', 'Тигр'],
+          correctIndex: 2,
+        ),
+        Question(
+          text: 'Сколько лап у этого животного?',
+          options: ['2', '4', '6', '8'],
+          correctIndex: 1,
+        ),
+        Question(
+          text: 'Сколько лап у этого животного?',
+          options: ['0', '0', '0', '0'],
+          correctIndex: 0,
+        ),
+        Question(
+          text: 'Сколько лап у этого животного?',
+          options: ['1', '1', '1', '1'],
+          correctIndex: 1,
+        ),
+        Question(
+          text: 'Сколько лап у этого животного?',
+          options: ['2', '2', '2', '2'],
+          correctIndex: 2,
+        ),
+        Question(
+          text: 'Сколько лап у этого животного?',
+          options: ['3', '3', '3', '3'],
+          correctIndex: 3,
+        ),
+        Question(
+          text: 'Сколько лап у этого животного?',
+          options: ['4', '4', '4', '4'],
+          correctIndex: 3,
+        ),
+        Question(
+            text: 'Сколько лап у этого животного?',
+            options: ['5', '5', '5', '5'],
+            correctIndex: 3),
+        Question(
+          text: 'Сколько лап у этого животного?',
+          options: ['6', '6', '6', '6'],
+          correctIndex: 3,
+        ),
+        Question(
+          text: 'Сколько лап у этого животного?',
+          options: ['8', '8', '8', '8'],
+          correctIndex: 3,
+        ),
+      ],
+    ),
+    ImageQuestion(
+      imagePath: 'assets/image3.png',
+      questions: [
+        Question(
+          text: 'Какое животное изображено на картинке?',
+          options: ['Собака', 'Кошка', 'Лев', 'Тигр'],
+          correctIndex: 2,
+        ),
+        Question(
+          text: 'Сколько лап у этого животного?',
+          options: ['2', '4', '6', '8'],
+          correctIndex: 1,
+        ),
+        Question(
+          text: 'Сколько лап у этого животного?',
+          options: ['0', '0', '0', '0'],
+          correctIndex: 0,
+        ),
+        Question(
+          text: 'Сколько лап у этого животного?',
+          options: ['1', '1', '1', '1'],
+          correctIndex: 1,
+        ),
+        Question(
+          text: 'Сколько лап у этого животного?',
+          options: ['2', '2', '2', '2'],
+          correctIndex: 2,
+        ),
+        Question(
+          text: 'Сколько лап у этого животного?',
+          options: ['3', '3', '3', '3'],
+          correctIndex: 3,
+        ),
+        Question(
+          text: 'Сколько лап у этого животного?',
+          options: ['4', '4', '4', '4'],
+          correctIndex: 3,
+        ),
+        Question(
+            text: 'Сколько лап у этого животного?',
+            options: ['5', '5', '5', '5'],
+            correctIndex: 3),
+        Question(
+          text: 'Сколько лап у этого животного?',
+          options: ['6', '6', '6', '6'],
+          correctIndex: 3,
+        ),
+        Question(
+          text: 'Сколько лап у этого животного?',
+          options: ['8', '8', '8', '8'],
+          correctIndex: 3,
+        ),
+      ],
+    ),
   ];
 
   void initializeGameData() {
@@ -89,6 +195,8 @@ class _ImageGameState extends State<ImageGame> {
     questionNumber = 1;
     _isStart = true;
     _isFinished = false;
+    randomIndex = Random().nextInt(imageQuestions.length);
+    imageQuestions[randomIndex].questions.shuffle();
   }
 
   void startGameIfTrue() {
@@ -101,20 +209,9 @@ class _ImageGameState extends State<ImageGame> {
     });
   }
 
-  List<Question> getQuestionsForCurrentImage() {
-    randomIndex = Random().nextInt(imageQuestions.length);
-    ImageQuestion randomImageQuestion = imageQuestions[randomIndex];
-    imageQuestions.forEach((imageQuestion) {
-      imageQuestion.questions.shuffle();
-    });
-    List<Question> questions = imageQuestions[currentQuestionIndex].questions;
-    return questions.sublist(0, min(5, questions.length));
-  }
-
   @override
   void initState() {
     initializeGameData();
-    getQuestionsForCurrentImage();
     startGameIfTrue();
     super.initState();
   }
@@ -128,7 +225,7 @@ class _ImageGameState extends State<ImageGame> {
   @override
   Widget build(BuildContext context) {
     mediaQueryData = MediaQuery.of(context);
-    List<Question> questions = imageQuestions[currentQuestionIndex].questions;
+    List<Question> questions = imageQuestions[randomIndex].questions.take(5).toList();
     return _isStart
         ? SafeArea(
             child: Scaffold(
@@ -144,8 +241,11 @@ class _ImageGameState extends State<ImageGame> {
                             textAlign: TextAlign.center,
                           ),
                           SizedBox(height: 20.v),
-                          Image.asset('assets/image1.png',
-                              width: 200, height: 200),
+                          Image.asset(
+                            imageQuestions[randomIndex].imagePath,
+                            width: 200,
+                            height: 200,
+                          ),
                           SizedBox(height: 20.v),
                           CustomElevatedButton(
                             text: "Начать раньше",
@@ -240,8 +340,8 @@ class _ImageGameState extends State<ImageGame> {
                                 children: questions[currentQuestionIndex]
                                     .options
                                     .map((option) => Padding(
-                                        padding: EdgeInsets.symmetric(
-                                            vertical: 8.v),
+                                        padding:
+                                            EdgeInsets.symmetric(vertical: 8.v),
                                         child: CustomElevatedButton(
                                           onTap: () {
                                             if (option ==
@@ -253,11 +353,14 @@ class _ImageGameState extends State<ImageGame> {
                                                 correctAnswers++;
                                               });
                                             }
-                                            if (currentQuestionIndex <
-                                                5) {
+                                            print(currentQuestionIndex);
+                                            print(questions.length - 1);
+                                            if (currentQuestionIndex < questions.length - 1) {
                                               setState(() {
                                                 currentQuestionIndex++;
                                                 questionNumber++;
+                                                print(questions);
+                                                print(currentQuestionIndex);
                                               });
                                             } else {
                                               setState(() {
