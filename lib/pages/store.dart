@@ -136,12 +136,12 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
                               tabs: const [
                                 Tab(
                                   child: Text(
-                                    "рынок",
+                                    "советы",
                                   ),
                                 ),
                                 Tab(
                                   child: Text(
-                                    "советы",
+                                    "рынок",
                                   ),
                                 ),
                                 Tab(
@@ -161,6 +161,21 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
                           child: TabBarView(
                               controller: _tabController,
                               children: <Widget>[
+                                Container(
+                                  color: appTheme.lightGray,
+                                  width: 353.h,
+                                  height: 90.v,
+                                ),
+                                Container(
+                                  color: appTheme.lightGray,
+                                  width: 353.h,
+                                  height: 90.v,
+                                ),
+                                Container(
+                                  color: appTheme.lightGray,
+                                  width: 353.h,
+                                  height: 90.v,
+                                ),
                                 Container(
                                   color: appTheme.lightGray,
                                   width: 353.h,
