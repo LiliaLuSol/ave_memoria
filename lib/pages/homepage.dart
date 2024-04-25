@@ -75,6 +75,7 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                       child: Text("AveMemoria",
                           style: CustomTextStyles.extraBold32Primary)),
                   Spacer(),
+                  if (supabase.auth.currentUser?.email != "anounymous@gmail.com")
                   Padding(
                       padding: EdgeInsets.only(
                         top: 14.v,
@@ -85,6 +86,7 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                               ? moneyList.first.toString()
                               : '0',
                           style: CustomTextStyles.semiBold18Text)),
+                  if (supabase.auth.currentUser?.email != "anounymous@gmail.com")
                   IconButton(
                     icon: FaIcon(
                       FontAwesomeIcons.coins,

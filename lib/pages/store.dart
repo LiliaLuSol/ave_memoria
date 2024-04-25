@@ -84,6 +84,7 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
                         child: Text("Свод",
                             style: CustomTextStyles.extraBold32Text)),
                     Spacer(),
+                    if (supabase.auth.currentUser?.email != "anounymous@gmail.com")
                     Padding(
                       padding: EdgeInsets.only(
                         top: 14.v,
@@ -95,6 +96,7 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
                               : '0',
                           style: CustomTextStyles.semiBold18Text)
                     ),
+                    if (supabase.auth.currentUser?.email != "anounymous@gmail.com")
                     IconButton(
                       icon: FaIcon(
                         FontAwesomeIcons.coins,
