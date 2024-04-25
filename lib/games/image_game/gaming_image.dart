@@ -34,48 +34,49 @@ class _ImageGameState extends State<ImageGame> {
           correctIndex: 2,
         ),
         Question(
-          text: 'Сколько лап у этого животного?',
-          options: ['2', '4', '6', '8'],
+          text: 'Как называется самое большое животное на Земле?',
+          options: ['Слон', 'Кит', 'Гиппопотам', 'Бегемот'],
           correctIndex: 1,
         ),
         Question(
-          text: 'Сколько лап у этого животного?',
-          options: ['0', '0', '0', '0'],
+          text: 'Какое животное является символом США?',
+          options: ['Орёл', 'Буйвол', 'Медведь', 'Американский питбультерьер'],
           correctIndex: 0,
         ),
         Question(
-          text: 'Сколько лап у этого животного?',
-          options: ['1', '1', '1', '1'],
+          text: 'Что едят кенгуру?',
+          options: ['Трава', 'Плоды', 'Планктон', 'Мясо'],
+          correctIndex: 0,
+        ),
+        Question(
+          text: 'Где живут пингвины?',
+          options: ['Арктика', 'Антарктида', 'Сахара', 'Амазонка'],
           correctIndex: 1,
         ),
         Question(
-          text: 'Сколько лап у этого животного?',
-          options: ['2', '2', '2', '2'],
+          text: 'Как называется животное, которое спит зимой в норе?',
+          options: ['Медведь', 'Слон', 'Енот', 'Барсук'],
+          correctIndex: 3,
+        ),
+        Question(
+          text: 'Как называется самая длинная змея в мире?',
+          options: ['Питон', 'Анаконда', 'Удав', 'Кобра'],
+          correctIndex: 1,
+        ),
+        Question(
+          text: 'Сколько ног у паука?',
+          options: ['4', '6', '8', '10'],
           correctIndex: 2,
         ),
         Question(
-          text: 'Сколько лап у этого животного?',
-          options: ['3', '3', '3', '3'],
-          correctIndex: 3,
+          text: 'Какое животное считается самым быстрым на Земле?',
+          options: ['Гепард', 'Лев', 'Олень', 'Тигр'],
+          correctIndex: 0,
         ),
         Question(
-          text: 'Сколько лап у этого животного?',
-          options: ['4', '4', '4', '4'],
-          correctIndex: 3,
-        ),
-        Question(
-            text: 'Сколько лап у этого животного?',
-            options: ['5', '5', '5', '5'],
-            correctIndex: 3),
-        Question(
-          text: 'Сколько лап у этого животного?',
-          options: ['6', '6', '6', '6'],
-          correctIndex: 3,
-        ),
-        Question(
-          text: 'Сколько лап у этого животного?',
-          options: ['8', '8', '8', '8'],
-          correctIndex: 3,
+          text: 'Какой птицей является символ мира?',
+          options: ['Голубь', 'Орёл', 'Страус', 'Сова'],
+          correctIndex: 0,
         ),
       ],
     ),
@@ -88,48 +89,49 @@ class _ImageGameState extends State<ImageGame> {
           correctIndex: 2,
         ),
         Question(
-          text: 'Сколько лап у этого животного?',
-          options: ['2', '4', '6', '8'],
+          text: 'Как называется самое большое животное на Земле?',
+          options: ['Слон', 'Кит', 'Гиппопотам', 'Бегемот'],
           correctIndex: 1,
         ),
         Question(
-          text: 'Сколько лап у этого животного?',
-          options: ['0', '0', '0', '0'],
+          text: 'Какое животное является символом США?',
+          options: ['Орёл', 'Буйвол', 'Медведь', 'Американский питбультерьер'],
           correctIndex: 0,
         ),
         Question(
-          text: 'Сколько лап у этого животного?',
-          options: ['1', '1', '1', '1'],
+          text: 'Что едят кенгуру?',
+          options: ['Трава', 'Плоды', 'Планктон', 'Мясо'],
+          correctIndex: 0,
+        ),
+        Question(
+          text: 'Где живут пингвины?',
+          options: ['Арктика', 'Антарктида', 'Сахара', 'Амазонка'],
           correctIndex: 1,
         ),
         Question(
-          text: 'Сколько лап у этого животного?',
-          options: ['2', '2', '2', '2'],
+          text: 'Как называется животное, которое спит зимой в норе?',
+          options: ['Медведь', 'Слон', 'Енот', 'Барсук'],
+          correctIndex: 3,
+        ),
+        Question(
+          text: 'Как называется самая длинная змея в мире?',
+          options: ['Питон', 'Анаконда', 'Удав', 'Кобра'],
+          correctIndex: 1,
+        ),
+        Question(
+          text: 'Сколько ног у паука?',
+          options: ['4', '6', '8', '10'],
           correctIndex: 2,
         ),
         Question(
-          text: 'Сколько лап у этого животного?',
-          options: ['3', '3', '3', '3'],
-          correctIndex: 3,
+          text: 'Какое животное считается самым быстрым на Земле?',
+          options: ['Гепард', 'Лев', 'Олень', 'Тигр'],
+          correctIndex: 0,
         ),
         Question(
-          text: 'Сколько лап у этого животного?',
-          options: ['4', '4', '4', '4'],
-          correctIndex: 3,
-        ),
-        Question(
-            text: 'Сколько лап у этого животного?',
-            options: ['5', '5', '5', '5'],
-            correctIndex: 3),
-        Question(
-          text: 'Сколько лап у этого животного?',
-          options: ['6', '6', '6', '6'],
-          correctIndex: 3,
-        ),
-        Question(
-          text: 'Сколько лап у этого животного?',
-          options: ['8', '8', '8', '8'],
-          correctIndex: 3,
+          text: 'Какой птицей является символ мира?',
+          options: ['Голубь', 'Орёл', 'Страус', 'Сова'],
+          correctIndex: 0,
         ),
       ],
     ),
@@ -142,48 +144,49 @@ class _ImageGameState extends State<ImageGame> {
           correctIndex: 2,
         ),
         Question(
-          text: 'Сколько лап у этого животного?',
-          options: ['2', '4', '6', '8'],
+          text: 'Как называется самое большое животное на Земле?',
+          options: ['Слон', 'Кит', 'Гиппопотам', 'Бегемот'],
           correctIndex: 1,
         ),
         Question(
-          text: 'Сколько лап у этого животного?',
-          options: ['0', '0', '0', '0'],
+          text: 'Какое животное является символом США?',
+          options: ['Орёл', 'Буйвол', 'Медведь', 'Американский питбультерьер'],
           correctIndex: 0,
         ),
         Question(
-          text: 'Сколько лап у этого животного?',
-          options: ['1', '1', '1', '1'],
+          text: 'Что едят кенгуру?',
+          options: ['Трава', 'Плоды', 'Планктон', 'Мясо'],
+          correctIndex: 0,
+        ),
+        Question(
+          text: 'Где живут пингвины?',
+          options: ['Арктика', 'Антарктида', 'Сахара', 'Амазонка'],
           correctIndex: 1,
         ),
         Question(
-          text: 'Сколько лап у этого животного?',
-          options: ['2', '2', '2', '2'],
+          text: 'Как называется животное, которое спит зимой в норе?',
+          options: ['Медведь', 'Слон', 'Енот', 'Барсук'],
+          correctIndex: 3,
+        ),
+        Question(
+          text: 'Как называется самая длинная змея в мире?',
+          options: ['Питон', 'Анаконда', 'Удав', 'Кобра'],
+          correctIndex: 1,
+        ),
+        Question(
+          text: 'Сколько ног у паука?',
+          options: ['4', '6', '8', '10'],
           correctIndex: 2,
         ),
         Question(
-          text: 'Сколько лап у этого животного?',
-          options: ['3', '3', '3', '3'],
-          correctIndex: 3,
+          text: 'Какое животное считается самым быстрым на Земле?',
+          options: ['Гепард', 'Лев', 'Олень', 'Тигр'],
+          correctIndex: 0,
         ),
         Question(
-          text: 'Сколько лап у этого животного?',
-          options: ['4', '4', '4', '4'],
-          correctIndex: 3,
-        ),
-        Question(
-            text: 'Сколько лап у этого животного?',
-            options: ['5', '5', '5', '5'],
-            correctIndex: 3),
-        Question(
-          text: 'Сколько лап у этого животного?',
-          options: ['6', '6', '6', '6'],
-          correctIndex: 3,
-        ),
-        Question(
-          text: 'Сколько лап у этого животного?',
-          options: ['8', '8', '8', '8'],
-          correctIndex: 3,
+          text: 'Какой птицей является символ мира?',
+          options: ['Голубь', 'Орёл', 'Страус', 'Сова'],
+          correctIndex: 0,
         ),
       ],
     ),
@@ -225,7 +228,8 @@ class _ImageGameState extends State<ImageGame> {
   @override
   Widget build(BuildContext context) {
     mediaQueryData = MediaQuery.of(context);
-    List<Question> questions = imageQuestions[randomIndex].questions.take(5).toList();
+    List<Question> questions =
+        imageQuestions[randomIndex].questions.take(5).toList();
     return _isStart
         ? SafeArea(
             child: Scaffold(
@@ -266,6 +270,9 @@ class _ImageGameState extends State<ImageGame> {
             ? ResultGame(
                 nameGame: "Римские картинки",
                 goRoute: AppRoutes.game_image,
+                isGameImage: true,
+                correctAnswers: correctAnswers,
+                totalQuestions: 5,
               )
             : SafeArea(
                 child: Scaffold(
@@ -318,7 +325,7 @@ class _ImageGameState extends State<ImageGame> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Spacer(),
-                                  info_card("Вопрос", "$questionNumber"),
+                                  info_card("Вопрос", "$questionNumber из 5"),
                                   Spacer(),
                                 ],
                               ),
@@ -353,14 +360,11 @@ class _ImageGameState extends State<ImageGame> {
                                                 correctAnswers++;
                                               });
                                             }
-                                            print(currentQuestionIndex);
-                                            print(questions.length - 1);
-                                            if (currentQuestionIndex < questions.length - 1) {
+                                            if (currentQuestionIndex <
+                                                questions.length - 1) {
                                               setState(() {
                                                 currentQuestionIndex++;
                                                 questionNumber++;
-                                                print(questions);
-                                                print(currentQuestionIndex);
                                               });
                                             } else {
                                               setState(() {

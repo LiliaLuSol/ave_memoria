@@ -1,6 +1,9 @@
+import 'dart:ui';
+
 import 'package:ave_memoria/other/app_export.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class ResultGame extends StatefulWidget {
   final String nameGame;
@@ -11,6 +14,8 @@ class ResultGame extends StatefulWidget {
   final int? time;
   final int? minTries;
   final int? maxScore;
+  final int? correctAnswers;
+  final int? totalQuestions;
   final bool? isGameCards;
   final bool? isGameSequence;
   final bool? isGameImage;
@@ -25,6 +30,8 @@ class ResultGame extends StatefulWidget {
     this.time,
     this.minTries,
     this.maxScore,
+    this.correctAnswers,
+    this.totalQuestions,
     this.isGameCards,
     this.isGameSequence,
     this.isGameImage,
@@ -45,7 +52,7 @@ class _ResultGameState extends State<ResultGame> {
         ? (widget.tries! - widget.minTries!) / widget.minTries!
         : 0;
     int filledStars = 0;
-    double percentage = (scorePercentage + triesPercentage)/2;
+    double percentage = (scorePercentage + triesPercentage) / 2;
     if (percentage >= 0.8) {
       filledStars = 3;
     } else if (percentage >= 0.6) {
@@ -68,6 +75,25 @@ class _ResultGameState extends State<ResultGame> {
       }
     });
 
+    Color _calculateColor() {
+      double percentage =
+          (widget.correctAnswers != null && widget.totalQuestions != null
+              ? widget.correctAnswers! / widget.totalQuestions!
+              : 0);
+
+      if (percentage <= 0.2) {
+        return Colors.red;
+      } else if (percentage <= 0.4) {
+        return Colors.orange;
+      } else if (percentage <= 0.6) {
+        return Colors.yellow;
+      } else if (percentage <= 0.8) {
+        return Colors.green;
+      } else {
+        return Colors.blue;
+      }
+    }
+
     return SafeArea(
         child: Scaffold(
             backgroundColor: Color(0xFFC0C0C0),
@@ -84,37 +110,83 @@ class _ResultGameState extends State<ResultGame> {
                             children: [
                               SizedBox(height: 35.v),
                               Text(widget.nameGame,
-                                  style: CustomTextStyles.regular24Text, textAlign: TextAlign.center),
+                                  style: CustomTextStyles.regular24Text,
+                                  textAlign: TextAlign.center),
                               SizedBox(height: 60.v),
                               if (widget.isGameCards ?? false)
-                              Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Spacer(),
-                                    SizedBox(width: 12.h),
-                                    ...stars,
-                                    Spacer()
-                                  ]),
-                              SizedBox(height: 60.v),
+                                Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Spacer(),
+                                      SizedBox(width: 12.h),
+                                      ...stars,
+                                      Spacer()
+                                    ]),
+                              if (widget.isGameImage ?? false)
+                                Stack(
+                                    fit: StackFit.passthrough,
+                                    alignment: Alignment.center,
+                                    children: [
+                                      CircularPercentIndicator(
+                                        radius: 71.h,
+                                        animation: false,
+                                        lineWidth: 19.h,
+                                        percent: 1,
+                                        circularStrokeCap:
+                                            CircularStrokeCap.round,
+                                        progressColor:
+                                            theme.colorScheme.onPrimary,
+                                        backgroundColor: appTheme.lightGray,
+                                      ),
+                                      CircularPercentIndicator(
+                                        radius: 70.h,
+                                        animation: true,
+                                        lineWidth: 17.h,
+                                        percent: widget.correctAnswers !=
+                                                    null &&
+                                                widget.totalQuestions != null
+                                            ? widget.correctAnswers! /
+                                                widget.totalQuestions!
+                                            : 0,
+                                        center: Text(
+                                            '${((widget.correctAnswers != null && widget.totalQuestions != null ? widget.correctAnswers! / widget.totalQuestions! : 0) * 100).toStringAsFixed(0)}%',
+                                            style:
+                                                CustomTextStyles.regular24Text),
+                                        circularStrokeCap:
+                                            CircularStrokeCap.round,
+                                        backgroundColor: appTheme.white,
+                                        progressColor: _calculateColor(),
+                                      )
+                                    ]),
+                              if (widget.isGameCards ?? false)
+                                SizedBox(height: 60.v),
+                              if (widget.isGameImage ?? false)
+                                Spacer(),
                               Row(children: [
                                 Spacer(),
+                                if (widget.isGameImage ?? false)
+                                  info_card("Ответы",
+                                      "${widget.correctAnswers} из ${widget.totalQuestions}"),
                                 if (widget.isGameSequence ?? false)
                                   info_card("Раунд", "${widget.rounde}"),
                                 if (widget.isGameCards ?? false)
-                                info_card("Попытки", "${widget.tries}"),
+                                  info_card("Попытки", "${widget.tries}"),
                                 Spacer(),
                                 if ((widget.isGameCards ?? false) ||
                                     (widget.isGameSequence ?? false))
-                                info_card("Очки", "${widget.score}"),
+                                  info_card("Очки", "${widget.score}"),
                                 if ((widget.isGameCards ?? false) ||
                                     (widget.isGameSequence ?? false))
-                                Spacer(),
+                                  Spacer(),
                                 if (widget.isGameCards ?? false)
-                                info_card("Время", "${widget.time}"),
+                                  info_card("Время", "${widget.time}"),
                                 if (widget.isGameCards ?? false)
-                                Spacer(),
+                                  Spacer(),
                               ]),
-                              SizedBox(height: 60.v),
+                              if ((widget.isGameCards ?? false) ||
+                                  (widget.isGameSequence ?? false))
+                                SizedBox(height: 60.v),
+                              Spacer(),
                               CustomElevatedButton(
                                 text: "Переиграть",
                                 buttonTextStyle:
@@ -142,7 +214,8 @@ class _ResultGameState extends State<ResultGame> {
                                   onTap: () {
                                     GoRouter.of(context)
                                         .push(AppRoutes.homepage);
-                                  })
+                                  }),
+                              Spacer()
                             ]))))));
   }
 }

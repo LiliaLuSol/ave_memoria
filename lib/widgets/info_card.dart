@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 Widget info_card(String title, String info) {
 
   List<Widget> hearts = List.generate(3, (index) {
-    if (index < int.parse(info)) {
+    if (title == "Жизни" && index < int.parse(info)) {
       return Icon(CupertinoIcons.heart_fill,
               color: Color.fromRGBO(230, 70, 70, 100));
     } else {

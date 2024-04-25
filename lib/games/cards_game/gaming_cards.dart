@@ -109,14 +109,13 @@ class _CardsGameState extends State<CardsGame> {
     return _isFinished
         ? ResultGame(
             nameGame: "Легион памяти",
-      goRoute:
-      AppRoutes.game_cards,
+            goRoute: AppRoutes.game_cards,
             tries: tries,
             score: score,
             time: tries,
             minTries: 6,
             maxScore: 600,
-      isGameCards: true,
+            isGameCards: true,
           )
         : SafeArea(
             child: Scaffold(
