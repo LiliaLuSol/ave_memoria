@@ -136,7 +136,7 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
                               tabs: const [
                                 Tab(
                                   child: Text(
-                                    "советы",
+                                    "библиотека",
                                   ),
                                 ),
                                 Tab(
@@ -155,33 +155,41 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
                                   ),
                                 ),
                               ]))),
+                  Divider(height: 1, color: appTheme.gray),
+                  SizedBox(height: 15.v),
                   Expanded(
-                      child: Padding(
-                          padding: EdgeInsets.only(left: 16.h, right: 16.h),
                           child: TabBarView(
                               controller: _tabController,
                               children: <Widget>[
+                                Column(children: [
+                                  Container(
+                                    color: appTheme.lightGray,
+                                    width: 353.h,
+                                    height: 90.v,
+                                  ),
+                                  SizedBox(height: 15.v),
+                                  Container(
+                                    color: appTheme.lightGray,
+                                    width: 353.h,
+                                    height: 90.v,
+                                  ),
+                                ]),
                                 Container(
-                                  color: appTheme.lightGray,
+                                  color: appTheme.green,
                                   width: 353.h,
                                   height: 90.v,
                                 ),
                                 Container(
-                                  color: appTheme.lightGray,
+                                  color: appTheme.yellow,
                                   width: 353.h,
                                   height: 90.v,
                                 ),
                                 Container(
-                                  color: appTheme.lightGray,
+                                  color: appTheme.orange,
                                   width: 353.h,
                                   height: 90.v,
                                 ),
-                                Container(
-                                  color: appTheme.lightGray,
-                                  width: 353.h,
-                                  height: 90.v,
-                                ),
-                              ]))),
+                              ])),
                 ]),
               ),
             ),
