@@ -16,7 +16,6 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> with TickerProviderStateMixin {
   final _emailcontroller = TextEditingController();
   final emailFocusNode = FocusNode();
-  final _namecontroller = TextEditingController();
   final nameFocusNode = FocusNode();
 
   bool isNameValid = false;
@@ -60,8 +59,7 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
     final res = await supabase
         .from('profileusergame')
         .select('money')
-        .eq('email',
-        email)
+        .eq('email', email)
         .count(CountOption.exact);
     final data = res.data;
     setState(() {
@@ -130,16 +128,15 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
                               style: CustomTextStyles.extraBold32Text)),
                       Spacer(),
                       Padding(
-                        padding: EdgeInsets.only(
-                          top: 14.v,
-                          bottom: 9.v,
-                        ),
-                        child: Text(
-                            moneyList.isNotEmpty
-                                ? moneyList.first.toString()
-                                : '0',
-                            style: CustomTextStyles.semiBold18Text)
-                      ),
+                          padding: EdgeInsets.only(
+                            top: 14.v,
+                            bottom: 9.v,
+                          ),
+                          child: Text(
+                              moneyList.isNotEmpty
+                                  ? moneyList.first.toString()
+                                  : '0',
+                              style: CustomTextStyles.semiBold18Text)),
                       IconButton(
                         icon: FaIcon(
                           FontAwesomeIcons.coins,
@@ -178,34 +175,6 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: [
-                                              Text(
-                                                "Имя воплощения",
-                                                style:
-                                                    theme.textTheme.bodyMedium,
-                                              ),
-                                              SizedBox(height: 4.v),
-                                              CustomTextFormField(
-                                                controller: _namecontroller,
-                                                focusNode: nameFocusNode,
-                                                autofocus: false,
-                                                hintText: "Игрок",
-                                                textInputType:
-                                                    TextInputType.text,
-                                                validator: (value) {
-                                                  return value!.length < 1 &&
-                                                          value!.length > 16
-                                                      ? "Длина имени от 1 до 16 символов"
-                                                      : null;
-                                                },
-                                                onChanged: (value) {
-                                                  setState(() {
-                                                    isNameValid =
-                                                        value.length >= 1 &&
-                                                            value.length <= 16;
-                                                  });
-                                                },
-                                              ),
-                                              SizedBox(height: 16.v),
                                               Text(
                                                 "Email",
                                                 style:
@@ -554,7 +523,7 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
                                                           )
                                                         ])),
                                               ]),
-                                              SizedBox(height: 155.v),
+                                              SizedBox(height: 240.v),
                                               CustomElevatedButton(
                                                 text: "Выход из аккаунта",
                                                 buttonTextStyle:

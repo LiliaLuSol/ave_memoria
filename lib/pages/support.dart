@@ -9,6 +9,7 @@ class Support extends StatefulWidget {
 }
 
 class _SupportState extends State<Support> {
+  bool isMessageNotEmpty = false;
   late TextEditingController messageplaceholController;
   final msgFocusNode = FocusNode();
 
@@ -80,32 +81,47 @@ class _SupportState extends State<Support> {
                                         SizedBox(height: 4.v),
                                         SingleChildScrollView(
                                             child: CustomTextFormField(
-                                                controller:
-                                                    messageplaceholController,
-                                                focusNode: msgFocusNode,
-                                                maxLines: 19,
-                                                autofocus: false,
-                                                hintText: "Сообщение...",
-                                                textInputAction:
-                                                    TextInputAction.done)),
-                                        SizedBox(height: 100.v),
+                                          controller: messageplaceholController,
+                                          focusNode: msgFocusNode,
+                                          maxLines: 19,
+                                          autofocus: false,
+                                          hintText: "Сообщение...",
+                                          textInputAction: TextInputAction.done,
+                                              onChanged: (p0) {
+                                                setState(() {
+                                                  isMessageNotEmpty = messageplaceholController.text.isNotEmpty;
+                                                });
+                                              },
+                                        )),
+                                        SizedBox(height: 180.v),
                                         CustomElevatedButton(
                                           text: "Отправить",
                                           buttonTextStyle: CustomTextStyles
                                               .semiBold18TextWhite,
-                                          buttonStyle: ElevatedButton.styleFrom(
-                                              backgroundColor:
-                                                  theme.colorScheme.primary,
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          5))),
-                                          onTap: () {
-                                            context.showsnackbar(
-                                                title: 'Сообщение отправлено!',
-                                                color: Colors.grey);
-                                            Navigator.of(context).pop();
-                                          },
+                                          buttonStyle: isMessageNotEmpty
+                                              ? ElevatedButton.styleFrom(
+                                                  backgroundColor:
+                                                      theme.colorScheme.primary,
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5)))
+                                              : ElevatedButton.styleFrom(
+                                                  backgroundColor:
+                                                      appTheme.gray,
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5))),
+                                          onTap: isMessageNotEmpty
+                                              ? () {
+                                                  context.showsnackbar(
+                                                      title:
+                                                          'Сообщение отправлено!',
+                                                      color: Colors.grey);
+                                                  Navigator.of(context).pop();
+                                                }
+                                              : null,
                                         ),
                                       ]))
                             ]))))));
