@@ -30,6 +30,30 @@ class _SupportState extends State<Support> {
     mediaQueryData = MediaQuery.of(context);
 
     return SafeArea(
+        child: Scaffold(
+      extendBody: true,
+      extendBodyBehindAppBar: true,
+      resizeToAvoidBottomInset: false,
+      body: OfflineBuilder(
+        connectivityBuilder: (
+          BuildContext context,
+          ConnectivityResult connectivity,
+          Widget child,
+        ) {
+          final bool connected = connectivity != ConnectivityResult.none;
+          return connected ? _supportPage(context) : const BuildNoInternet();
+        },
+        child: Center(
+          child: CircularProgressIndicator(
+            color: theme.colorScheme.primary,
+          ),
+        ),
+      ),
+    ));
+  }
+
+  SafeArea _supportPage(BuildContext context) {
+    return SafeArea(
         child: GestureDetector(
             onTap: () {
               FocusScope.of(context).unfocus();
@@ -87,11 +111,13 @@ class _SupportState extends State<Support> {
                                           autofocus: false,
                                           hintText: "Сообщение...",
                                           textInputAction: TextInputAction.done,
-                                              onChanged: (p0) {
-                                                setState(() {
-                                                  isMessageNotEmpty = messageplaceholController.text.isNotEmpty;
-                                                });
-                                              },
+                                          onChanged: (p0) {
+                                            setState(() {
+                                              isMessageNotEmpty =
+                                                  messageplaceholController
+                                                      .text.isNotEmpty;
+                                            });
+                                          },
                                         )),
                                         SizedBox(height: 180.v),
                                         CustomElevatedButton(

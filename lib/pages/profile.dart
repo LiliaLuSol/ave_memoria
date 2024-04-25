@@ -61,7 +61,7 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
       return email;
     } else if (has_internet() != ConnectivityResult.none) {
       setState(() {
-isValid = false;
+        isValid = false;
       });
       return emailAnon;
     } else {
@@ -215,206 +215,221 @@ isValid = false;
                                                 enabled: false,
                                               ),
                                               SizedBox(height: 16.v),
-                                                GestureDetector(
-                                                    onTap: () {
-                                                      GoRouter.of(context).push(
-                                                          AppRoutes.support);
-                                                    },
-                                                    child: Container(
-                                                        padding: EdgeInsets
-                                                            .symmetric(
-                                                                horizontal:
-                                                                    13.h,
-                                                                vertical: 15.v),
-                                                        decoration: AppDecoration
-                                                            .outlineGray
-                                                            .copyWith(
-                                                                borderRadius: BorderRadiusStyle
-                                                                    .circleBorder15),
-                                                        child: Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .spaceBetween,
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              Text(
-                                                                  "Обратная связь",
-                                                                  style: CustomTextStyles
-                                                                      .regular16Text),
-                                                              CustomImageView(
-                                                                  svgPath:
-                                                                      ImageConstant
-                                                                          .imgArrowright,
-                                                                  height: 15.v,
-                                                                  width: 9.h,
-                                                                  margin: EdgeInsets
-                                                                      .only(
-                                                                          top: 2
-                                                                              .v,
-                                                                          bottom:
-                                                                              5.v))
-                                                            ]))),
+                                              GestureDetector(
+                                                  onTap: () {
+                                                    GoRouter.of(context).push(
+                                                        AppRoutes.support);
+                                                  },
+                                                  child: Container(
+                                                      padding:
+                                                          EdgeInsets.symmetric(
+                                                              horizontal: 13.h,
+                                                              vertical: 15.v),
+                                                      decoration: AppDecoration
+                                                          .outlineGray
+                                                          .copyWith(
+                                                              borderRadius:
+                                                                  BorderRadiusStyle
+                                                                      .circleBorder15),
+                                                      child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            Text(
+                                                                "Обратная связь",
+                                                                style: CustomTextStyles
+                                                                    .regular16Text),
+                                                            CustomImageView(
+                                                                svgPath:
+                                                                    ImageConstant
+                                                                        .imgArrowright,
+                                                                height: 15.v,
+                                                                width: 9.h,
+                                                                margin: EdgeInsets
+                                                                    .only(
+                                                                        top:
+                                                                            2.v,
+                                                                        bottom:
+                                                                            5.v))
+                                                          ]))),
                                               SizedBox(height: 16.v),
-                                                GestureDetector(
-                                                    onTap: () {
-                                                      showDialog(
-                                                          context: context,
-                                                          builder: (BuildContext
-                                                              context) {
-                                                            return AlertDialog(
-                                                              backgroundColor: theme
-                                                                  .colorScheme
-                                                                  .onPrimaryContainer,
-                                                              title: Text(
-                                                                  'Оценка',
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .center),
-                                                              titleTextStyle:
-                                                                  CustomTextStyles
-                                                                      .semiBold32Text,
-                                                              shape: RoundedRectangleBorder(
-                                                                  borderRadius:
-                                                                      BorderRadiusStyle
-                                                                          .circleBorder15),
-                                                              content: Column(
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .start,
-                                                                  crossAxisAlignment:
-                                                                      CrossAxisAlignment
-                                                                          .center,
-                                                                  mainAxisSize:
-                                                                      MainAxisSize
-                                                                          .min,
-                                                                  children: [
-                                                                    StatefulBuilder(
-                                                                      builder: (BuildContext
-                                                                              context,
-                                                                          StateSetter
-                                                                              setState) {
-                                                                        return RatingBar
-                                                                            .builder(
-                                                                          initialRating:
-                                                                              rating,
-                                                                          minRating:
-                                                                              1,
-                                                                          direction:
-                                                                              Axis.horizontal,
-                                                                          allowHalfRating:
-                                                                              true,
-                                                                          itemCount:
-                                                                              5,
-                                                                          itemPadding:
-                                                                              EdgeInsets.symmetric(horizontal: 4.h),
-                                                                          itemBuilder: (context, _) => Icon(
-                                                                              Icons.star,
-                                                                              color: theme.colorScheme.primary),
-                                                                          onRatingUpdate:
-                                                                              (newRating) {
-                                                                            setState(() {
-                                                                              rating = newRating;
-                                                                            });
-                                                                          },
-                                                                        );
-                                                                      },
-                                                                    ),
-                                                                    SizedBox(
-                                                                        height:
-                                                                            4.v),
-                                                                    Divider(
-                                                                        height:
+                                              GestureDetector(
+                                                  onTap: () {
+                                                    showDialog(
+                                                        context: context,
+                                                        builder: (BuildContext
+                                                            context) {
+                                                          return AlertDialog(
+                                                            backgroundColor: theme
+                                                                .colorScheme
+                                                                .onPrimaryContainer,
+                                                            title: Text(
+                                                                'Оценка',
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center),
+                                                            titleTextStyle:
+                                                                CustomTextStyles
+                                                                    .semiBold32Text,
+                                                            shape: RoundedRectangleBorder(
+                                                                borderRadius:
+                                                                    BorderRadiusStyle
+                                                                        .circleBorder15),
+                                                            content: Column(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .start,
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .center,
+                                                                mainAxisSize:
+                                                                    MainAxisSize
+                                                                        .min,
+                                                                children: [
+                                                                  StatefulBuilder(
+                                                                    builder: (BuildContext
+                                                                            context,
+                                                                        StateSetter
+                                                                            setState) {
+                                                                      return RatingBar
+                                                                          .builder(
+                                                                        initialRating:
+                                                                            rating,
+                                                                        minRating:
                                                                             1,
-                                                                        color: appTheme
-                                                                            .gray),
-                                                                    SizedBox(
-                                                                        height:
-                                                                            4.v),
-                                                                    SingleChildScrollView(
-                                                                        child: CustomTextFormField(
-                                                                            controller:
-                                                                                messageplaceholController,
-                                                                            focusNode:
-                                                                                msgFocusNode,
-                                                                            maxLines:
-                                                                                5,
-                                                                            autofocus:
-                                                                                false,
-                                                                            hintText:
-                                                                                "Отзыв...",
-                                                                            borderDecoration:
-                                                                                InputBorder.none,
-                                                                            textInputAction: TextInputAction.done,
-                                                                            fillColor: Colors.transparent)),
-                                                                    SizedBox(
-                                                                        height:
-                                                                            8.v),
-                                                                    CustomElevatedButton(
-                                                                      text:
-                                                                          "Оценить",
-                                                                      buttonTextStyle:
-                                                                          CustomTextStyles
-                                                                              .semiBold18TextWhite,
-                                                                      buttonStyle: ElevatedButton.styleFrom(
-                                                                          backgroundColor: theme
-                                                                              .colorScheme
-                                                                              .primary,
-                                                                          shape:
-                                                                              RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
-                                                                      onTap:
-                                                                          () {
+                                                                        direction:
+                                                                            Axis.horizontal,
+                                                                        allowHalfRating:
+                                                                            true,
+                                                                        itemCount:
+                                                                            5,
+                                                                        itemPadding:
+                                                                            EdgeInsets.symmetric(horizontal: 4.h),
+                                                                        itemBuilder: (context, _) => Icon(
+                                                                            Icons
+                                                                                .star,
+                                                                            color:
+                                                                                theme.colorScheme.primary),
+                                                                        onRatingUpdate:
+                                                                            (newRating) {
+                                                                          setState(
+                                                                              () {
+                                                                            rating =
+                                                                                newRating;
+                                                                          });
+                                                                        },
+                                                                      );
+                                                                    },
+                                                                  ),
+                                                                  SizedBox(
+                                                                      height:
+                                                                          4.v),
+                                                                  Divider(
+                                                                      height: 1,
+                                                                      color: appTheme
+                                                                          .gray),
+                                                                  SizedBox(
+                                                                      height:
+                                                                          4.v),
+                                                                  SingleChildScrollView(
+                                                                      child: CustomTextFormField(
+                                                                          controller:
+                                                                              messageplaceholController,
+                                                                          focusNode:
+                                                                              msgFocusNode,
+                                                                          maxLines:
+                                                                              5,
+                                                                          autofocus:
+                                                                              false,
+                                                                          hintText:
+                                                                              "Отзыв...",
+                                                                          borderDecoration: InputBorder
+                                                                              .none,
+                                                                          textInputAction: TextInputAction
+                                                                              .done,
+                                                                          fillColor:
+                                                                              Colors.transparent)),
+                                                                  SizedBox(
+                                                                      height:
+                                                                          8.v),
+                                                                  CustomElevatedButton(
+                                                                    text:
+                                                                        "Оценить",
+                                                                    buttonTextStyle:
+                                                                        CustomTextStyles
+                                                                            .semiBold18TextWhite,
+                                                                    buttonStyle: ElevatedButton.styleFrom(
+                                                                        backgroundColor: theme
+                                                                            .colorScheme
+                                                                            .primary,
+                                                                        shape: RoundedRectangleBorder(
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(5))),
+                                                                    onTap: () {
+                                                                      if (has_internet() ==
+                                                                          ConnectivityResult
+                                                                              .none) {
+                                                                        context.showsnackbar(
+                                                                            title:
+                                                                                'Что-то пошло не так!');
+                                                                      } else {
                                                                         context.showsnackbar(
                                                                             title:
                                                                                 'Спасибо за оценку!',
                                                                             color:
                                                                                 Colors.grey);
-                                                                        Navigator.of(context)
-                                                                            .pop();
-                                                                      },
-                                                                    ),
-                                                                  ]),
-                                                            );
-                                                          });
-                                                    },
-                                                    child: Container(
-                                                        padding: EdgeInsets
-                                                            .symmetric(
-                                                                horizontal:
-                                                                    13.h,
-                                                                vertical: 15.v),
-                                                        decoration: AppDecoration
-                                                            .outlineGray
-                                                            .copyWith(
-                                                                borderRadius: BorderRadiusStyle
-                                                                    .circleBorder15),
-                                                        child: Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .spaceBetween,
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              Text("Оценить",
-                                                                  style: CustomTextStyles
-                                                                      .regular16Text),
-                                                              CustomImageView(
-                                                                  svgPath:
-                                                                      ImageConstant
-                                                                          .imgArrowright,
-                                                                  height: 15.v,
-                                                                  width: 9.h,
-                                                                  margin: EdgeInsets
-                                                                      .only(
-                                                                          top: 2
-                                                                              .v,
-                                                                          bottom:
-                                                                              5.v))
-                                                            ]))),
+                                                                      }
+                                                                      Navigator.of(
+                                                                              context)
+                                                                          .pop();
+                                                                    },
+                                                                  ),
+                                                                ]),
+                                                          );
+                                                        });
+                                                  },
+                                                  child: Container(
+                                                      padding:
+                                                          EdgeInsets.symmetric(
+                                                              horizontal: 13.h,
+                                                              vertical: 15.v),
+                                                      decoration: AppDecoration
+                                                          .outlineGray
+                                                          .copyWith(
+                                                              borderRadius:
+                                                                  BorderRadiusStyle
+                                                                      .circleBorder15),
+                                                      child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            Text("Оценить",
+                                                                style: CustomTextStyles
+                                                                    .regular16Text),
+                                                            CustomImageView(
+                                                                svgPath:
+                                                                    ImageConstant
+                                                                        .imgArrowright,
+                                                                height: 15.v,
+                                                                width: 9.h,
+                                                                margin: EdgeInsets
+                                                                    .only(
+                                                                        top:
+                                                                            2.v,
+                                                                        bottom:
+                                                                            5.v))
+                                                          ]))),
                                               SizedBox(height: 16.v),
-                                              if (getEmail() != 'anounymous@gmail.com')
+                                              if (getEmail() !=
+                                                  'anounymous@gmail.com')
                                                 Container(
                                                     padding:
                                                         EdgeInsets.symmetric(
@@ -452,7 +467,8 @@ isValid = false;
                                                               })
                                                         ])),
                                               SizedBox(height: 16.v),
-                                              if (getEmail() != 'anounymous@gmail.com')
+                                              if (getEmail() !=
+                                                  'anounymous@gmail.com')
                                                 Row(children: [
                                                   Container(
                                                       padding:
@@ -544,7 +560,8 @@ isValid = false;
                                                             )
                                                           ])),
                                                 ]),
-                                              if (getEmail() == 'anounymous@gmail.com')
+                                              if (getEmail() ==
+                                                  'anounymous@gmail.com')
                                                 SizedBox(height: 120.v),
                                               // if (has_internet() == ConnectivityResult.none)
                                               //   SizedBox(height: 120.v),

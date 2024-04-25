@@ -6,7 +6,28 @@ class BuildNoInternet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return
+      Scaffold(appBar: CustomAppBar(
+        height: 75.v,
+        leadingWidth: double.maxFinite,
+        leading: Padding(
+            padding: EdgeInsets.only(left: 20.h),
+            child: Row(children: [
+              AppbarIconbutton(
+                  svgPath: ImageConstant.imgArrowleft,
+                  margin: EdgeInsets.only(bottom: 4.v),
+                  onTap: () {
+                    Navigator.pop(context, true);
+                  }),
+              AppbarSubtitle(
+                text: "Нет интернета",
+                margin: EdgeInsets.only(left: 16.h),
+              )
+            ])),
+        styleType: Style.bgFill,
+      ),
+          body:
+      Container(
         width: mediaQueryData.size.width,
         height: mediaQueryData.size.height,
         child: SizedBox(
@@ -14,9 +35,6 @@ class BuildNoInternet extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(
-                height: 75.v,
-              ),
               Divider(height: 1, color: appTheme.gray),
               Spacer(),
               Image.asset(
@@ -25,6 +43,6 @@ class BuildNoInternet extends StatelessWidget {
               Spacer(),
             ],
           ),
-        ));
+        )));
   }
 }
