@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:ave_memoria/blocs/Auth/bloc/authentication_bloc.dart';
 import 'package:ave_memoria/main.dart';
 
@@ -19,7 +22,7 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
   final emailFocusNode = FocusNode();
   final nameFocusNode = FocusNode();
 
-  bool isValid = false;
+  bool _isConnection = false;
   bool isSelectedSwitch = false;
   bool isSelectedSwitch1 = false;
   String emailAnon = '';
@@ -33,10 +36,11 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
   @override
   void initState() {
     moneyList = [];
-    isValid = true;
     getMoney();
     messageplaceholController = TextEditingController();
     emailAnon = globalData.emailAnon;
+    _tryConnection();
+    super.initState();
     super.initState();
   }
 
@@ -47,27 +51,34 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
     super.dispose();
   }
 
-  Future<dynamic> has_internet() async {
-    return await Connectivity().checkConnectivity();
+  Future<void> _tryConnection() async {
+    try {
+      final response = await InternetAddress.lookup('www.google.com');
+      print(response);
+      print(response.isNotEmpty);
+      setState(() {
+        _isConnection = response.isNotEmpty;
+      });
+      print('object');
+    } on SocketException catch (e) {
+      setState(() {
+        _isConnection = false;
+      });
+    }
   }
+
+  // Future<ConnectivityResult> has_internet() async {
+  //   return await Connectivity().checkConnectivity();
+  // }
 
   String? getEmail() {
     final currentUser = supabase.auth.currentUser;
     if (currentUser != null) {
       final email = currentUser.email!;
-      setState(() {
-        isValid = true;
-      });
       return email;
-    } else if (has_internet() != ConnectivityResult.none) {
-      setState(() {
-        isValid = false;
-      });
+    } else if (_isConnection) {
       return emailAnon;
     } else {
-      setState(() {
-        isValid = true;
-      });
       return "Ваш email скоро здесь появится...";
     }
   }
@@ -122,7 +133,7 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
           if (state is UnAuthenticatedState) {
             GoRouter.of(context).pushReplacement(AppRoutes.authreg);
           } else if (state is AuthErrorState) {
-            if (has_internet() != ConnectivityResult.none) {
+            if (_isConnection) {
               context.showsnackbar(title: 'Что-то пошло не так!');
             }
           }
@@ -370,18 +381,16 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
                                                                             borderRadius:
                                                                                 BorderRadius.circular(5))),
                                                                     onTap: () {
-                                                                      if (has_internet() ==
-                                                                          ConnectivityResult
-                                                                              .none) {
-                                                                        context.showsnackbar(
-                                                                            title:
-                                                                                'Что-то пошло не так!');
-                                                                      } else {
+                                                                      if (_isConnection) {
                                                                         context.showsnackbar(
                                                                             title:
                                                                                 'Спасибо за оценку!',
                                                                             color:
                                                                                 Colors.grey);
+                                                                      } else {
+                                                                        context.showsnackbar(
+                                                                            title:
+                                                                                'Что-то пошло не так!');
                                                                       }
                                                                       Navigator.of(
                                                                               context)
