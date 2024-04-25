@@ -56,6 +56,10 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
     super.dispose();
   }
 
+  Future<dynamic> has_internet() async {
+    return await Connectivity().checkConnectivity();
+  }
+
   @override
   Widget build(BuildContext context) {
     mediaQueryData = MediaQuery.of(context);
@@ -65,7 +69,9 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
           if (state is UnAuthenticatedState) {
             GoRouter.of(context).pushReplacement(AppRoutes.authreg);
           } else if (state is AuthErrorState) {
-            context.showsnackbar(title: 'Что-то пошло не так!');
+            Future<dynamic> has_internet() async {
+              return await Connectivity().checkConnectivity();
+            }
           }
         },
         child: SafeArea(

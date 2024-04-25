@@ -83,7 +83,9 @@ class _AuthRegState extends State<AuthReg> {
                     listener: (context, state) {
                   if (state is AuthSuccessState) {
                     GoRouter.of(context).push(AppRoutes.homepage);
-                  } else if (state is AuthErrorState) {}
+                  } else if (state is AuthErrorState) {
+                    GoRouter.of(context).push(AppRoutes.homepage);
+                  }
                 }, child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
                         builder: (context, state) {
                   if (state is AuthLoadingState) {

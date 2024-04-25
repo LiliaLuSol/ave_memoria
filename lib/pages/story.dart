@@ -52,6 +52,10 @@ class _StoryState extends State<Story> with TickerProviderStateMixin {
     super.dispose();
   }
 
+  Future<dynamic> has_internet() async {
+    return await Connectivity().checkConnectivity();
+  }
+
   @override
   Widget build(BuildContext context) {
     mediaQueryData = MediaQuery.of(context);
@@ -61,7 +65,9 @@ class _StoryState extends State<Story> with TickerProviderStateMixin {
         if (state is UnAuthenticatedState) {
           GoRouter.of(context).pushReplacement(AppRoutes.authreg);
         } else if (state is AuthErrorState) {
-          context.showsnackbar(title: 'Что-то пошло не так!');
+          if (has_internet() != ConnectivityResult.none) {
+            context.showsnackbar(title: 'Что-то пошло не так!');
+          }
         }
       },
       child: SafeArea(

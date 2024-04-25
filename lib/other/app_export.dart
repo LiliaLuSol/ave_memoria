@@ -26,3 +26,4 @@ export 'package:connectivity_plus/connectivity_plus.dart';
 export 'package:go_router/go_router.dart';
 export 'package:font_awesome_flutter/font_awesome_flutter.dart';
 export 'package:awesome_dialog/awesome_dialog.dart';
+export 'package:ave_memoria/utils/global_date.dart';

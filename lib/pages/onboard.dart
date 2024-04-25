@@ -74,6 +74,10 @@ class _OnboardState extends State<Onboard> {
     return buttonTextNotifier.value;
   }
 
+  Future<dynamic> has_internet() async {
+    return await Connectivity().checkConnectivity();
+  }
+
   @override
   Widget build(BuildContext context) {
     mediaQueryData = MediaQuery.of(context);
@@ -84,7 +88,9 @@ class _OnboardState extends State<Onboard> {
           } else if (state is UnAuthenticatedState) {
             GoRouter.of(context).go(AppRoutes.onboard);
           } else if (state is AuthErrorState) {
-            context.showsnackbar(title: 'Что-то пошло не так!');
+            if (has_internet() != ConnectivityResult.none) {
+              context.showsnackbar(title: 'Что-то пошло не так!');
+            }
           }
         },
         child: SafeArea(
