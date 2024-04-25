@@ -400,6 +400,7 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
                                                                             5.v))
                                                           ]))),
                                               SizedBox(height: 16.v),
+                                              if (supabase.auth.currentUser?.email != "anounymous@gmail.com")
                                               Container(
                                                   padding: EdgeInsets.symmetric(
                                                       horizontal: 13.h,
@@ -436,6 +437,7 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
                                                             })
                                                       ])),
                                               SizedBox(height: 16.v),
+                                              if (supabase.auth.currentUser?.email != "anounymous@gmail.com")
                                               Row(children: [
                                                 Container(
                                                     padding:
@@ -525,6 +527,8 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
                                                           )
                                                         ])),
                                               ]),
+                                              if (supabase.auth.currentUser?.email == "anounymous@gmail.com")
+                                                SizedBox(height: 120.v),
                                               SizedBox(height: 240.v),
                                               CustomElevatedButton(
                                                 text: "Выход из аккаунта",
