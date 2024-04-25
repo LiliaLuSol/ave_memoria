@@ -77,16 +77,20 @@ class _AuthRegState extends State<AuthReg> {
                   onTap: () {
                     GoRouter.of(context).push(AppRoutes.registration);
                   },
-                  // onTap: context.goNamed(AppRoutes.watchlistRoute);
                 ),
                 SizedBox(height: 36.v),
-                BlocBuilder<AuthenticationBloc, AuthenticationState>(
-                    builder: (context, state) {
+                BlocListener<AuthenticationBloc, AuthenticationState>(
+                    listener: (context, state) {
+                  if (state is AuthSuccessState) {
+                    GoRouter.of(context).push(AppRoutes.homepage);
+                  } else if (state is AuthErrorState) {}
+                }, child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+                        builder: (context, state) {
                   if (state is AuthLoadingState) {
                     return Center(
                         child: CircularProgressIndicator(
-                          color: theme.colorScheme.primary,
-                        ));
+                      color: theme.colorScheme.primary,
+                    ));
                   } else {
                     return CustomElevatedButton(
                       text: "Продолжить без регистрации",
@@ -98,11 +102,11 @@ class _AuthRegState extends State<AuthReg> {
                           side: BorderSide(width: 1, color: appTheme.gray)),
                       onTap: () {
                         blocProvider.add(const AnounymousAuthEvent());
-                        GoRouter.of(context).push(AppRoutes.homepage);
+                        // GoRouter.of(context).push(AppRoutes.homepage);
                       },
                     );
                   }
-                }),
+                })),
                 Spacer(),
               ],
             ),
