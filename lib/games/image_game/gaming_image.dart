@@ -26,7 +26,7 @@ class _ImageGameState extends State<ImageGame> {
 
   List<ImageQuestion> imageQuestions = [
     ImageQuestion(
-      imagePath: 'assets/image1.png',
+      imagePath: ImageConstant.imgImage_1,
       questions: [
         Question(
           text: 'Какое животное изображено на картинке?',
@@ -81,7 +81,7 @@ class _ImageGameState extends State<ImageGame> {
       ],
     ),
     ImageQuestion(
-      imagePath: 'assets/image2.png',
+      imagePath: ImageConstant.imgImage_2,
       questions: [
         Question(
           text: 'Какое животное изображено на картинке?',
@@ -136,7 +136,7 @@ class _ImageGameState extends State<ImageGame> {
       ],
     ),
     ImageQuestion(
-      imagePath: 'assets/image3.png',
+      imagePath: ImageConstant.imgImage_3,
       questions: [
         Question(
           text: 'Какое животное изображено на картинке?',
@@ -203,7 +203,7 @@ class _ImageGameState extends State<ImageGame> {
   }
 
   void startGameIfTrue() {
-    _timer = Timer(Duration(seconds: 10), () {
+    _timer = Timer(Duration(seconds: 20), () {
       if (_isStart) {
         setState(() {
           _isStart = false;
@@ -240,15 +240,14 @@ class _ImageGameState extends State<ImageGame> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                           Text(
-                            "Картинка будет представлена на 10 секунд. Запомните как можено больше деталей!",
+                            "Картинка будет представлена на 20 секунд. Запомните как можено больше деталей!",
                             style: CustomTextStyles.regular24Text,
                             textAlign: TextAlign.center,
                           ),
                           SizedBox(height: 20.v),
                           Image.asset(
                             imageQuestions[randomIndex].imagePath,
-                            width: 200,
-                            height: 200,
+                            width: 353.h,
                           ),
                           SizedBox(height: 20.v),
                           CustomElevatedButton(
