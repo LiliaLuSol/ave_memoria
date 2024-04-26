@@ -43,8 +43,7 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
     final res = await supabase
         .from('profileusergame')
         .select('money')
-        .eq('email',
-        email)
+        .eq('email', email)
         .count(CountOption.exact);
     final data = res.data;
     setState(() {
@@ -92,24 +91,25 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
                         child: Text("Свод",
                             style: CustomTextStyles.extraBold32Text)),
                     Spacer(),
-                    if (supabase.auth.currentUser?.email != "anounymous@gmail.com")
-                    Padding(
-                      padding: EdgeInsets.only(
-                        top: 14.v,
-                        bottom: 9.v,
-                      ),
-                      child: Text(money.toString(),
-                          style: CustomTextStyles.semiBold18Text)
-                    ),
-                    if (supabase.auth.currentUser?.email != "anounymous@gmail.com")
-                    IconButton(
-                      icon: FaIcon(
-                        FontAwesomeIcons.coins,
-                        size: 25.h,
-                        color: appTheme.yellow,
-                      ),
-                      onPressed: () {},
-                    )
+                    if (supabase.auth.currentUser?.email !=
+                        "anounymous@gmail.com")
+                      Padding(
+                          padding: EdgeInsets.only(
+                            top: 14.v,
+                            bottom: 9.v,
+                          ),
+                          child: Text(money.toString(),
+                              style: CustomTextStyles.semiBold18Text)),
+                    if (supabase.auth.currentUser?.email !=
+                        "anounymous@gmail.com")
+                      IconButton(
+                        icon: FaIcon(
+                          FontAwesomeIcons.coins,
+                          size: 25.h,
+                          color: appTheme.yellow,
+                        ),
+                        onPressed: () {},
+                      )
                   ],
                 ),
                 styleType: Style.bgFill),
@@ -153,7 +153,7 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
                                 ),
                                 Tab(
                                   child: Text(
-                                    "находки",
+                                    "склад",
                                   ),
                                 ),
                                 Tab(
@@ -165,38 +165,98 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
                   Divider(height: 1, color: appTheme.gray),
                   SizedBox(height: 15.v),
                   Expanded(
-                          child: TabBarView(
-                              controller: _tabController,
-                              children: <Widget>[
-                                Column(children: [
-                                  Container(
-                                    color: appTheme.lightGray,
-                                    width: 353.h,
-                                    height: 90.v,
-                                  ),
-                                  SizedBox(height: 15.v),
-                                  Container(
-                                    color: appTheme.lightGray,
-                                    width: 353.h,
-                                    height: 90.v,
-                                  ),
-                                ]),
+                      child: TabBarView(
+                          controller: _tabController,
+                          children: <Widget>[
+                        Column(children: [
+                          Container(
+                            color: appTheme.lightGray,
+                            width: 353.h,
+                            height: 90.v,
+                          ),
+                          SizedBox(height: 15.v),
+                          Container(
+                            color: appTheme.lightGray,
+                            width: 353.h,
+                            height: 90.v,
+                          ),
+                        ]),
+                        Column(children: [
+                          Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
                                 Container(
-                                  color: appTheme.green,
-                                  width: 353.h,
-                                  height: 90.v,
+                                  color: appTheme.lightGray,
+                                  width: 170.h,
+                                  height: 104.v,
                                 ),
                                 Container(
-                                  color: appTheme.yellow,
-                                  width: 353.h,
-                                  height: 90.v,
+                                  color: appTheme.lightGray,
+                                  width: 170.h,
+                                  height: 104.v,
+                                ),
+                              ]),
+                          SizedBox(height: 20.v),
+                          Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Container(
+                                  color: appTheme.lightGray,
+                                  width: 170.h,
+                                  height: 104.v,
                                 ),
                                 Container(
-                                  color: appTheme.orange,
-                                  width: 353.h,
-                                  height: 90.v,
+                                  color: appTheme.lightGray,
+                                  width: 170.h,
+                                  height: 104.v,
                                 ),
-                              ])),
+                              ]),
+                        ]),
+                        Column(children: [
+                          Container(
+                            color: appTheme.lightGray,
+                            width: 353.h,
+                            height: 90.v,
+                          ),
+                          SizedBox(height: 15.v),
+                          Container(
+                            color: appTheme.lightGray,
+                            width: 353.h,
+                            height: 90.v,
+                          ),
+                        ]),
+                        Column(children: [
+                          Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Container(
+                                  color: appTheme.lightGray,
+                                  width: 170.h,
+                                  height: 104.v,
+                                ),
+                                Container(
+                                  color: appTheme.lightGray,
+                                  width: 170.h,
+                                  height: 104.v,
+                                ),
+                              ]),
+                          SizedBox(height: 20.v),
+                          Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Container(
+                                  color: appTheme.lightGray,
+                                  width: 170.h,
+                                  height: 104.v,
+                                ),
+                                Container(
+                                  color: appTheme.lightGray,
+                                  width: 170.h,
+                                  height: 104.v,
+                                ),
+                              ]),
+                        ]),
+                      ])),
                 ]),
               ),
             ),
