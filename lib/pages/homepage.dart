@@ -20,6 +20,18 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
   GlobalData globalData = GlobalData();
   String emailAnon = '';
   int money = 0;
+  String nameGame1 = '';
+  String nameGame2 = '';
+  String nameGame3 = '';
+  String game1Rule1 = '';
+  String game1Rule2 = '';
+  String game1Rule3 = '';
+  String game2Rule1 = '';
+  String game2Rule2 = '';
+  String game2Rule3 = '';
+  String game3Rule1 = '';
+  String game3Rule2 = '';
+
   bool _isConnection = false;
   late bool gameRulesFirst1;
   late bool gameRulesFirst2;
@@ -35,6 +47,17 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
     getMoney();
     _tryConnection();
     getFirstRule();
+    nameGame1 = globalData.nameGame1;
+    nameGame2 = globalData.nameGame2;
+    nameGame3 = globalData.nameGame3;
+    game1Rule1 = globalData.game1Rule1;
+    game1Rule2 = globalData.game1Rule2;
+    game1Rule3 = globalData.game1Rule3;
+    game2Rule1 = globalData.game2Rule1;
+    game2Rule2 = globalData.game2Rule2;
+    game2Rule3 = globalData.game2Rule3;
+    game3Rule1 = globalData.game3Rule1;
+    game3Rule2 = globalData.game3Rule2;
     super.initState();
   }
 
@@ -90,9 +113,6 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
       gameRulesFirst1 = data[0]['is_new'];
       gameRulesFirst2 = data[2]['is_new'];
       gameRulesFirst3 = data[1]['is_new'];
-      print(data[0]['is_new']);
-      print(data[2]['is_new']);
-      print(data[1]['is_new']);
     });
   }
 
@@ -103,7 +123,8 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
         .from('GameRule')
         .update({'is_new': false})
         // .eq('email', email)
-        .eq('game', 'cards').count(CountOption.exact);
+        .eq('game', 'cards')
+        .count(CountOption.exact);
   }
 
   @override
@@ -179,7 +200,7 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                                           Container(
                                               width: 353.h,
                                               height: 167.v,
-                                              decoration: BoxDecoration(
+                                              decoration: const BoxDecoration(
                                                 image: DecorationImage(
                                                   image: AssetImage(
                                                       'assets/images/cards_game.png'),
@@ -190,8 +211,7 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                                             top: 10.h,
                                             left: 28.h,
                                             child: Text(
-                                              'Карточная игра\n'
-                                              '"Легион памяти"',
+                                              nameGame1,
                                               style: TextStyle(
                                                 color: Colors.brown,
                                                 fontSize: 16.h,
@@ -213,18 +233,18 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                                                       PageRouteBuilder(
                                                           pageBuilder: (_, __,
                                                                   ___) =>
-                                                              const GameRules(
+                                                              GameRules(
                                                                 firstTimes:
                                                                     true,
                                                                 countRule: 3,
                                                                 goRoute: AppRoutes
                                                                     .game_cards,
                                                                 text1:
-                                                                    "Игровое поле состоит из карт, за каждой из которых скрыта картинка. Картинки ― парные, т.е. на игровом поле есть две карты, на которых находятся одинаковые картинки",
+                                                                    game1Rule1,
                                                                 text2:
-                                                                    "В начале игры на несколько секунд показывают все картинки. Ваша задача запомнить как можно больше карт",
+                                                                    game1Rule2,
                                                                 text3:
-                                                                    "А затем все карты перевернут рубашкой вверх. Надо с меньшим числом попыток найти и перевернуть парные карты, если картинки различаются, тогда они снова повернутся",
+                                                                    game1Rule3,
                                                               ),
                                                           opaque: false,
                                                           fullscreenDialog:
@@ -239,7 +259,7 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                                           Container(
                                               width: 353.h,
                                               height: 167.v,
-                                              decoration: BoxDecoration(
+                                              decoration: const BoxDecoration(
                                                 image: DecorationImage(
                                                   image: AssetImage(
                                                       'assets/images/cards_game.png'),
@@ -250,7 +270,7 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                                             top: 10.h,
                                             left: 28.h,
                                             child: Text(
-                                              'Гладиаторская тренировка памяти',
+                                              nameGame2,
                                               style: TextStyle(
                                                 color: Colors.brown,
                                                 fontSize: 16.h,
@@ -272,18 +292,18 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                                                       PageRouteBuilder(
                                                           pageBuilder: (_, __,
                                                                   ___) =>
-                                                              const GameRules(
+                                                              GameRules(
                                                                 firstTimes:
                                                                     true,
                                                                 countRule: 3,
                                                                 goRoute: AppRoutes
                                                                     .game_sequence,
                                                                 text1:
-                                                                    "В каждом раунде, гладиатор показывает последовательность движений.",
+                                                                    game2Rule1,
                                                                 text2:
-                                                                    "Ваша задача запоинить и воспроизвести эти движения за определенное время, не допуская ошибок.",
+                                                                    game2Rule2,
                                                                 text3:
-                                                                    "С каждым раундом времени на раздумья будет все меньше, а за ошибку вы теярете по одной жизни.",
+                                                                    game2Rule3,
                                                               ),
                                                           opaque: false,
                                                           fullscreenDialog:
@@ -298,7 +318,7 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                                           Container(
                                               width: 353.h,
                                               height: 167.v,
-                                              decoration: BoxDecoration(
+                                              decoration: const BoxDecoration(
                                                 image: DecorationImage(
                                                   image: AssetImage(
                                                       'assets/images/cards_game.png'),
@@ -309,7 +329,7 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                                             top: 10.h,
                                             left: 28.h,
                                             child: Text(
-                                              'Римские картинки',
+                                              nameGame1,
                                               style: TextStyle(
                                                 color: Colors.brown,
                                                 fontSize: 16.h,
@@ -331,16 +351,16 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                                                       PageRouteBuilder(
                                                           pageBuilder: (_, __,
                                                                   ___) =>
-                                                              const GameRules(
+                                                              GameRules(
                                                                 firstTimes:
                                                                     true,
                                                                 countRule: 2,
                                                                 goRoute: AppRoutes
                                                                     .game_image,
                                                                 text1:
-                                                                    "В начале вам показывается картинка, вы должны запомнить как можно больше подробнее его",
+                                                                    game3Rule1,
                                                                 text2:
-                                                                    "Затем задается ряд вопросов по картинке на которые Вам предстоит ответить по памяти",
+                                                                    game3Rule2,
                                                               ),
                                                           opaque: false,
                                                           fullscreenDialog:
