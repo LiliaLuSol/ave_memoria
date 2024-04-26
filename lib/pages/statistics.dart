@@ -14,11 +14,14 @@ class Statistics extends StatefulWidget {
 }
 
 class _StatisticsState extends State<Statistics> with TickerProviderStateMixin {
-  late List<dynamic> moneyList;
+  GlobalData globalData = GlobalData();
+  String emailAnon = '';
+  int money = 0;
 
   @override
   void initState() {
-    moneyList = [];
+    emailAnon = globalData.emailAnon;
+    money = globalData.money;
     getMoney();
     super.initState();
   }
@@ -43,13 +46,12 @@ class _StatisticsState extends State<Statistics> with TickerProviderStateMixin {
         .count(CountOption.exact);
     final data = res.data;
     setState(() {
-      moneyList.add(data[0]['money']);
+      globalData.updateMoney(data[0]['money']);
     });
   }
 
   @override
   void dispose() {
-    moneyList.clear();
     super.dispose();
   }
 
@@ -87,10 +89,7 @@ class _StatisticsState extends State<Statistics> with TickerProviderStateMixin {
                       top: 14.v,
                       bottom: 9.v,
                     ),
-                    child: Text(
-                        moneyList.isNotEmpty
-                            ? moneyList.first.toString()
-                            : '0',
+                    child: Text(money.toString(),
                         style: CustomTextStyles.semiBold18Text)
                   ),
                   if (supabase.auth.currentUser?.email != "anounymous@gmail.com")

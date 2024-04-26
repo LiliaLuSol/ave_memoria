@@ -14,13 +14,16 @@ class Store extends StatefulWidget {
 
 class _StoreState extends State<Store> with TickerProviderStateMixin {
   late final TabController _tabController;
-  late List<dynamic> moneyList;
+  GlobalData globalData = GlobalData();
+  String emailAnon = '';
+  int money = 0;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 4, vsync: this);
-    moneyList = [];
+    emailAnon = globalData.emailAnon;
+    money = globalData.money;
     getMoney();
   }
 
@@ -45,13 +48,12 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
         .count(CountOption.exact);
     final data = res.data;
     setState(() {
-      moneyList.add(data[0]['money']);
+      globalData.updateMoney(data[0]['money']);
     });
   }
 
   @override
   void dispose() {
-    moneyList.clear();
     _tabController.dispose();
     super.dispose();
   }
@@ -96,10 +98,7 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
                         top: 14.v,
                         bottom: 9.v,
                       ),
-                      child: Text(
-                          moneyList.isNotEmpty
-                              ? moneyList.first.toString()
-                              : '0',
+                      child: Text(money.toString(),
                           style: CustomTextStyles.semiBold18Text)
                     ),
                     if (supabase.auth.currentUser?.email != "anounymous@gmail.com")

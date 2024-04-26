@@ -26,27 +26,25 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
   bool isSelectedSwitch = false;
   bool isSelectedSwitch1 = false;
   String emailAnon = '';
+  int money = 0;
 
   TimeOfDay selectedTime = TimeOfDay.now();
 
   late TextEditingController messageplaceholController;
   final msgFocusNode = FocusNode();
-  late List<dynamic> moneyList;
 
   @override
   void initState() {
-    moneyList = [];
     getMoney();
     messageplaceholController = TextEditingController();
     emailAnon = globalData.emailAnon;
+    money = globalData.money;
     _tryConnection();
-    super.initState();
     super.initState();
   }
 
   @override
   void dispose() {
-    moneyList.clear();
     messageplaceholController.dispose();
     super.dispose();
   }
@@ -93,7 +91,7 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
         .count(CountOption.exact);
     final data = res.data;
     setState(() {
-      moneyList.add(data[0]['money']);
+      globalData.updateMoney(data[0]['money']);
     });
   }
 
@@ -164,10 +162,7 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
                               top: 14.v,
                               bottom: 9.v,
                             ),
-                            child: Text(
-                                moneyList.isNotEmpty
-                                    ? moneyList.first.toString()
-                                    : '0',
+                            child: Text(money.toString(),
                                 style: CustomTextStyles.semiBold18Text)),
                       if (getEmail() != 'anounymous@gmail.com')
                         IconButton(
