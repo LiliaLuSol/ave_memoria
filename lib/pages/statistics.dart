@@ -26,12 +26,16 @@ class _StatisticsState extends State<Statistics> with TickerProviderStateMixin {
   int fri = 0;
   int sat = 0;
   int sun = 0;
+  String nameGame1 = '';
+  String nameGame2 = '';
 
   @override
   void initState() {
     _tabController = TabController(length: 3, vsync: this);
     emailAnon = globalData.emailAnon;
     money = globalData.money;
+    nameGame1 = globalData.nameGame1_;
+    nameGame2 = globalData.nameGame2;
     getMoney();
     mon = globalData.mon;
     tue = globalData.tue;
@@ -154,7 +158,7 @@ class _StatisticsState extends State<Statistics> with TickerProviderStateMixin {
                             children: [
                               SizedBox(height: 14.v),
                               Text("Очки за неделю:",
-                                  style: CustomTextStyles.regular16Text),
+                                  style: CustomTextStyles.extraBold20Text),
                               SizedBox(height: 14.v),
                               Row(children: [
                                 day_score("пн", mon, false),
@@ -175,86 +179,89 @@ class _StatisticsState extends State<Statistics> with TickerProviderStateMixin {
                               Text("Вы занимаетесь уже 5 день(-ей)!",
                                   style: theme.textTheme.bodyMedium),
                               SizedBox(height: 20.v),
-                              Divider(height: 1, color: appTheme.gray),
-                              SizedBox(height: 20.v),
-                              Text("Общее число очков за...",
-                                  style: CustomTextStyles.extraBold20Text),
-                              SizedBox(height: 9.v),
-                              TabBar(
-                                  controller: _tabController,
-                                  labelPadding: EdgeInsets.zero,
-                                  indicatorPadding:
-                                      EdgeInsets.symmetric(horizontal: -15.h),
-                                  labelStyle: CustomTextStyles.regular16White,
-                                  unselectedLabelStyle:
-                                      CustomTextStyles.regular16Text,
-                                  indicator: BoxDecoration(
-                                    color: theme.colorScheme.primary,
-                                    borderRadius: BorderRadius.circular(
-                                      50.h,
-                                    ),
-                                  ),
-                                  tabs: const [
-                                    Tab(
-                                      child: Text(
-                                        "неделя",
-                                      ),
-                                    ),
-                                    Tab(
-                                      child: Text(
-                                        "месяц",
-                                      ),
-                                    ),
-                                    Tab(
-                                      child: Text(
-                                        "год",
-                                      ),
-                                    )
-                                  ]),
-                              //  Divider(height: 1, color: appTheme.gray),
-                              SizedBox(height: 15.v),
-                              SizedBox(height: 40.v,
-                                  width: 353.h,
-                                  child: TabBarView(
-                                      controller: _tabController,
-                                      children: <Widget>[
-                                    Center(
-                                        child: Text(
-                                            '${mon + tue + wen + thu + fri + sat + sun} оч.',
-                                            style: CustomTextStyles
-                                                .extraBold20Text)),
-                                    Center(
-                                        child: Text(
-                                            '${mon + tue + wen + thu + fri + sat + sun} оч.',
-                                            style: CustomTextStyles
-                                                .extraBold20Text)),
-                                    Center(
-                                        child: Text(
-                                            '${mon + tue + wen + thu + fri + sat + sun} оч.',
-                                            style: CustomTextStyles
-                                                .extraBold20Text)),
+                              Container(
+                                  decoration: AppDecoration.outlineGray,
+                                  child: Column(children: [
+                                    SizedBox(height: 20.v),
+                                    Text("Общее число очков за...",
+                                        style:
+                                            CustomTextStyles.extraBold20Text),
+                                    SizedBox(height: 9.v),
+                                    TabBar(
+                                        controller: _tabController,
+                                        labelPadding: EdgeInsets.zero,
+                                        indicatorPadding: EdgeInsets.symmetric(
+                                            horizontal: -15.h),
+                                        labelStyle:
+                                            CustomTextStyles.regular16White,
+                                        unselectedLabelStyle:
+                                            CustomTextStyles.regular16Text,
+                                        indicator: BoxDecoration(
+                                          color: theme.colorScheme.primary,
+                                          borderRadius: BorderRadius.circular(
+                                            50.h,
+                                          ),
+                                        ),
+                                        tabs: const [
+                                          Tab(
+                                            child: Text(
+                                              "неделя",
+                                            ),
+                                          ),
+                                          Tab(
+                                            child: Text(
+                                              "месяц",
+                                            ),
+                                          ),
+                                          Tab(
+                                            child: Text(
+                                              "год",
+                                            ),
+                                          )
+                                        ]),
+                                    //  Divider(height: 1, color: appTheme.gray),
+                                    SizedBox(
+                                        height: 75.v,
+                                        width: 361.h,
+                                        child: TabBarView(
+                                            controller: _tabController,
+                                            children: <Widget>[
+                                              Center(
+                                                  child: Text(
+                                                      '${mon + tue + wen + thu + fri + sat + sun} оч.',
+                                                      style: CustomTextStyles
+                                                          .extraBold20Text)),
+                                              Center(
+                                                  child: Text(
+                                                      '${mon + tue + wen + thu + fri + sat + sun} оч.',
+                                                      style: CustomTextStyles
+                                                          .extraBold20Text)),
+                                              Center(
+                                                  child: Text(
+                                                      '${mon + tue + wen + thu + fri + sat + sun} оч.',
+                                                      style: CustomTextStyles
+                                                          .extraBold20Text)),
+                                            ])),
                                   ])),
                               SizedBox(height: 20.v),
-                              Divider(height: 1, color: appTheme.gray),
-                              SizedBox(height: 20.v),
-                              Text("Рекорды за все время",
+                              Text("Рекорды за все время:",
                                   style: CustomTextStyles.extraBold20Text),
                               SizedBox(height: 9.v),
                               Row(
                                 children: [
-                                  Text("Рекорды за все время",
+                                  Text(nameGame1,
                                       style: CustomTextStyles.extraBold16Text),
                                   Spacer(),
-                                  Text("Рекорды за все время",
+                                  Text("0 очков",
                                       style: CustomTextStyles.extraBold16Text),
                                 ],
                               ),
                               SizedBox(height: 9.v),
                               Row(children: [
-                                Text("Рекорды за все время",
+                                Text(nameGame2,
                                     style: CustomTextStyles.extraBold16Text),
                                 Spacer(),
-                                Text("Рекорды за все время",
+                                Text("0 раунд",
                                     style: CustomTextStyles.extraBold16Text),
                               ]),
                               SizedBox(height: 14.v),
