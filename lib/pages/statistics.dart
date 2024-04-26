@@ -1,4 +1,5 @@
 import 'package:ave_memoria/blocs/Auth/bloc/authentication_bloc.dart';
+import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
 import 'package:ave_memoria/other/app_export.dart';
@@ -14,17 +15,34 @@ class Statistics extends StatefulWidget {
 }
 
 class _StatisticsState extends State<Statistics> with TickerProviderStateMixin {
+  late final TabController _tabController;
   GlobalData globalData = GlobalData();
   String emailAnon = '';
   int money = 0;
+  int mon = 0;
+  int tue = 0;
+  int wen = 0;
+  int thu = 0;
+  int fri = 0;
+  int sat = 0;
+  int sun = 0;
 
   @override
   void initState() {
+    _tabController = TabController(length: 3, vsync: this);
     emailAnon = globalData.emailAnon;
     money = globalData.money;
     getMoney();
+    mon = globalData.mon;
+    tue = globalData.tue;
+    wen = globalData.wen;
+    thu = globalData.thu;
+    fri = globalData.fri;
+    sat = globalData.sat;
+    sun = globalData.sun;
     super.initState();
   }
+
   String? getEmail() {
     final currentUser = supabase.auth.currentUser;
     if (currentUser != null) {
@@ -41,8 +59,21 @@ class _StatisticsState extends State<Statistics> with TickerProviderStateMixin {
     final res = await supabase
         .from('profileusergame')
         .select('money')
-        .eq('email',
-        email)
+        .eq('email', email)
+        .count(CountOption.exact);
+    final data = res.data;
+    setState(() {
+      globalData.updateMoney(data[0]['money']);
+    });
+  }
+
+  void getDayScore() async {
+    String? email = getEmail();
+    email = email.toString();
+    final res = await supabase
+        .from('profileusergame')
+        .select('money')
+        .eq('email', email)
         .count(CountOption.exact);
     final data = res.data;
     setState(() {
@@ -52,6 +83,7 @@ class _StatisticsState extends State<Statistics> with TickerProviderStateMixin {
 
   @override
   void dispose() {
+    _tabController.dispose();
     super.dispose();
   }
 
@@ -83,24 +115,25 @@ class _StatisticsState extends State<Statistics> with TickerProviderStateMixin {
                       child: Text("Статистика",
                           style: CustomTextStyles.extraBold32Text)),
                   Spacer(),
-                  if (supabase.auth.currentUser?.email != "anounymous@gmail.com")
-                  Padding(
-                    padding: EdgeInsets.only(
-                      top: 14.v,
-                      bottom: 9.v,
-                    ),
-                    child: Text(money.toString(),
-                        style: CustomTextStyles.semiBold18Text)
-                  ),
-                  if (supabase.auth.currentUser?.email != "anounymous@gmail.com")
-                  IconButton(
-                    icon: FaIcon(
-                      FontAwesomeIcons.coins,
-                      size: 25.h,
-                      color: appTheme.yellow,
-                    ),
-                    onPressed: () {},
-                  )
+                  if (supabase.auth.currentUser?.email !=
+                      "anounymous@gmail.com")
+                    Padding(
+                        padding: EdgeInsets.only(
+                          top: 14.v,
+                          bottom: 9.v,
+                        ),
+                        child: Text(money.toString(),
+                            style: CustomTextStyles.semiBold18Text)),
+                  if (supabase.auth.currentUser?.email !=
+                      "anounymous@gmail.com")
+                    IconButton(
+                      icon: FaIcon(
+                        FontAwesomeIcons.coins,
+                        size: 25.h,
+                        color: appTheme.yellow,
+                      ),
+                      onPressed: () {},
+                    )
                 ],
               ),
               styleType: Style.bgFill),
@@ -114,37 +147,119 @@ class _StatisticsState extends State<Statistics> with TickerProviderStateMixin {
                   SizedBox(height: 75.v),
                   Divider(height: 1, color: appTheme.gray),
                   Expanded(
-                      child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 16.h),
-                          child: SingleChildScrollView(
-                              child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                SizedBox(height: 14.v),
-                                Text("Очки за неделю:",
-                                    style: CustomTextStyles.regular16Text),
-                                SizedBox(height: 14.v),
-                                Row(children: [
-                                  day_score("пн", 0),
-                                  SizedBox(width: 8.h),
-                                  day_score("пн", 0),
-                                  SizedBox(width: 8.h),
-                                  day_score("вт", 0),
-                                  SizedBox(width: 8.h),
-                                  day_score("ср", 134),
-                                  SizedBox(width: 8.h),
-                                  day_score("чт", 1886),
-                                  SizedBox(width: 8.h),
-                                  day_score("пт", 0),
-                                  SizedBox(width: 8.h),
-                                  day_score("сб", 0),
-                                  SizedBox(width: 8.h),
-                                  day_score("вс", 0)
-                                ]),
-                                SizedBox(height: 14.v),
-                                Text("Вы занимаетесь уже 5 день(-ей)!",
-                                    style: theme.textTheme.bodyMedium),
-                              ])))),
+                    child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16.h),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(height: 14.v),
+                              Text("Очки за неделю:",
+                                  style: CustomTextStyles.regular16Text),
+                              SizedBox(height: 14.v),
+                              Row(children: [
+                                day_score("пн", mon, false),
+                                SizedBox(width: 8.h),
+                                day_score("вт", tue, false),
+                                SizedBox(width: 8.h),
+                                day_score("ср", wen, false),
+                                SizedBox(width: 8.h),
+                                day_score("чт", thu, false),
+                                SizedBox(width: 8.h),
+                                day_score("пт", fri, true),
+                                SizedBox(width: 8.h),
+                                day_score("сб", sat, false),
+                                SizedBox(width: 8.h),
+                                day_score("вс", sun, false)
+                              ]),
+                              SizedBox(height: 14.v),
+                              Text("Вы занимаетесь уже 5 день(-ей)!",
+                                  style: theme.textTheme.bodyMedium),
+                              SizedBox(height: 20.v),
+                              Divider(height: 1, color: appTheme.gray),
+                              SizedBox(height: 20.v),
+                              Text("Общее число очков за...",
+                                  style: CustomTextStyles.extraBold20Text),
+                              SizedBox(height: 9.v),
+                              TabBar(
+                                  controller: _tabController,
+                                  labelPadding: EdgeInsets.zero,
+                                  indicatorPadding:
+                                      EdgeInsets.symmetric(horizontal: -15.h),
+                                  labelStyle: CustomTextStyles.regular16White,
+                                  unselectedLabelStyle:
+                                      CustomTextStyles.regular16Text,
+                                  indicator: BoxDecoration(
+                                    color: theme.colorScheme.primary,
+                                    borderRadius: BorderRadius.circular(
+                                      50.h,
+                                    ),
+                                  ),
+                                  tabs: const [
+                                    Tab(
+                                      child: Text(
+                                        "неделя",
+                                      ),
+                                    ),
+                                    Tab(
+                                      child: Text(
+                                        "месяц",
+                                      ),
+                                    ),
+                                    Tab(
+                                      child: Text(
+                                        "год",
+                                      ),
+                                    )
+                                  ]),
+                              //  Divider(height: 1, color: appTheme.gray),
+                              SizedBox(height: 15.v),
+                              SizedBox(height: 40.v,
+                                  width: 353.h,
+                                  child: TabBarView(
+                                      controller: _tabController,
+                                      children: <Widget>[
+                                    Center(
+                                        child: Text(
+                                            '${mon + tue + wen + thu + fri + sat + sun} оч.',
+                                            style: CustomTextStyles
+                                                .extraBold20Text)),
+                                    Center(
+                                        child: Text(
+                                            '${mon + tue + wen + thu + fri + sat + sun} оч.',
+                                            style: CustomTextStyles
+                                                .extraBold20Text)),
+                                    Center(
+                                        child: Text(
+                                            '${mon + tue + wen + thu + fri + sat + sun} оч.',
+                                            style: CustomTextStyles
+                                                .extraBold20Text)),
+                                  ])),
+                              SizedBox(height: 20.v),
+                              Divider(height: 1, color: appTheme.gray),
+                              SizedBox(height: 20.v),
+                              Text("Рекорды за все время",
+                                  style: CustomTextStyles.extraBold20Text),
+                              SizedBox(height: 9.v),
+                              Row(
+                                children: [
+                                  Text("Рекорды за все время",
+                                      style: CustomTextStyles.extraBold16Text),
+                                  Spacer(),
+                                  Text("Рекорды за все время",
+                                      style: CustomTextStyles.extraBold16Text),
+                                ],
+                              ),
+                              SizedBox(height: 9.v),
+                              Row(children: [
+                                Text("Рекорды за все время",
+                                    style: CustomTextStyles.extraBold16Text),
+                                Spacer(),
+                                Text("Рекорды за все время",
+                                    style: CustomTextStyles.extraBold16Text),
+                              ]),
+                              SizedBox(height: 14.v),
+                            ])),
+                  )
                 ],
               ),
             ),

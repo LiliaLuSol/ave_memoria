@@ -10,6 +10,16 @@ class CustomTextStyles {
         color: theme.colorScheme.onPrimary,
       );
 
+  static get extraBold20Text => theme.textTheme.headlineLarge!.copyWith(
+    color: theme.colorScheme.onPrimary,
+    fontSize: 20.fSize
+  );
+
+  static get extraBold16Text => theme.textTheme.headlineLarge!.copyWith(
+      color: theme.colorScheme.onPrimary,
+      fontSize: 16.fSize
+  );
+
   static get semiBold32Text => theme.textTheme.headlineLarge!.copyWith(
       color: theme.colorScheme.onPrimary, fontWeight: FontWeight.w600);
 

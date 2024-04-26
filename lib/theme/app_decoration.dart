@@ -22,6 +22,14 @@ class AppDecoration {
     ),
   );
 
+  static BoxDecoration get outlinePrimary => BoxDecoration(
+    color: theme.colorScheme.onPrimaryContainer,
+    border: Border.all(
+      color: theme.colorScheme.primary,
+      width: 1.h,
+    ),
+  );
+
 }
 
 class BorderRadiusStyle {
