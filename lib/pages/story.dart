@@ -1,5 +1,6 @@
 import 'package:ave_memoria/blocs/Auth/bloc/authentication_bloc.dart';
 import 'package:ave_memoria/main.dart';
+import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
 import 'package:ave_memoria/other/app_export.dart';
@@ -24,6 +25,7 @@ class _StoryState extends State<Story> with TickerProviderStateMixin {
     getMoney();
     super.initState();
   }
+
   String? getEmail() {
     final currentUser = supabase.auth.currentUser;
     if (currentUser != null) {
@@ -40,8 +42,7 @@ class _StoryState extends State<Story> with TickerProviderStateMixin {
     final res = await supabase
         .from('profileusergame')
         .select('money')
-        .eq('email',
-        email)
+        .eq('email', email)
         .count(CountOption.exact);
     final data = res.data;
     setState(() {
@@ -74,63 +75,118 @@ class _StoryState extends State<Story> with TickerProviderStateMixin {
       },
       child: SafeArea(
         child: Scaffold(
-          extendBody: true,
-          extendBodyBehindAppBar: true,
-          resizeToAvoidBottomInset: false,
-          appBar: CustomAppBar(
-              height: 75.v,
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Padding(
-                      padding: EdgeInsets.only(left: 16.h, right: 16.h),
-                      child: Text("Сюжет",
-                          style: CustomTextStyles.extraBold32Text)),
-                  Spacer(),
-                  if (supabase.auth.currentUser?.email != "anounymous@gmail.com")
-                  Padding(
-                    padding: EdgeInsets.only(
-                      top: 14.v,
-                      bottom: 9.v,
-                    ),
-                    child: Text(money.toString(),
-                        style: CustomTextStyles.semiBold18Text)
-                  ),
-                  if (supabase.auth.currentUser?.email != "anounymous@gmail.com")
-                  IconButton(
-                    icon: FaIcon(
-                      FontAwesomeIcons.coins,
-                      size: 25.h,
-                      color: appTheme.yellow,
-                    ),
-                    onPressed: () {},
-                  )
-                ],
-              ),
-              styleType: Style.bgFill),
-          body: Container(
-              width: mediaQueryData.size.width,
-              height: mediaQueryData.size.height,
-              child: SizedBox(
-                  width: double.maxFinite,
-                  child: Column(children: [
-                    SizedBox(
-                      height: 75.v,
-                    ),
-                    Divider(height: 1, color: appTheme.gray),
-                    Expanded(
-                        child: Padding(
-                            padding: EdgeInsets.only(left: 16.h, right: 16.h),
-                            child: SingleChildScrollView(
-                                child: Column(
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                    children: [
-                                      
-                                    ]))))
-                  ])))
-        ),
+            extendBody: true,
+            extendBodyBehindAppBar: true,
+            resizeToAvoidBottomInset: false,
+            appBar: CustomAppBar(
+                height: 75.v,
+                title: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Padding(
+                        padding: EdgeInsets.only(left: 16.h, right: 16.h),
+                        child: Text("Сюжет. Глава I",
+                            style: CustomTextStyles.extraBold32Text)),
+                    Spacer(),
+                    if (supabase.auth.currentUser?.email !=
+                        "anounymous@gmail.com")
+                      Padding(
+                          padding: EdgeInsets.only(
+                            top: 14.v,
+                            bottom: 9.v,
+                          ),
+                          child: Text(money.toString(),
+                              style: CustomTextStyles.semiBold18Text)),
+                    if (supabase.auth.currentUser?.email !=
+                        "anounymous@gmail.com")
+                      IconButton(
+                        icon: FaIcon(
+                          FontAwesomeIcons.coins,
+                          size: 25.h,
+                          color: appTheme.yellow,
+                        ),
+                        onPressed: () {},
+                      )
+                  ],
+                ),
+                styleType: Style.bgFill),
+            body: Container(
+                width: mediaQueryData.size.width,
+                height: mediaQueryData.size.height,
+                child: SizedBox(
+                    width: double.maxFinite,
+                    child: Column(children: [
+                      SizedBox(
+                        height: 75.v,
+                      ),
+                      Divider(height: 1, color: appTheme.gray),
+                      Stack(children: [
+                        Expanded(
+                            child: Padding(
+                                padding:
+                                    EdgeInsets.only(left: 16.h, right: 16.h),
+                                child: SingleChildScrollView(
+                                    child: Column(children: [
+                                  SizedBox(height: 5.v),
+                                  Text("Глава I",
+                                      style: CustomTextStyles.extraBold32Text,
+                                      textAlign: TextAlign.center),
+                                  SizedBox(height: 28.v),
+                                  Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      children: [
+                                        Container(
+                                            color: appTheme.lightGray,
+                                            width: 170.h,
+                                            height: 107.v),
+                                        Spacer(),
+                                        CustomImageView(
+                                          svgPath: ImageConstant.imgStoryR,
+                                        ),
+                                        Spacer(),
+                                      ]),
+                                  SizedBox(height: 28.v),
+                                  Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      children: [
+                                        Spacer(),
+                                        CustomImageView(
+                                          svgPath: ImageConstant.imgStoryL,
+                                        ),
+                                        Spacer(),
+                                        Container(
+                                            color: appTheme.lightGray,
+                                            width: 170.h,
+                                            height: 107.v),
+                                      ]),
+                                  // Stack(children: [
+                                  //
+                                  //   Text(
+                                  //       'Скоро будет продолжение! Следите за обновлениями',
+                                  //       style: CustomTextStyles.semiBold32Primary,
+                                  //       textAlign: TextAlign.center)
+                                  // ])
+                                ])))),
+                        Column(children: [
+                          SizedBox(height: 350.v),
+                          Container(
+                              color: appTheme.white,
+                              width: 393.h,
+                              height: 338.h,
+                              child: Center(
+                                  child: Padding(
+                                      padding: EdgeInsets.all(16.h),
+                                      child: Text(
+                                          'Скоро будет продолжение! Следите за обновлениями',
+                                          style:
+                                              CustomTextStyles.regular16Primary,
+                                          textAlign: TextAlign.center))))
+                        ])
+                      ])
+                    ])))),
       ),
       //  )
     );

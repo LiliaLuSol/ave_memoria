@@ -8,6 +8,10 @@ class ImageConstant {
 
   static String imgArrowdown = '$imagePath/img_arrow_down.svg';
 
+  static String imgStoryR = '$imagePath/img_rectangle_194.svg';
+
+  static String imgStoryL= '$imagePath/img_rectangle_195.svg';
+
   static String imgEye = '$imagePath/img_eye.svg';
 
   static String imgBrandicoyandexrect = '$imagePath/img_brandico_yandex_rect.svg';
