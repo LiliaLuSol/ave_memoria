@@ -170,15 +170,71 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
                           children: <Widget>[
                         Column(children: [
                           Container(
-                            color: appTheme.lightGray,
+                            decoration: AppDecoration.outlineGray.copyWith(
+                                borderRadius: BorderRadiusStyle.circleBorder5),
                             width: 353.h,
                             height: 90.v,
+                            child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  SizedBox(width: 16.v),
+                                  Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Spacer(),
+                                        Text('Как работает память',
+                                            style: CustomTextStyles
+                                                .semiBold18Text),
+                                        Spacer(),
+                                        Text('На прочтение: 5 минуты',
+                                            style:
+                                                CustomTextStyles.regular16Text),
+                                        Spacer(),
+                                      ]),
+                                  Spacer(),
+                                  CustomImageView(
+                                      svgPath: ImageConstant.imgArrowright,
+                                      height: 15.v,
+                                      width: 9.h,
+                                      margin: EdgeInsets.only(
+                                          top: 2.v, bottom: 5.v)),
+                                  SizedBox(width: 16.v),
+                                ]),
                           ),
                           SizedBox(height: 15.v),
                           Container(
-                            color: appTheme.lightGray,
+                            decoration: AppDecoration.outlineGray.copyWith(
+                                borderRadius: BorderRadiusStyle.circleBorder5),
                             width: 353.h,
                             height: 90.v,
+                            child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  SizedBox(width: 16.v),
+                                  Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Spacer(),
+                                        Text('Советы по развитию памяти',
+                                            style: CustomTextStyles
+                                                .semiBold18Text),
+                                        Spacer(),
+                                        Text('На прочтение: 10 минуты',
+                                            style:
+                                                CustomTextStyles.regular16Text),
+                                        Spacer(),
+                                      ]),
+                                  Spacer(),
+                                  CustomImageView(
+                                      svgPath: ImageConstant.imgArrowright,
+                                      height: 15.v,
+                                      width: 9.h,
+                                      margin: EdgeInsets.only(
+                                          top: 2.v, bottom: 5.v)),
+                                  SizedBox(width: 16.v),
+                                ]),
                           ),
                         ]),
                         Column(children: [
@@ -186,12 +242,18 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 Container(
-                                  color: appTheme.lightGray,
+                                  decoration: AppDecoration.outlineGray
+                                      .copyWith(
+                                          borderRadius:
+                                              BorderRadiusStyle.circleBorder5),
                                   width: 170.h,
                                   height: 104.v,
                                 ),
                                 Container(
-                                  color: appTheme.lightGray,
+                                  decoration: AppDecoration.outlineGray
+                                      .copyWith(
+                                          borderRadius:
+                                              BorderRadiusStyle.circleBorder5),
                                   width: 170.h,
                                   height: 104.v,
                                 ),
@@ -201,12 +263,18 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 Container(
-                                  color: appTheme.lightGray,
+                                  decoration: AppDecoration.outlineGray
+                                      .copyWith(
+                                          borderRadius:
+                                              BorderRadiusStyle.circleBorder5),
                                   width: 170.h,
                                   height: 104.v,
                                 ),
                                 Container(
-                                  color: appTheme.lightGray,
+                                  decoration: AppDecoration.outlineGray
+                                      .copyWith(
+                                          borderRadius:
+                                              BorderRadiusStyle.circleBorder5),
                                   width: 170.h,
                                   height: 104.v,
                                 ),
@@ -214,13 +282,15 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
                         ]),
                         Column(children: [
                           Container(
-                            color: appTheme.lightGray,
+                            decoration: AppDecoration.outlineGray.copyWith(
+                                borderRadius: BorderRadiusStyle.circleBorder5),
                             width: 353.h,
                             height: 90.v,
                           ),
                           SizedBox(height: 15.v),
                           Container(
-                            color: appTheme.lightGray,
+                            decoration: AppDecoration.outlineGray.copyWith(
+                                borderRadius: BorderRadiusStyle.circleBorder5),
                             width: 353.h,
                             height: 90.v,
                           ),
@@ -230,12 +300,18 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 Container(
-                                  color: appTheme.lightGray,
+                                  decoration: AppDecoration.outlineGray
+                                      .copyWith(
+                                          borderRadius:
+                                              BorderRadiusStyle.circleBorder5),
                                   width: 170.h,
                                   height: 104.v,
                                 ),
                                 Container(
-                                  color: appTheme.lightGray,
+                                  decoration: AppDecoration.outlineGray
+                                      .copyWith(
+                                          borderRadius:
+                                              BorderRadiusStyle.circleBorder5),
                                   width: 170.h,
                                   height: 104.v,
                                 ),
@@ -245,12 +321,18 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 Container(
-                                  color: appTheme.lightGray,
+                                  decoration: AppDecoration.outlineGray
+                                      .copyWith(
+                                          borderRadius:
+                                              BorderRadiusStyle.circleBorder5),
                                   width: 170.h,
                                   height: 104.v,
                                 ),
                                 Container(
-                                  color: appTheme.lightGray,
+                                  decoration: AppDecoration.outlineGray
+                                      .copyWith(
+                                          borderRadius:
+                                              BorderRadiusStyle.circleBorder5),
                                   width: 170.h,
                                   height: 104.v,
                                 ),
