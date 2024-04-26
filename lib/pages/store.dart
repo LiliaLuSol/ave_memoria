@@ -88,7 +88,7 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
                   children: [
                     Padding(
                         padding: EdgeInsets.only(left: 16.h, right: 16.h),
-                        child: Text("Свод",
+                        child: Text("Проводник",
                             style: CustomTextStyles.extraBold32Text)),
                     Spacer(),
                     if (supabase.auth.currentUser?.email !=

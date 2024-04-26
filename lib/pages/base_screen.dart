@@ -75,7 +75,7 @@ class _BaseScreenState extends State<BaseScreen> {
               FontAwesomeIcons.feather,
               size: 25.h,
             ),
-            label: 'свод',
+            label: 'проводник',
           ),
           BottomNavigationBarItem(
             icon: FaIcon(
