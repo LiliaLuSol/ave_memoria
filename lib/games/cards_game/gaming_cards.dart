@@ -16,6 +16,11 @@ class CardsGame extends StatefulWidget {
 }
 
 class _CardsGameState extends State<CardsGame> {
+  GlobalData globalData = GlobalData();
+  String _nameGame1 = '';
+  String game1Rule1 = '';
+  String game1Rule2 = '';
+  String game1Rule3 = '';
   int time = -3;
   int _previousIndex = -1;
   int _time = 3;
@@ -69,6 +74,10 @@ class _CardsGameState extends State<CardsGame> {
 
   @override
   void initState() {
+    _nameGame1 = globalData.nameGame1_;
+    game1Rule1 = globalData.game1Rule1;
+    game1Rule2 = globalData.game1Rule2;
+    game1Rule3 = globalData.game1Rule3;
     startTimer();
     startDuration();
     startGameAfterDelay();
@@ -108,7 +117,7 @@ class _CardsGameState extends State<CardsGame> {
 
     return _isFinished
         ? ResultGame(
-            nameGame: "Легион памяти",
+            nameGame: _nameGame1,
             goRoute: AppRoutes.game_cards,
             tries: tries,
             score: score,
@@ -134,7 +143,7 @@ class _CardsGameState extends State<CardsGame> {
                             children: [
                               SizedBox(width: 49.h),
                               Spacer(),
-                              Text("Легион памяти",
+                              Text(_nameGame1,
                                   style: CustomTextStyles.regular24Text),
                               Spacer(),
                               IconButton(
@@ -147,16 +156,13 @@ class _CardsGameState extends State<CardsGame> {
                                           context,
                                           PageRouteBuilder(
                                               pageBuilder: (_, __, ___) =>
-                                                  const PauseMenu(
+                                                  PauseMenu(
                                                     goRoute:
                                                         AppRoutes.game_cards,
                                                     countRule: 3,
-                                                    text1:
-                                                        "Игровое поле состоит из карт, за каждой из которых скрыта картинка. Картинки ― парные, т.е. на игровом поле есть две карты, на которых находятся одинаковые картинки",
-                                                    text2:
-                                                        "В начале игры на несколько секунд показывают все картинки. Ваша задача запомнить как можно больше карт",
-                                                    text3:
-                                                        "А затем все карты перевернут рубашкой вверх. Надо с меньшим числом попыток найти и перевернуть парные карты, если картинки различаются, тогда они снова повернутся",
+                                                    text1: game1Rule1,
+                                                    text2: game1Rule2,
+                                                    text3: game1Rule3,
                                                   ),
                                               opaque: false,
                                               fullscreenDialog: true))

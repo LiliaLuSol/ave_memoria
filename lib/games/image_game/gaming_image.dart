@@ -16,6 +16,11 @@ class ImageGame extends StatefulWidget {
 }
 
 class _ImageGameState extends State<ImageGame> {
+  GlobalData globalData = GlobalData();
+  String nameGame3 = '';
+  String game3Rule1 = '';
+  String game3Rule2 = '';
+
   int correctAnswers = 0;
   int currentQuestionIndex = 0;
   int questionNumber = 0;
@@ -214,6 +219,9 @@ class _ImageGameState extends State<ImageGame> {
 
   @override
   void initState() {
+    nameGame3 = globalData.nameGame3;
+    game3Rule1 = globalData.game3Rule1;
+    game3Rule2 = globalData.game3Rule2;
     initializeGameData();
     startGameIfTrue();
     super.initState();
@@ -240,16 +248,16 @@ class _ImageGameState extends State<ImageGame> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                           Text(
-                            "Картинка будет представлена на 20 секунд. Запомните как можено больше деталей!",
+                            "Картинка будет представлена на 20 секунд. Запомните как можно больше деталей!",
                             style: CustomTextStyles.regular24Text,
                             textAlign: TextAlign.center,
                           ),
-                          SizedBox(height: 20.v),
+                          SizedBox(height: 40.v),
                           Image.asset(
                             imageQuestions[randomIndex].imagePath,
                             width: 353.h,
                           ),
-                          SizedBox(height: 20.v),
+                          SizedBox(height: 40.v),
                           CustomElevatedButton(
                             text: "Начать раньше",
                             buttonTextStyle:
@@ -267,7 +275,7 @@ class _ImageGameState extends State<ImageGame> {
                         ])))))
         : _isFinished
             ? ResultGame(
-                nameGame: "Римские картинки",
+                nameGame: nameGame3,
                 goRoute: AppRoutes.game_image,
                 isGameImage: true,
                 correctAnswers: correctAnswers,
@@ -290,7 +298,7 @@ class _ImageGameState extends State<ImageGame> {
                                 children: [
                                   SizedBox(width: 49.h),
                                   Spacer(),
-                                  Text("Римские картинки",
+                                  Text(nameGame3,
                                       style: CustomTextStyles.regular24Text),
                                   Spacer(),
                                   IconButton(
@@ -302,14 +310,12 @@ class _ImageGameState extends State<ImageGame> {
                                             context,
                                             PageRouteBuilder(
                                                 pageBuilder: (_, __, ___) =>
-                                                    const PauseMenu(
+                                                    PauseMenu(
                                                       goRoute:
                                                           AppRoutes.game_image,
                                                       countRule: 2,
-                                                      text1:
-                                                          "В начале вам показывается картинка, вы должны запомнить как можно больше подробнее его",
-                                                      text2:
-                                                          "Затем задается ряд вопросов по картинке на которые Вам предстоит ответить по памяти",
+                                                      text1: game3Rule1,
+                                                      text2: game3Rule2,
                                                     ),
                                                 opaque: false,
                                                 fullscreenDialog: true));

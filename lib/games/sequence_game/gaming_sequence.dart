@@ -15,6 +15,13 @@ class SequenceGame extends StatefulWidget {
 }
 
 class _SequenceGameState extends State<SequenceGame> {
+  GlobalData globalData = GlobalData();
+  String nameGame2 = '';
+  String _nameGame2 = '';
+  String game2Rule1 = '';
+  String game2Rule2 = '';
+  String game2Rule3 = '';
+
   Map<int, String> numberImageMap = {
     0: "0",
     1: "1",
@@ -78,6 +85,11 @@ class _SequenceGameState extends State<SequenceGame> {
 
   @override
   void initState() {
+    nameGame2 = globalData.nameGame2;
+    _nameGame2 = globalData.nameGame2_;
+    game2Rule1 = globalData.game2Rule1;
+    game2Rule2 = globalData.game2Rule2;
+    game2Rule3 = globalData.game2Rule3;
     startGameAfterDelay();
     initializeGameData();
     super.initState();
@@ -155,7 +167,7 @@ class _SequenceGameState extends State<SequenceGame> {
           ))))
         : _isFinished
             ? ResultGame(
-                nameGame: "Гладиаторская тренировка памяти",
+                nameGame: nameGame2,
                 goRoute: AppRoutes.game_sequence,
                 rounde: rounde,
                 score: score,
@@ -178,7 +190,7 @@ class _SequenceGameState extends State<SequenceGame> {
                             children: [
                               SizedBox(width: 49.h),
                               Spacer(),
-                              Text("    Гладиаторская\nтренировка памяти",
+                              Text(_nameGame2,
                                   style: CustomTextStyles.regular24Text),
                               Spacer(),
                               IconButton(
@@ -190,16 +202,13 @@ class _SequenceGameState extends State<SequenceGame> {
                                       context,
                                       PageRouteBuilder(
                                           pageBuilder: (_, __, ___) =>
-                                              const PauseMenu(
+                                              PauseMenu(
                                                 goRoute:
                                                     AppRoutes.game_sequence,
                                                 countRule: 3,
-                                                text1:
-                                                    "В каждом раунде, гладиатор показывает последовательность движений.",
-                                                text2:
-                                                    "Ваша задача запоинить и воспроизвести эти движения за определенное время, не допуская ошибок.",
-                                                text3:
-                                                    "С каждым раундом времени на раздумья будет все меньше, а за ошибку вы теярете по одной жизни.",
+                                                text1: game2Rule1,
+                                                text2: game2Rule2,
+                                                text3: game2Rule3,
                                               ),
                                           opaque: false,
                                           fullscreenDialog: true));
