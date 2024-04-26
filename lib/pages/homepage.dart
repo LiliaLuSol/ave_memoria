@@ -1,4 +1,5 @@
 import 'dart:core';
+import 'dart:io';
 import 'package:ave_memoria/theme/custom_text_style.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -19,14 +20,35 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
   GlobalData globalData = GlobalData();
   String emailAnon = '';
   int money = 0;
-  bool gameRulesFirst1 = true;
+  bool _isConnection = false;
+  late bool gameRulesFirst1;
+  late bool gameRulesFirst2;
+  late bool gameRulesFirst3;
 
   @override
   void initState() {
+    gameRulesFirst1 = true;
+    gameRulesFirst2 = true;
+    gameRulesFirst3 = true;
     emailAnon = globalData.emailAnon;
     money = globalData.money;
     getMoney();
+    _tryConnection();
+    getFirstRule();
     super.initState();
+  }
+
+  Future<void> _tryConnection() async {
+    try {
+      final response = await InternetAddress.lookup('www.google.com');
+      setState(() {
+        _isConnection = response.isNotEmpty;
+      });
+    } on SocketException catch (e) {
+      setState(() {
+        _isConnection = false;
+      });
+    }
   }
 
   String? getEmail() {
@@ -34,6 +56,8 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
     if (currentUser != null) {
       final email = currentUser.email!;
       return email;
+    } else if (_isConnection) {
+      return emailAnon;
     } else {
       return "Ваш email скоро здесь появится...";
     }
@@ -51,6 +75,35 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
     setState(() {
       globalData.updateMoney(data[0]['money']);
     });
+  }
+
+  void getFirstRule() async {
+    String? email = getEmail();
+    email = email.toString();
+    final res = await supabase
+        .from('usergamedata')
+        .select('is_new')
+        .eq('email', email)
+        .count(CountOption.exact);
+    final data = res.data;
+    setState(() {
+      gameRulesFirst1 = data[0]['is_new'];
+      gameRulesFirst2 = data[2]['is_new'];
+      gameRulesFirst3 = data[1]['is_new'];
+      print(data[0]['is_new']);
+      print(data[2]['is_new']);
+      print(data[1]['is_new']);
+    });
+  }
+
+  Future<void> updateFirstRule(String nameGame) async {
+    String? email = getEmail();
+    email = email.toString();
+    await supabase
+        .from('GameRule')
+        .update({'is_new': false})
+        // .eq('email', email)
+        .eq('game', 'cards').count(CountOption.exact);
   }
 
   @override
@@ -77,25 +130,27 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                       child: Text("AveMemoria",
                           style: CustomTextStyles.extraBold32Primary)),
                   Spacer(),
-                  if (supabase.auth.currentUser?.email != "anounymous@gmail.com")
-                  Padding(
-                      padding: EdgeInsets.only(
-                        top: 14.v,
-                        bottom: 9.v,
+                  if (supabase.auth.currentUser?.email !=
+                      "anounymous@gmail.com")
+                    Padding(
+                        padding: EdgeInsets.only(
+                          top: 14.v,
+                          bottom: 9.v,
+                        ),
+                        child: Text(money.toString(),
+                            style: CustomTextStyles.semiBold18Text)),
+                  if (supabase.auth.currentUser?.email !=
+                      "anounymous@gmail.com")
+                    IconButton(
+                      icon: FaIcon(
+                        FontAwesomeIcons.coins,
+                        size: 25.h,
+                        color: appTheme.yellow,
                       ),
-                      child: Text(money.toString(),
-                          style: CustomTextStyles.semiBold18Text)),
-                  if (supabase.auth.currentUser?.email != "anounymous@gmail.com")
-                  IconButton(
-                    icon: FaIcon(
-                      FontAwesomeIcons.coins,
-                      size: 25.h,
-                      color: appTheme.yellow,
-                    ),
-                    onPressed: () {
-                      null;
-                    },
-                  )
+                      onPressed: () {
+                        null;
+                      },
+                    )
                 ],
               ),
               styleType: Style.bgFill,
@@ -148,25 +203,33 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                                         ]),
                                         onTap: () {
                                           gameRulesFirst1
-                                              ? Navigator.push(
-                                                  context,
-                                                  PageRouteBuilder(
-                                                      pageBuilder: (_, __,
-                                                              ___) =>
-                                                          const GameRules(
-                                                            firstTimes: true,
-                                                            countRule: 3,
-                                                            goRoute: AppRoutes
-                                                                .game_cards,
-                                                            text1:
-                                                                "Игровое поле состоит из карт, за каждой из которых скрыта картинка. Картинки ― парные, т.е. на игровом поле есть две карты, на которых находятся одинаковые картинки",
-                                                            text2:
-                                                                "В начале игры на несколько секунд показывают все картинки. Ваша задача запомнить как можно больше карт",
-                                                            text3:
-                                                                "А затем все карты перевернут рубашкой вверх. Надо с меньшим числом попыток найти и перевернуть парные карты, если картинки различаются, тогда они снова повернутся",
-                                                          ),
-                                                      opaque: false,
-                                                      fullscreenDialog: true))
+                                              ? {
+                                                  setState(() {
+                                                    gameRulesFirst1 = false;
+                                                    updateFirstRule('cards');
+                                                  }),
+                                                  Navigator.push(
+                                                      context,
+                                                      PageRouteBuilder(
+                                                          pageBuilder: (_, __,
+                                                                  ___) =>
+                                                              const GameRules(
+                                                                firstTimes:
+                                                                    true,
+                                                                countRule: 3,
+                                                                goRoute: AppRoutes
+                                                                    .game_cards,
+                                                                text1:
+                                                                    "Игровое поле состоит из карт, за каждой из которых скрыта картинка. Картинки ― парные, т.е. на игровом поле есть две карты, на которых находятся одинаковые картинки",
+                                                                text2:
+                                                                    "В начале игры на несколько секунд показывают все картинки. Ваша задача запомнить как можно больше карт",
+                                                                text3:
+                                                                    "А затем все карты перевернут рубашкой вверх. Надо с меньшим числом попыток найти и перевернуть парные карты, если картинки различаются, тогда они снова повернутся",
+                                                              ),
+                                                          opaque: false,
+                                                          fullscreenDialog:
+                                                              true))
+                                                }
                                               : GoRouter.of(context)
                                                   .push(AppRoutes.game_cards);
                                         }),
@@ -198,26 +261,34 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                                           )
                                         ]),
                                         onTap: () {
-                                          gameRulesFirst1
-                                              ? Navigator.push(
-                                                  context,
-                                                  PageRouteBuilder(
-                                                      pageBuilder: (_, __,
-                                                              ___) =>
-                                                          const GameRules(
-                                                            firstTimes: true,
-                                                            countRule: 3,
-                                                            goRoute: AppRoutes
-                                                                .game_sequence,
-                                                            text1:
-                                                                "В каждом раунде, гладиатор показывает последовательность движений.",
-                                                            text2:
-                                                                "Ваша задача запоинить и воспроизвести эти движения за определенное время, не допуская ошибок.",
-                                                            text3:
-                                                                "С каждым раундом времени на раздумья будет все меньше, а за ошибку вы теярете по одной жизни.",
-                                                          ),
-                                                      opaque: false,
-                                                      fullscreenDialog: true))
+                                          gameRulesFirst2
+                                              ? {
+                                                  setState(() {
+                                                    gameRulesFirst2 = false;
+                                                    updateFirstRule('sequence');
+                                                  }),
+                                                  Navigator.push(
+                                                      context,
+                                                      PageRouteBuilder(
+                                                          pageBuilder: (_, __,
+                                                                  ___) =>
+                                                              const GameRules(
+                                                                firstTimes:
+                                                                    true,
+                                                                countRule: 3,
+                                                                goRoute: AppRoutes
+                                                                    .game_sequence,
+                                                                text1:
+                                                                    "В каждом раунде, гладиатор показывает последовательность движений.",
+                                                                text2:
+                                                                    "Ваша задача запоинить и воспроизвести эти движения за определенное время, не допуская ошибок.",
+                                                                text3:
+                                                                    "С каждым раундом времени на раздумья будет все меньше, а за ошибку вы теярете по одной жизни.",
+                                                              ),
+                                                          opaque: false,
+                                                          fullscreenDialog:
+                                                              true))
+                                                }
                                               : GoRouter.of(context).push(
                                                   AppRoutes.game_sequence);
                                         }),
@@ -249,24 +320,32 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                                           )
                                         ]),
                                         onTap: () {
-                                          gameRulesFirst1
-                                              ? Navigator.push(
-                                                  context,
-                                                  PageRouteBuilder(
-                                                      pageBuilder: (_, __,
-                                                              ___) =>
-                                                          const GameRules(
-                                                            firstTimes: true,
-                                                            countRule: 2,
-                                                            goRoute: AppRoutes
-                                                                .game_image,
-                                                            text1:
-                                                                "В начале вам показывается картинка, вы должны запомнить как можно больше подробнее его",
-                                                            text2:
-                                                                "Затем задается ряд вопросов по картинке на которые Вам предстоит ответить по памяти",
-                                                          ),
-                                                      opaque: false,
-                                                      fullscreenDialog: true))
+                                          gameRulesFirst3
+                                              ? {
+                                                  setState(() {
+                                                    gameRulesFirst3 = false;
+                                                    updateFirstRule('image');
+                                                  }),
+                                                  Navigator.push(
+                                                      context,
+                                                      PageRouteBuilder(
+                                                          pageBuilder: (_, __,
+                                                                  ___) =>
+                                                              const GameRules(
+                                                                firstTimes:
+                                                                    true,
+                                                                countRule: 2,
+                                                                goRoute: AppRoutes
+                                                                    .game_image,
+                                                                text1:
+                                                                    "В начале вам показывается картинка, вы должны запомнить как можно больше подробнее его",
+                                                                text2:
+                                                                    "Затем задается ряд вопросов по картинке на которые Вам предстоит ответить по памяти",
+                                                              ),
+                                                          opaque: false,
+                                                          fullscreenDialog:
+                                                              true))
+                                                }
                                               : GoRouter.of(context)
                                                   .push(AppRoutes.game_image);
                                         }),

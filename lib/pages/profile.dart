@@ -52,12 +52,9 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
   Future<void> _tryConnection() async {
     try {
       final response = await InternetAddress.lookup('www.google.com');
-      print(response);
-      print(response.isNotEmpty);
       setState(() {
         _isConnection = response.isNotEmpty;
       });
-      print('object');
     } on SocketException catch (e) {
       setState(() {
         _isConnection = false;
