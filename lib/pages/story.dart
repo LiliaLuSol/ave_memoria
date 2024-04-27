@@ -171,19 +171,34 @@ class _StoryState extends State<Story> with TickerProviderStateMixin {
                                   // ])
                                 ])))),
                         Column(children: [
-                          SizedBox(height: 350.v),
+                          SizedBox(height: 345.v),
                           Container(
-                              color: appTheme.white,
                               width: 393.h,
-                              height: 338.h,
-                              child: Center(
-                                  child: Padding(
-                                      padding: EdgeInsets.all(16.h),
-                                      child: Text(
-                                          'Скоро будет продолжение! Следите за обновлениями',
-                                          style:
-                                              CustomTextStyles.regular16Primary,
-                                          textAlign: TextAlign.center))))
+                              height: 343.v,
+                              child: Stack(children: [
+                                Container(
+                                    width: 393.h,
+                                    height: 343.v,
+                                    decoration: const BoxDecoration(
+                                      image: DecorationImage(
+                                        image: AssetImage(
+                                            'assets/images/cloud.png'),
+                                        fit: BoxFit.fill,
+                                      ),
+                                    )),
+                                Center(
+                                    child: Padding(
+                                        padding: EdgeInsets.all(16.h),
+                                        child: Text(
+                                            'Скоро будет продолжение! Следите за обновлениями',
+                                            style: CustomTextStyles
+                                                .extraBold20Primary,
+                                            textAlign: TextAlign.center)))
+                              ])),
+                          Container(
+                            color: appTheme.white,
+                              width: 393.h,
+                              height: 25.v)
                         ])
                       ])
                     ])))),

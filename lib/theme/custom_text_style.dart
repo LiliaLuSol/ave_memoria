@@ -15,6 +15,11 @@ class CustomTextStyles {
     fontSize: 20.fSize
   );
 
+  static get extraBold20Primary => theme.textTheme.headlineLarge!.copyWith(
+      color: theme.colorScheme.primary,
+      fontSize: 20.fSize
+  );
+
   static get extraBold16Text => theme.textTheme.headlineLarge!.copyWith(
       color: theme.colorScheme.onPrimary,
       fontSize: 16.fSize

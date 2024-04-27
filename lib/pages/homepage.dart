@@ -122,7 +122,7 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
     await supabase
         .from('GameRule')
         .update({'is_new': false})
-        // .eq('email', email)
+        .eq('email', email)
         .eq('game', 'cards')
         .count(CountOption.exact);
   }
