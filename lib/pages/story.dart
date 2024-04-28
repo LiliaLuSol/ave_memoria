@@ -1,5 +1,6 @@
 import 'package:ave_memoria/blocs/Auth/bloc/authentication_bloc.dart';
 import 'package:ave_memoria/main.dart';
+import 'package:ave_memoria/widgets/story_card.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
@@ -17,11 +18,13 @@ class _StoryState extends State<Story> with TickerProviderStateMixin {
   GlobalData globalData = GlobalData();
   String emailAnon = '';
   int money = 0;
+  int filledStars = 0;
 
   @override
   void initState() {
     emailAnon = globalData.emailAnon;
     money = globalData.money;
+    filledStars = 3;
     getMoney();
     super.initState();
   }
@@ -133,42 +136,17 @@ class _StoryState extends State<Story> with TickerProviderStateMixin {
                                       style: CustomTextStyles.extraBold32Text,
                                       textAlign: TextAlign.center),
                                   SizedBox(height: 28.v),
-                                  Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                      children: [
-                                        Container(
-                                            color: appTheme.lightGray,
-                                            width: 170.h,
-                                            height: 107.v),
-                                        Spacer(),
-                                        CustomImageView(
-                                          svgPath: ImageConstant.imgStoryR,
-                                        ),
-                                        Spacer(),
-                                      ]),
+                                  story_card(
+                                      levelText: "Уровень 1",
+                                      subText: "Пролог",
+                                      svgPath: ImageConstant.imgStoryR,
+                                      filledStars: 3),
                                   SizedBox(height: 28.v),
-                                  Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                      children: [
-                                        Spacer(),
-                                        CustomImageView(
-                                          svgPath: ImageConstant.imgStoryL,
-                                        ),
-                                        Spacer(),
-                                        Container(
-                                            color: appTheme.lightGray,
-                                            width: 170.h,
-                                            height: 107.v),
-                                      ]),
-                                  // Stack(children: [
-                                  //
-                                  //   Text(
-                                  //       'Скоро будет продолжение! Следите за обновлениями',
-                                  //       style: CustomTextStyles.semiBold32Primary,
-                                  //       textAlign: TextAlign.center)
-                                  // ])
+                                  story_card(
+                                      levelText: "Уровень 2",
+                                      subText: "Первая проблема",
+                                      svgPath: ImageConstant.imgStoryL,
+                                      filledStars: 2),
                                 ])))),
                         Column(children: [
                           SizedBox(height: 345.v),
@@ -196,9 +174,7 @@ class _StoryState extends State<Story> with TickerProviderStateMixin {
                                             textAlign: TextAlign.center)))
                               ])),
                           Container(
-                            color: appTheme.white,
-                              width: 393.h,
-                              height: 25.v)
+                              color: appTheme.white, width: 393.h, height: 25.v)
                         ])
                       ])
                     ])))),
