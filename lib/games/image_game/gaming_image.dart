@@ -34,54 +34,64 @@ class _ImageGameState extends State<ImageGame> {
       imagePath: ImageConstant.imgImage_1,
       questions: [
         Question(
-          text: 'Какое животное изображено на картинке?',
-          options: ['Собака', 'Кошка', 'Лев', 'Тигр'],
+          text: 'Какой цвет у ленты на шляпке девушки?',
+          options: ['Голубой', 'Розовый', 'Черный', 'Желтый'],
           correctIndex: 2,
         ),
         Question(
-          text: 'Как называется самое большое животное на Земле?',
-          options: ['Слон', 'Кит', 'Гиппопотам', 'Бегемот'],
-          correctIndex: 1,
-        ),
-        Question(
-          text: 'Какое животное является символом США?',
-          options: ['Орёл', 'Буйвол', 'Медведь', 'Американский питбультерьер'],
-          correctIndex: 0,
-        ),
-        Question(
-          text: 'Что едят кенгуру?',
-          options: ['Трава', 'Плоды', 'Планктон', 'Мясо'],
-          correctIndex: 0,
-        ),
-        Question(
-          text: 'Где живут пингвины?',
-          options: ['Арктика', 'Антарктида', 'Сахара', 'Амазонка'],
-          correctIndex: 1,
-        ),
-        Question(
-          text: 'Как называется животное, которое спит зимой в норе?',
-          options: ['Медведь', 'Слон', 'Енот', 'Барсук'],
+          text: 'Была ли шляпа у мужчины?',
+          options: [
+            'Да, в левой руке',
+            'Да, в правой руке',
+            'Да, на голове',
+            'Нет'
+          ],
           correctIndex: 3,
         ),
         Question(
-          text: 'Как называется самая длинная змея в мире?',
-          options: ['Питон', 'Анаконда', 'Удав', 'Кобра'],
+          text: 'Был ли объект розового цвета?',
+          options: ['Нет', 'Да, воздушный шарик', 'Да, мячик', 'Да, шляпа'],
+          correctIndex: 0,
+        ),
+        Question(
+          text: 'Была ли карта на фото?',
+          options: [
+            'Нет',
+            'Да, лежала рядом с парой',
+            'Да, стенд стоял снизу',
+            'Да, карта весела на здании'
+          ],
           correctIndex: 1,
         ),
         Question(
-          text: 'Сколько ног у паука?',
-          options: ['4', '6', '8', '10'],
+          text: 'Какого цвета юбка у девушки?',
+          options: ['Красная', 'Желтая', 'Синяя', 'Черная'],
+          correctIndex: 3,
+        ),
+        Question(
+          text: 'На какой руке кольца у парня?',
+          options: ['На левой', 'На правой', 'На двух', 'Ни на одной'],
           correctIndex: 2,
         ),
         Question(
-          text: 'Какое животное считается самым быстрым на Земле?',
-          options: ['Гепард', 'Лев', 'Олень', 'Тигр'],
-          correctIndex: 0,
+          text: 'Была ли сумка на фото?',
+          options: [
+            'Нет',
+            'Да, лежала рядом с девушкой',
+            'Да, лежала рядом с парнем',
+            'Да, весела на плече девушки'
+          ],
+          correctIndex: 3,
         ),
         Question(
-          text: 'Какой птицей является символ мира?',
-          options: ['Голубь', 'Орёл', 'Страус', 'Сова'],
-          correctIndex: 0,
+          text: 'На какой руке парня находятся часы?',
+          options: ['Ни на одной', 'На левой', 'На правой', 'На двух'],
+          correctIndex: 1,
+        ),
+        Question(
+          text: 'Каого объекта не было на фото?',
+          options: ['Фотоаппарат', 'Фонарь', 'Самолет', 'Браслет'],
+          correctIndex: 2,
         ),
       ],
     ),
@@ -89,53 +99,48 @@ class _ImageGameState extends State<ImageGame> {
       imagePath: ImageConstant.imgImage_2,
       questions: [
         Question(
-          text: 'Какое животное изображено на картинке?',
-          options: ['Собака', 'Кошка', 'Лев', 'Тигр'],
+          text: 'На какой руке у мужчины часы?',
+          options: ['Ни на одной', 'На левой', 'На правой'],
           correctIndex: 2,
         ),
         Question(
-          text: 'Как называется самое большое животное на Земле?',
-          options: ['Слон', 'Кит', 'Гиппопотам', 'Бегемот'],
+          text: 'Какого цвета кепка у мужчины?',
+          options: [
+            'Красно-черная',
+            'Бело-черная',
+            'Бело-Красная',
+            'Красно-серая'
+          ],
           correctIndex: 1,
         ),
         Question(
-          text: 'Какое животное является символом США?',
-          options: ['Орёл', 'Буйвол', 'Медведь', 'Американский питбультерьер'],
-          correctIndex: 0,
-        ),
-        Question(
-          text: 'Что едят кенгуру?',
-          options: ['Трава', 'Плоды', 'Планктон', 'Мясо'],
-          correctIndex: 0,
-        ),
-        Question(
-          text: 'Где живут пингвины?',
-          options: ['Арктика', 'Антарктида', 'Сахара', 'Амазонка'],
-          correctIndex: 1,
-        ),
-        Question(
-          text: 'Как называется животное, которое спит зимой в норе?',
-          options: ['Медведь', 'Слон', 'Енот', 'Барсук'],
+          text: 'Какого цвета футболка у мужчины?',
+          options: ['Футболки нет', 'Красная', 'Белая', 'Черная'],
           correctIndex: 3,
         ),
         Question(
-          text: 'Как называется самая длинная змея в мире?',
-          options: ['Питон', 'Анаконда', 'Удав', 'Кобра'],
-          correctIndex: 1,
+          text: 'Какого цвета кроссовки у девушки?',
+          options: ['Черные', 'Красные', 'Серые', 'Белые'],
+          correctIndex: 3,
         ),
         Question(
-          text: 'Сколько ног у паука?',
-          options: ['4', '6', '8', '10'],
+          text: 'Какого цвета тент у телеги?',
+          options: ['Зеленый', 'Коричневый', 'Оранжевый', 'Фиолетовый'],
           correctIndex: 2,
         ),
         Question(
-          text: 'Какое животное считается самым быстрым на Земле?',
-          options: ['Гепард', 'Лев', 'Олень', 'Тигр'],
+          text: 'Были ли у мужчины очки?',
+          options: [
+            'Нет',
+            'Да, надеты на лицо',
+            'Да, прикреплены к сумке',
+            'Да, прикреплены к рубашке '
+          ],
           correctIndex: 0,
         ),
         Question(
-          text: 'Какой птицей является символ мира?',
-          options: ['Голубь', 'Орёл', 'Страус', 'Сова'],
+          text: 'Что было на фото?',
+          options: ['Камера', 'Воздушный шар', 'Колокольчик', 'Коврик'],
           correctIndex: 0,
         ),
       ],
@@ -144,54 +149,49 @@ class _ImageGameState extends State<ImageGame> {
       imagePath: ImageConstant.imgImage_3,
       questions: [
         Question(
-          text: 'Какое животное изображено на картинке?',
-          options: ['Собака', 'Кошка', 'Лев', 'Тигр'],
+          text: 'Какая обивка у стульев?',
+          options: ['Бамбук', 'Велюр', 'Кожа', 'Флок'],
+          correctIndex: 0,
+        ),
+        Question(
+          text: 'Какого цвета свечи на столе?',
+          options: ['Черные', 'Оранжевые', 'Красные', 'Синие'],
           correctIndex: 2,
         ),
         Question(
-          text: 'Как называется самое большое животное на Земле?',
-          options: ['Слон', 'Кит', 'Гиппопотам', 'Бегемот'],
-          correctIndex: 1,
+          text: 'Был ли на картинке штопор?',
+          options: [
+            'Да, на столе справа',
+            'Да, штопор ввинчен в пробку',
+            'Да, на столе слева',
+            'Нет'
+          ],
+          correctIndex: 2,
         ),
         Question(
-          text: 'Какое животное является символом США?',
-          options: ['Орёл', 'Буйвол', 'Медведь', 'Американский питбультерьер'],
+          text: 'Где находилась гирлянда?',
+          options: ['В цветах', 'На окне', 'На столе', 'Вдоль корней'],
           correctIndex: 0,
         ),
         Question(
-          text: 'Что едят кенгуру?',
-          options: ['Трава', 'Плоды', 'Планктон', 'Мясо'],
-          correctIndex: 0,
+          text: 'Какого предмета не было на картинке?',
+          options: ['Бутылка вина', 'Бокалы', 'Букет', 'Скатерть'],
+          correctIndex: 2,
         ),
         Question(
-          text: 'Где живут пингвины?',
-          options: ['Арктика', 'Антарктида', 'Сахара', 'Амазонка'],
-          correctIndex: 1,
-        ),
-        Question(
-          text: 'Как называется животное, которое спит зимой в норе?',
-          options: ['Медведь', 'Слон', 'Енот', 'Барсук'],
+          text: 'Из какого материала изготовлен каркас стульев?',
+          options: ['Дерево', 'Стекло', 'Пластик', 'Металл'],
           correctIndex: 3,
         ),
         Question(
-          text: 'Как называется самая длинная змея в мире?',
-          options: ['Питон', 'Анаконда', 'Удав', 'Кобра'],
+          text: 'Какого цвета окна?',
+          options: ['Синие', 'Красные', 'Зеленые', 'Белые'],
+          correctIndex: 0,
+        ),
+        Question(
+          text: 'Какой предмет был на картинке?',
+          options: ['Шарик', 'Труба', 'Торшер', 'Шкаф'],
           correctIndex: 1,
-        ),
-        Question(
-          text: 'Сколько ног у паука?',
-          options: ['4', '6', '8', '10'],
-          correctIndex: 2,
-        ),
-        Question(
-          text: 'Какое животное считается самым быстрым на Земле?',
-          options: ['Гепард', 'Лев', 'Олень', 'Тигр'],
-          correctIndex: 0,
-        ),
-        Question(
-          text: 'Какой птицей является символ мира?',
-          options: ['Голубь', 'Орёл', 'Страус', 'Сова'],
-          correctIndex: 0,
         ),
       ],
     ),
@@ -241,38 +241,40 @@ class _ImageGameState extends State<ImageGame> {
     return _isStart
         ? SafeArea(
             child: Scaffold(
-                body: Padding(
-                    padding: EdgeInsets.all(16.v),
-                    child: Center(
-                        child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                          Text(
-                            "Картинка будет представлена на 20 секунд. Запомните как можно больше деталей!",
-                            style: CustomTextStyles.regular24Text,
-                            textAlign: TextAlign.center,
-                          ),
-                          SizedBox(height: 40.v),
-                          Image.asset(
-                            imageQuestions[randomIndex].imagePath,
-                            width: 353.h,
-                          ),
-                          SizedBox(height: 40.v),
-                          CustomElevatedButton(
-                            text: "Начать раньше",
-                            buttonTextStyle:
-                                CustomTextStyles.semiBold18TextWhite,
-                            buttonStyle: ElevatedButton.styleFrom(
-                                backgroundColor: theme.colorScheme.primary,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5))),
-                            onTap: () {
-                              setState(() {
-                                _isStart = false;
-                              });
-                            },
-                          )
-                        ])))))
+                body: Stack(children: [
+            Padding(
+                padding: EdgeInsets.all(16.v),
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(height: 70.v),
+                      Text(
+                        "Картинка будет представлена на 20 секунд. Запомните как можно больше деталей!",
+                        style: CustomTextStyles.regular24Text,
+                        textAlign: TextAlign.center,
+                      ),
+                      Spacer(),
+                      CustomElevatedButton(
+                        text: "Начать раньше",
+                        buttonTextStyle: CustomTextStyles.semiBold18TextWhite,
+                        buttonStyle: ElevatedButton.styleFrom(
+                            backgroundColor: theme.colorScheme.primary,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5))),
+                        onTap: () {
+                          setState(() {
+                            _isStart = false;
+                          });
+                        },
+                      ),
+                      SizedBox(height: 70.v),
+                    ])),
+            Center(
+                child: Image.asset(
+              imageQuestions[randomIndex].imagePath,
+              width: 393.h,
+            )),
+          ])))
         : _isFinished
             ? ResultGame(
                 nameGame: nameGame3,
@@ -344,7 +346,8 @@ class _ImageGameState extends State<ImageGame> {
                               SizedBox(height: 150.v),
                               Text(
                                 questions[currentQuestionIndex].text,
-                                style: CustomTextStyles.regular16Text,
+                                style: theme.textTheme.titleMedium,
+                                textAlign: TextAlign.center,
                               ),
                               //       Spacer(),
                               SizedBox(height: 150.v),
@@ -355,6 +358,13 @@ class _ImageGameState extends State<ImageGame> {
                                         padding:
                                             EdgeInsets.symmetric(vertical: 8.v),
                                         child: CustomElevatedButton(
+                                          buttonStyle: ElevatedButton.styleFrom(
+                                              backgroundColor:
+                                                  appTheme.lightGray,
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          5))),
                                           onTap: () {
                                             if (option ==
                                                 questions[currentQuestionIndex]
