@@ -1,3 +1,4 @@
+import 'package:ave_memoria/pages/dialog_game.dart';
 import 'package:ave_memoria/pages/new_password_screen.dart';
 import 'package:ave_memoria/pages/support.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +31,7 @@ class AppRoutes {
   static const game_image = '/gaming_image';
   static const forgetScreen = '/forget_screen';
   static const new_password = '/new_password_screen';
+  static const dialog = '/dialog_game';
 
   static final GoRouter _router = GoRouter(
     routes: <GoRoute>[
@@ -90,6 +92,10 @@ class AppRoutes {
       GoRoute(
         path: game_image,
         builder: (context, state) => const ImageGame(),
+      ),
+      GoRoute(
+        path: dialog,
+        builder: (context, state) => const DialogGame(),
       ),
      ],
     initialLocation: root,

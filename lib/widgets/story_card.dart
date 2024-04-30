@@ -3,6 +3,7 @@ import 'package:ave_memoria/other/app_export.dart';
 import 'package:flutter/cupertino.dart';
 
 Widget story_card(
+    BuildContext context,
     {required String levelText,
     required String subText,
     required String svgPath,
@@ -28,7 +29,10 @@ Widget story_card(
       if (svgPath == ImageConstant.imgStoryL) CustomImageView(svgPath: svgPath),
       if (svgPath == ImageConstant.imgStoryL) Spacer(),
       GestureDetector(
-        onTap: null,
+        onTap: () {
+          GoRouter.of(context)
+              .push(AppRoutes.dialog);
+        },
         child: Container(
           decoration: AppDecoration.outlineGray.copyWith(
             borderRadius: BorderRadiusStyle.circleBorder15,

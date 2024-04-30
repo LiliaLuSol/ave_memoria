@@ -136,13 +136,13 @@ class _StoryState extends State<Story> with TickerProviderStateMixin {
                                       style: CustomTextStyles.extraBold32Text,
                                       textAlign: TextAlign.center),
                                   SizedBox(height: 28.v),
-                                  story_card(
+                                  story_card(context,
                                       levelText: "Уровень 1",
                                       subText: "Пролог",
                                       svgPath: ImageConstant.imgStoryR,
                                       filledStars: 3),
                                   SizedBox(height: 28.v),
-                                  story_card(
+                                  story_card(context,
                                       levelText: "Уровень 2",
                                       subText: "Первая проблема",
                                       svgPath: ImageConstant.imgStoryL,
