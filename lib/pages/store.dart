@@ -305,6 +305,16 @@ class _NestedTabBarState extends State<NestedTabBar>
     super.dispose();
   }
 
+  Future<dynamic> getArticleSelfList() async {
+    List<dynamic> list = await supabase
+        .from("library")
+        .select()
+        .eq("type", "self-development")
+        .eq('security', 1);
+
+    return list;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -332,6 +342,15 @@ class _NestedTabBarState extends State<NestedTabBar>
           child: TabBarView(
             controller: _tabController,
             children: <Widget>[
+              FutureBuilder(
+                  future: getArticleSelfList(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                    final list = snapshot.data!;
+                    return buildList(list);
+                  }),
               GestureDetector(
                   child: Column(children: [
                     SizedBox(height: 15.v),
@@ -409,76 +428,139 @@ class _NestedTabBarState extends State<NestedTabBar>
                             builder: (context) =>
                                 Article(title: 'Как работает память')));
                   }),
-              Column(children: [
-                SizedBox(height: 15.v),
-                Container(
-                  decoration: AppDecoration.outlineGray
-                      .copyWith(borderRadius: BorderRadiusStyle.circleBorder5),
-                  width: 353.h,
-                  height: 90.v,
-                  child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        SizedBox(width: 16.v),
-                        Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Spacer(),
-                              Text('Как работает память',
-                                  style: CustomTextStyles.semiBold18Text),
-                              Spacer(),
-                              Text('На прочтение: 5 минуты',
-                                  style: CustomTextStyles.regular16Text),
-                              Spacer(),
-                            ]),
-                        Spacer(),
-                        CustomImageView(
-                            svgPath: ImageConstant.imgArrowright,
-                            height: 15.v,
-                            width: 9.h,
-                            margin: EdgeInsets.only(top: 2.v, bottom: 5.v)),
-                        SizedBox(width: 16.v),
-                      ]),
-                ),
-                SizedBox(height: 15.v),
-                Container(
-                  decoration: AppDecoration.outlineGray
-                      .copyWith(borderRadius: BorderRadiusStyle.circleBorder5),
-                  width: 353.h,
-                  height: 90.v,
-                  child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        SizedBox(width: 16.v),
-                        Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Spacer(),
-                              Text('Советы по развитию памяти',
-                                  style: CustomTextStyles.semiBold18Text),
-                              Spacer(),
-                              Text('На прочтение: 10 минуты',
-                                  style: CustomTextStyles.regular16Text),
-                              Spacer(),
-                            ]),
-                        Spacer(),
-                        CustomImageView(
-                            svgPath: ImageConstant.imgArrowright,
-                            height: 15.v,
-                            width: 9.h,
-                            margin: EdgeInsets.only(top: 2.v, bottom: 5.v)),
-                        SizedBox(width: 16.v),
-                      ]),
-                ),
-                SizedBox(height: 15.v),
-                Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.h),
-                    child: Text(
-                        'Для получения большего числа сведений следует дальше проходить сюжет',
-                        textAlign: TextAlign.center,
-                        style: CustomTextStyles.regular16Primary))
-              ]),
+              // Column(children: [
+              //   SizedBox(height: 15.v),
+              //   Container(
+              //     decoration: AppDecoration.outlineGray
+              //         .copyWith(borderRadius: BorderRadiusStyle.circleBorder5),
+              //     width: 353.h,
+              //     height: 90.v,
+              //     child: Row(
+              //         crossAxisAlignment: CrossAxisAlignment.center,
+              //         children: [
+              //           SizedBox(width: 16.v),
+              //           Column(
+              //               crossAxisAlignment: CrossAxisAlignment.start,
+              //               children: [
+              //                 Spacer(),
+              //                 Text('Как работает память',
+              //                     style: CustomTextStyles.semiBold18Text),
+              //                 Spacer(),
+              //                 Text('На прочтение: 5 минуты',
+              //                     style: CustomTextStyles.regular16Text),
+              //                 Spacer(),
+              //               ]),
+              //           Spacer(),
+              //           CustomImageView(
+              //               svgPath: ImageConstant.imgArrowright,
+              //               height: 15.v,
+              //               width: 9.h,
+              //               margin: EdgeInsets.only(top: 2.v, bottom: 5.v)),
+              //           SizedBox(width: 16.v),
+              //         ]),
+              //   ),
+              //   SizedBox(height: 15.v),
+              //   Container(
+              //     decoration: AppDecoration.outlineGray
+              //         .copyWith(borderRadius: BorderRadiusStyle.circleBorder5),
+              //     width: 353.h,
+              //     height: 90.v,
+              //     child: Row(
+              //         crossAxisAlignment: CrossAxisAlignment.center,
+              //         children: [
+              //           SizedBox(width: 16.v),
+              //           Column(
+              //               crossAxisAlignment: CrossAxisAlignment.start,
+              //               children: [
+              //                 Spacer(),
+              //                 Text('Советы по развитию памяти',
+              //                     style: CustomTextStyles.semiBold18Text),
+              //                 Spacer(),
+              //                 Text('На прочтение: 10 минуты',
+              //                     style: CustomTextStyles.regular16Text),
+              //                 Spacer(),
+              //               ]),
+              //           Spacer(),
+              //           CustomImageView(
+              //               svgPath: ImageConstant.imgArrowright,
+              //               height: 15.v,
+              //               width: 9.h,
+              //               margin: EdgeInsets.only(top: 2.v, bottom: 5.v)),
+              //           SizedBox(width: 16.v),
+              //         ]),
+              //   ),
+              //   SizedBox(height: 15.v),
+              //   Padding(
+              //       padding: EdgeInsets.symmetric(horizontal: 16.h),
+              //       child: Text(
+              //           'Для получения большего числа сведений следует дальше проходить сюжет',
+              //           textAlign: TextAlign.center,
+              //           style: CustomTextStyles.regular16Primary))
+              // ]),
             ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget buildList(List<dynamic> list) {
+    return Column(
+      children: [
+        GridView.builder(
+          gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+            maxCrossAxisExtent: 706.h,
+            childAspectRatio: 3.92,
+            mainAxisSpacing: 15.h,
+          ),
+          shrinkWrap: true,
+          padding: EdgeInsets.all(16.h),
+          itemCount: list.length,
+          itemBuilder: (BuildContext ctx, index) {
+            return Container(
+              decoration: AppDecoration.outlineGray
+                  .copyWith(borderRadius: BorderRadiusStyle.circleBorder5),
+              width: 353.h,
+              height: 90.v,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(width: 16.v),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Spacer(),
+                      Text(
+                        list[index]["title"],
+                        style: CustomTextStyles.semiBold18Text,
+                      ),
+                      Spacer(),
+                      Text(
+                        'На прочтение: ${list[index]["time_read"]} минут',
+                        style: CustomTextStyles.regular16Text,
+                      ),
+                      Spacer(),
+                    ],
+                  ),
+                  Spacer(),
+                  CustomImageView(
+                    svgPath: ImageConstant.imgArrowright,
+                    height: 15.v,
+                    width: 9.h,
+                    margin: EdgeInsets.only(top: 2.v, bottom: 5.v),
+                  ),
+                  SizedBox(width: 16.v),
+                ],
+              ),
+            );
+          },
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.h),
+          child: Text(
+            'Для получения большего числа сведений необходимо иметь Карту доступа ур. 2 и выше',
+            textAlign: TextAlign.center,
+            style: CustomTextStyles.regular16Primary,
           ),
         ),
       ],
