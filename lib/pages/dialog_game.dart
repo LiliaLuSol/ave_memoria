@@ -11,28 +11,40 @@ class DialogGame extends StatefulWidget {
 class _DialogGameState extends State<DialogGame> {
   final Map<int, List<String>> dialoguesMap = {
     1: [
-      "Персонаж 1 - Реплика 1",
-      "Персонаж 2 - Реплика 1",
-      "Персонаж 1 - Реплика 2",
-      "Персонаж 1 - Реплика 3",
-      "Персонаж 2 - Реплика 2",
-      "Персонаж 1 - Реплика 4",
-      "Персонаж 1 - Реплика 5",
-      "Персонаж 2 - Реплика 3",
+      "Сила знания - твое оружие, сын мой. Вложи всю свою страсть и усилия в свое обучение, и никогда не забывай, что память - ключ к успеху",
+      "Эван, ты здесь?",
+      "Да, я здесь, Лава",
+      "Что случилось?",
+      "Я долго тебя искала. Раз мы здесь, не хочешь немного прогуляться  перед завтрашним уходом?",
+      "Конечно, я только за, чтобы только не собираться",
+      "Никогда не думал, что этот день наступит так быстро",
+      "Да, время летит. «Богиня Мемория будет с тобой на экзамене», - так ведь все говорят? А мы будем болеть за тебя во время его прохождения.",
+      "Конечно, Лава, я не сомневаюсь, но я не могу оставить тебя одну здесь! Дяди наверняка снова будут навязываться или выкинут что-то этакое",
+      "Брат так долго не был дома. В последнем письме он говорил, что вернется домой к моему уходу",
+      "Эв, ты же сам знаешь как братец Марц занят. Все эти дела апостола...",
+      "А, давай сыграем в игру, чтобы   отвлечься. Если выиграешь, я тебе дам кое-что",
+      "Хорошо, давай сыграем, только не плач потом",
+      "Хе-хе, я уже не маленькая"
     ],
     2: [],
   };
 
   final Map<int, List<String>> characterNamesMap = {
     1: [
-      "Персонаж 1",
-      "Персонаж 2",
-      "Персонаж 1",
-      "Персонаж 1",
-      "Персонаж 2",
-      "Персонаж 1",
-      "Персонаж 1",
-      "Персонаж 2",
+      "Отец",
+      "Лавиния",
+      "Эван",
+      "Эван",
+      "Лавиния",
+      "Эван",
+      "Эван",
+      "Лавиния",
+      "Эван",
+      "Эван",
+      "Лавиния",
+      "Лавиния",
+      "Эван",
+      "Лавиния",
     ],
     2: [],
   };
@@ -116,22 +128,56 @@ class _DialogGameState extends State<DialogGame> {
                       Expanded(
                         child: Stack(
                           children: [
-                            // Positioned(
-                            //   bottom: 0,
-                            //   left: 0,
-                            //   right: 0,
-                            //   child: Container(
-                            //     width: 393.h,
-                            //     height: 700.v,
-                            //     color: Colors.purple,
-                            //   ),
-                            // ),
                             Positioned.fill(
                               child: Image.asset(
                                 characterSprites[currentLevel]![
                                     currentDialogIndex],
                                 fit: BoxFit.contain,
                               ),
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SizedBox(height: 450.v),
+                                Container(
+                                  width: 177.h,
+                                  height: 30.v,
+                                  decoration: BoxDecoration(
+                                    color: Color.fromRGBO(255, 255, 255, 0.9),
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      Spacer(),
+                                      Text(
+                                        dialoguesMap[currentLevel]![
+                                            currentDialogIndex],
+                                        maxLines: 2,
+                                      ),
+                                      Spacer(),
+                                    ],
+                                  ),
+                                ),
+                                Container(
+                                  width: 177.h,
+                                  height: 30.v,
+                                  decoration: BoxDecoration(
+                                    color: Color.fromRGBO(255, 255, 255, 0.9),
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      Spacer(),
+                                      Text(
+                                        dialoguesMap[currentLevel]![
+                                            currentDialogIndex],
+                                        maxLines: 2,
+                                      ),
+                                      Spacer(),
+                                    ],
+                                  ),
+                                ),
+                              ],
                             ),
                             Center(
                               child: Column(

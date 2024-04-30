@@ -168,75 +168,7 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
                       child: TabBarView(
                           controller: _tabController,
                           children: <Widget>[
-                        Column(children: [
-                          Container(
-                            decoration: AppDecoration.outlineGray.copyWith(
-                                borderRadius: BorderRadiusStyle.circleBorder5),
-                            width: 353.h,
-                            height: 90.v,
-                            child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  SizedBox(width: 16.v),
-                                  Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Spacer(),
-                                        Text('Как работает память',
-                                            style: CustomTextStyles
-                                                .semiBold18Text),
-                                        Spacer(),
-                                        Text('На прочтение: 5 минуты',
-                                            style:
-                                                CustomTextStyles.regular16Text),
-                                        Spacer(),
-                                      ]),
-                                  Spacer(),
-                                  CustomImageView(
-                                      svgPath: ImageConstant.imgArrowright,
-                                      height: 15.v,
-                                      width: 9.h,
-                                      margin: EdgeInsets.only(
-                                          top: 2.v, bottom: 5.v)),
-                                  SizedBox(width: 16.v),
-                                ]),
-                          ),
-                          SizedBox(height: 15.v),
-                          Container(
-                            decoration: AppDecoration.outlineGray.copyWith(
-                                borderRadius: BorderRadiusStyle.circleBorder5),
-                            width: 353.h,
-                            height: 90.v,
-                            child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  SizedBox(width: 16.v),
-                                  Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Spacer(),
-                                        Text('Советы по развитию памяти',
-                                            style: CustomTextStyles
-                                                .semiBold18Text),
-                                        Spacer(),
-                                        Text('На прочтение: 10 минуты',
-                                            style:
-                                                CustomTextStyles.regular16Text),
-                                        Spacer(),
-                                      ]),
-                                  Spacer(),
-                                  CustomImageView(
-                                      svgPath: ImageConstant.imgArrowright,
-                                      height: 15.v,
-                                      width: 9.h,
-                                      margin: EdgeInsets.only(
-                                          top: 2.v, bottom: 5.v)),
-                                  SizedBox(width: 16.v),
-                                ]),
-                          ),
-                        ]),
+                        NestedTabBar('библиотека'),
                         Column(children: [
                           Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -344,5 +276,126 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
             ),
           ),
         ));
+  }
+}
+
+class NestedTabBar extends StatefulWidget {
+  const NestedTabBar(this.outerTab, {super.key});
+
+  final String outerTab;
+
+  @override
+  State<NestedTabBar> createState() => _NestedTabBarState();
+}
+
+class _NestedTabBarState extends State<NestedTabBar>
+    with TickerProviderStateMixin {
+  late final TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        TabBar.secondary(
+          controller: _tabController,
+          labelPadding: EdgeInsets.zero,
+          labelStyle: CustomTextStyles.regular16White,
+          unselectedLabelStyle: CustomTextStyles.regular16Text,
+          indicator: BoxDecoration(
+            color: theme.colorScheme.primary,
+            borderRadius: BorderRadius.circular(
+              50.h,
+            ),
+          ),
+          tabs: const <Widget>[
+            Tab(text: 'саморазвитие'),
+            Tab(text: 'сюжет'),
+          ],
+        ),
+        SizedBox(height: 15.v),
+        Divider(height: 1, color: appTheme.gray),
+        Expanded(
+          child: TabBarView(
+            controller: _tabController,
+            children: <Widget>[
+              Column(children: [
+                SizedBox(height: 15.v),
+                Container(
+                  decoration: AppDecoration.outlineGray
+                      .copyWith(borderRadius: BorderRadiusStyle.circleBorder5),
+                  width: 353.h,
+                  height: 90.v,
+                  child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(width: 16.v),
+                        Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Spacer(),
+                              Text('Как работает память',
+                                  style: CustomTextStyles.semiBold18Text),
+                              Spacer(),
+                              Text('На прочтение: 5 минуты',
+                                  style: CustomTextStyles.regular16Text),
+                              Spacer(),
+                            ]),
+                        Spacer(),
+                        CustomImageView(
+                            svgPath: ImageConstant.imgArrowright,
+                            height: 15.v,
+                            width: 9.h,
+                            margin: EdgeInsets.only(top: 2.v, bottom: 5.v)),
+                        SizedBox(width: 16.v),
+                      ]),
+                ),
+                SizedBox(height: 15.v),
+                Container(
+                  decoration: AppDecoration.outlineGray
+                      .copyWith(borderRadius: BorderRadiusStyle.circleBorder5),
+                  width: 353.h,
+                  height: 90.v,
+                  child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(width: 16.v),
+                        Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Spacer(),
+                              Text('Советы по развитию памяти',
+                                  style: CustomTextStyles.semiBold18Text),
+                              Spacer(),
+                              Text('На прочтение: 10 минуты',
+                                  style: CustomTextStyles.regular16Text),
+                              Spacer(),
+                            ]),
+                        Spacer(),
+                        CustomImageView(
+                            svgPath: ImageConstant.imgArrowright,
+                            height: 15.v,
+                            width: 9.h,
+                            margin: EdgeInsets.only(top: 2.v, bottom: 5.v)),
+                        SizedBox(width: 16.v),
+                      ]),
+                ),
+              ]),
+            ],
+          ),
+        ),
+      ],
+    );
   }
 }
