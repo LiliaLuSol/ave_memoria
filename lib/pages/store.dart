@@ -71,7 +71,7 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
     return await Connectivity().checkConnectivity();
   }
 
-  Future<dynamic> getArticleSelfList() async {
+  Future<dynamic> getAchievementList() async {
     String? email = getEmail();
     email = email.toString();
     List<dynamic> list = await supabase
@@ -79,6 +79,13 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
         .select()
         .eq('email', email)
         .eq('availble', true);
+
+    return list;
+  }
+
+  Future<dynamic> getStoreList() async {
+    List<dynamic> list =
+        await supabase.from("Store").select().lte('lv_availble', 1);
 
     return list;
   }
@@ -234,23 +241,20 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
                                 ),
                               ]),
                         ]),
-                        Column(children: [
-                          Container(
-                            decoration: AppDecoration.outlineGray.copyWith(
-                                borderRadius: BorderRadiusStyle.circleBorder5),
-                            width: 353.h,
-                            height: 90.v,
-                          ),
-                          SizedBox(height: 15.v),
-                          Container(
-                            decoration: AppDecoration.outlineGray.copyWith(
-                                borderRadius: BorderRadiusStyle.circleBorder5),
-                            width: 353.h,
-                            height: 90.v,
-                          ),
-                        ]),
                         FutureBuilder(
-                            future: getArticleSelfList(),
+                            future: getStoreList(),
+                            builder: (context, snapshot) {
+                              if (!snapshot.hasData) {
+                                return Center(
+                                  child: CircularProgressIndicator(
+                                      color: theme.colorScheme.primary),
+                                );
+                              }
+                              final list = snapshot.data!;
+                              return buildListStore(list);
+                            }),
+                        FutureBuilder(
+                            future: getAchievementList(),
                             builder: (context, snapshot) {
                               if (!snapshot.hasData) {
                                 return Center(
@@ -346,6 +350,74 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
       ],
     );
   }
+
+  Widget buildListStore(List<dynamic> list) {
+    return Column(
+      children: [
+        GridView.builder(
+          gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+              maxCrossAxisExtent: 706.h,
+              childAspectRatio: 2.35,
+              mainAxisSpacing: 15.h),
+          shrinkWrap: true,
+          padding: EdgeInsets.all(16.h),
+          itemCount: list.length,
+          itemBuilder: (BuildContext ctx, index) {
+            return GestureDetector(
+                onTap: null,
+                child: Container(
+                  decoration: AppDecoration.outlineGray
+                      .copyWith(borderRadius: BorderRadiusStyle.circleBorder5),
+                  width: 353.h,
+                  height: 150.v,
+                  child: Padding(
+                      padding: EdgeInsets.all(16.v),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            color: Colors.blueGrey,
+                            height: 100.v,
+                            width: 100.h,
+                          ),
+                          VerticalDivider(
+                            color: appTheme.gray,
+                            thickness: 1,
+                          ),
+                          Expanded(
+                              child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                Text(
+                                  list[index]['store_name'],
+                                  style: CustomTextStyles.extraBold16Text,
+                                  maxLines: 2,
+                                  textAlign: TextAlign.start,
+                                ),
+                                SizedBox(height: 4.v),
+                                Text(
+                                  list[index]['store_desc'],
+                                  style: CustomTextStyles.regular16Text,
+                                  maxLines: 4,
+                                  textAlign: TextAlign.start,
+                                ),
+                              ])),
+                          SizedBox(width: 3.h),
+                          CustomImageView(
+                            svgPath: ImageConstant.imgArrowright,
+                            height: 15.v,
+                            width: 9.h,
+                            margin: EdgeInsets.only(top: 2.v, bottom: 5.v),
+                          ),
+                        ],
+                      )),
+                ));
+          },
+        ),
+      ],
+    );
+  }
 }
 
 class NestedTabBar extends StatefulWidget {
@@ -375,20 +447,20 @@ class _NestedTabBarState extends State<NestedTabBar>
 
   Future<dynamic> getArticleSelfList() async {
     List<dynamic> list = await supabase
-        .from("library")
+        .from("Library")
         .select()
         .eq("type", "self-development")
-        .eq('security', 1);
+        .lte('security', 1);
 
     return list;
   }
 
   Future<dynamic> getArticleStoryList() async {
     List<dynamic> list = await supabase
-        .from("library")
+        .from("Library")
         .select()
         .eq("type", "story")
-        .eq('security', 1);
+        .lte('security', 1);
 
     return list;
   }
