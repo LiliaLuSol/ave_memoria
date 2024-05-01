@@ -1,5 +1,8 @@
 import 'package:ave_memoria/other/app_export.dart';
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+import '../main.dart';
 
 class Article extends StatefulWidget {
   final String title;
@@ -13,6 +16,30 @@ class Article extends StatefulWidget {
 class _ArticleState extends State<Article> {
   late String image;
   late String text;
+
+  void getArticleSelfList() async {
+   final res = await supabase
+        .from("library")
+        .select().eq('title', widget.title).count(CountOption.exact);
+    final data = res.data;
+    setState(() {
+      image = data[0]['image'].toString();
+      text = data[0]['text'];
+    });
+  }
+
+  @override
+  void initState() {
+    image = '';
+    text = '';
+    getArticleSelfList();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +79,7 @@ class _ArticleState extends State<Article> {
                             height: 75.v,
                           ),
                           Divider(height: 1, color: appTheme.gray),
+                          Expanded(child:
                           SingleChildScrollView(
                             padding: EdgeInsets.all(16.h),
                             child: Column(
@@ -61,20 +89,26 @@ class _ArticleState extends State<Article> {
                                   widget.title,
                                   style: CustomTextStyles.regular24Text,
                                 ),
-                                SizedBox(height: 16.h),
-                                // if (imageUrl != null)
-                                //   Image.network(
-                                //     imageUrl!,
-                                //     fit: BoxFit.cover,
-                                //   ),
-                                // SizedBox(height: 16),
-                                // Text(
-                                //   text,
-                                //   style: TextStyle(fontSize: 16),
-                                // ),
+                                SizedBox(height: 16.v),
+                                if (image != 'null')
+                                Container(
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      image: NetworkImage(image),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                  height: 353.v,
+                                  width: 353.h,
+                                ),
+                                SizedBox(height: 16.v),
+                                Text(
+                                  text,
+                                  style: CustomTextStyles.regular16Text,
+                                ),
                               ],
                             ),
-                          ),
+                          )),
                         ])))));
   }
 }
