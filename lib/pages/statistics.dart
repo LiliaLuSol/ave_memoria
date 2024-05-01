@@ -28,6 +28,7 @@ class _StatisticsState extends State<Statistics> with TickerProviderStateMixin {
   int sun = 0;
   String nameGame1 = '';
   String nameGame2 = '';
+  String nameGame3 = '';
 
   @override
   void initState() {
@@ -36,6 +37,7 @@ class _StatisticsState extends State<Statistics> with TickerProviderStateMixin {
     money = globalData.money;
     nameGame1 = globalData.nameGame1_;
     nameGame2 = globalData.nameGame2;
+    nameGame3 = globalData.nameGame3;
     getMoney();
     mon = globalData.mon;
     tue = globalData.tue;
@@ -262,6 +264,35 @@ class _StatisticsState extends State<Statistics> with TickerProviderStateMixin {
                                     style: CustomTextStyles.extraBold16Text),
                                 Spacer(),
                                 Text("0 раунд",
+                                    style: CustomTextStyles.extraBold16Text),
+                              ]),
+                              SizedBox(height: 20.v),
+                              Text("Количество сыгранных мини-игр за все время:",
+                                  style: CustomTextStyles.extraBold20Text),
+                              SizedBox(height: 9.v),
+                              Row(
+                                children: [
+                                  Text(nameGame1,
+                                      style: CustomTextStyles.extraBold16Text),
+                                  Spacer(),
+                                  Text("0 раз",
+                                      style: CustomTextStyles.extraBold16Text),
+                                ],
+                              ),
+                              SizedBox(height: 9.v),
+                              Row(children: [
+                                Text(nameGame2,
+                                    style: CustomTextStyles.extraBold16Text),
+                                Spacer(),
+                                Text("0 раз",
+                                    style: CustomTextStyles.extraBold16Text),
+                              ]),
+                              SizedBox(height: 9.v),
+                              Row(children: [
+                                Text(nameGame3,
+                                    style: CustomTextStyles.extraBold16Text),
+                                Spacer(),
+                                Text("0 раз",
                                     style: CustomTextStyles.extraBold16Text),
                               ]),
                               SizedBox(height: 14.v),

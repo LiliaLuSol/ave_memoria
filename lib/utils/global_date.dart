@@ -7,8 +7,15 @@ class GlobalData {
 
   GlobalData._internal();
 
+  //общее
   String emailAnon = 'anounymous@gmail.com';
   int money = 0;
+
+  void updateMoney(int newData) {
+    money = newData;
+  }
+
+  //статистика
   int mon = 0;
   int tue = 0;
   int wen = 0;
@@ -17,32 +24,55 @@ class GlobalData {
   int sat = 0;
   int sun = 0;
 
-  void updateMoney(int newData) {
-    money = newData;
+  int countGame1 = 0;
+  int countGame2 = 0;
+  int countGame3 = 0;
+
+  void updateDay(int dayOfWeek, int newData) {
+    switch (dayOfWeek) {
+      case DateTime.monday:
+        mon = newData;
+        break;
+      case DateTime.tuesday:
+        tue = newData;
+        break;
+      case DateTime.wednesday:
+        wen = newData;
+        break;
+      case DateTime.thursday:
+        thu = newData;
+        break;
+      case DateTime.friday:
+        fri = newData;
+        break;
+      case DateTime.saturday:
+        sat = newData;
+        break;
+      case DateTime.sunday:
+        sun = newData;
+        break;
+      default:
+        throw ArgumentError('глобал апдейт дей');
+    }
   }
 
-  void updateMon(int newData) {
-    mon = newData;
-  }
-  void updateTue(int newData) {
-    tue = newData;
-  }
-  void updateWen(int newData) {
-    wen = newData;
-  }
-  void updateThu(int newData) {
-    thu = newData;
-  }
-  void updateFri(int newData) {
-    fri = newData;
-  }
-  void updateSat(int newData) {
-    sat = newData;
-  }
-  void updateSun(int newData) {
-    sun = newData;
+  void updateCount(int numberGame) {
+    switch (numberGame) {
+      case 1:
+        countGame1++;
+        break;
+      case 2:
+        countGame2++;
+        break;
+      case 3:
+        countGame3++;
+        break;
+      default:
+        throw ArgumentError('глобал апдейт каунт');
+    }
   }
 
+  //игры
   String nameGame1 = 'Карточная игра\n'
       '"Река памяти"';
   String nameGame1_ = 'Река памяти';
@@ -67,4 +97,7 @@ class GlobalData {
       "В начале игры Вам показывается картинка на 20 секунд, Вы должны запомнить как можно больше деталей";
   String game3Rule2 =
       "Затем задается ряд вопросов по картинке, на которые Вам предстоит ответить по памяти";
+
+  //проводник
+
 }

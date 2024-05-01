@@ -2,9 +2,11 @@ import 'package:ave_memoria/blocs/Auth/bloc/authentication_bloc.dart';
 import 'package:ave_memoria/main.dart';
 import 'package:ave_memoria/pages/article.dart';
 import 'package:ave_memoria/theme/theme_helper.dart';
+import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
 import 'package:ave_memoria/other/app_export.dart';
+import 'package:flutter/rendering.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class Store extends StatefulWidget {
@@ -19,6 +21,9 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
   GlobalData globalData = GlobalData();
   String emailAnon = '';
   int money = 0;
+  int countGame1 = 0;
+  int countGame2 = 0;
+  int countGame3 = 0;
 
   @override
   void initState() {
@@ -27,6 +32,9 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
     emailAnon = globalData.emailAnon;
     money = globalData.money;
     getMoney();
+    countGame1 = globalData.countGame1;
+    countGame2 = globalData.countGame2;
+    countGame3 = globalData.countGame3;
   }
 
   String? getEmail() {
@@ -61,6 +69,18 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
 
   Future<dynamic> has_internet() async {
     return await Connectivity().checkConnectivity();
+  }
+
+  Future<dynamic> getArticleSelfList() async {
+    String? email = getEmail();
+    email = email.toString();
+    List<dynamic> list = await supabase
+        .from("userachievements")
+        .select()
+        .eq('email', email)
+        .eq('availble', true);
+
+    return list;
   }
 
   @override
@@ -229,55 +249,102 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
                             height: 90.v,
                           ),
                         ]),
-                        Column(children: [
-                          Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Container(
-                                  decoration: AppDecoration.outlineGray
-                                      .copyWith(
-                                          borderRadius:
-                                              BorderRadiusStyle.circleBorder5),
-                                  width: 170.h,
-                                  height: 104.v,
-                                ),
-                                Container(
-                                  decoration: AppDecoration.outlineGray
-                                      .copyWith(
-                                          borderRadius:
-                                              BorderRadiusStyle.circleBorder5),
-                                  width: 170.h,
-                                  height: 104.v,
-                                ),
-                              ]),
-                          SizedBox(height: 20.v),
-                          Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Container(
-                                  decoration: AppDecoration.outlineGray
-                                      .copyWith(
-                                          borderRadius:
-                                              BorderRadiusStyle.circleBorder5),
-                                  width: 170.h,
-                                  height: 104.v,
-                                ),
-                                Container(
-                                  decoration: AppDecoration.outlineGray
-                                      .copyWith(
-                                          borderRadius:
-                                              BorderRadiusStyle.circleBorder5),
-                                  width: 170.h,
-                                  height: 104.v,
-                                ),
-                              ]),
-                        ]),
+                        FutureBuilder(
+                            future: getArticleSelfList(),
+                            builder: (context, snapshot) {
+                              if (!snapshot.hasData) {
+                                return Center(
+                                  child: CircularProgressIndicator(
+                                      color: theme.colorScheme.primary),
+                                );
+                              }
+                              final list = snapshot.data!;
+                              return buildListAch(list);
+                            }),
                       ])),
                 ]),
               ),
             ),
           ),
         ));
+  }
+
+  Widget buildListAch(List<dynamic> list) {
+    final List<int> countGame = [countGame1, countGame2, countGame3];
+    return Column(
+      children: [
+        GridView.builder(
+          gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+              maxCrossAxisExtent: 170.h,
+              childAspectRatio: 1,
+              mainAxisSpacing: 15.h,
+              crossAxisSpacing: 15.h),
+          shrinkWrap: true,
+          padding: EdgeInsets.all(16.h),
+          itemCount: list.length,
+          itemBuilder: (BuildContext ctx, index) {
+            final bool isCountValid =
+                countGame[index] == 1 || countGame[index] == 5;
+            return Container(
+                decoration: AppDecoration.outlineGray
+                    .copyWith(borderRadius: BorderRadiusStyle.circleBorder5),
+                width: 170.h,
+                height: 150.v,
+                child: Padding(
+                  padding: EdgeInsets.all(4.h),
+                  child: Column(
+                    children: [
+                      Text(
+                        list[index]['achievement_name'],
+                        style: CustomTextStyles.extraBold16Text,
+                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(height: 4.v),
+                      Divider(height: 1, color: appTheme.gray),
+                      SizedBox(height: 4.v),
+                      Spacer(),
+                      Text(
+                        list[index]['achievement_desc'],
+                        style: CustomTextStyles.regular16Text,
+                        maxLines: 3,
+                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(height: 4.v),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text('+${list[index]['money']} '),
+                            FaIcon(
+                              FontAwesomeIcons.coins,
+                              size: 16.h,
+                              color: appTheme.yellow,
+                            ),
+                          ]),
+                      Spacer(),
+                      SizedBox(height: 4.v),
+                      CustomElevatedButton(
+                        text: isCountValid ? 'Получить' : 'Не выполнено',
+                        height: 30.v,
+                        buttonStyle: isCountValid
+                            ? ElevatedButton.styleFrom(
+                                backgroundColor: theme.colorScheme.primary,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5.h)),
+                              )
+                            : ElevatedButton.styleFrom(
+                                backgroundColor: appTheme.gray,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5.h)),
+                              ),
+                        buttonTextStyle: CustomTextStyles.regular16White,
+                      ),
+                    ],
+                  ),
+                ));
+          },
+        ),
+      ],
+    );
   }
 }
 
@@ -357,89 +424,28 @@ class _NestedTabBarState extends State<NestedTabBar>
                   future: getArticleSelfList(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
-                      return Center(child: CircularProgressIndicator(color: theme.colorScheme.primary),);
+                      return Center(
+                        child: CircularProgressIndicator(
+                            color: theme.colorScheme.primary),
+                      );
                     }
                     final list = snapshot.data!;
-                    return buildList(list,'Для получения большего числа сведений необходимо иметь Карту доступа ур. 2 и выше');
+                    return buildList(list,
+                        'Для получения большего числа сведений необходимо иметь Карту доступа ур. 2 и выше');
                   }),
               FutureBuilder(
                   future: getArticleStoryList(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
-                      return Center(child: CircularProgressIndicator(color: theme.colorScheme.primary),);
+                      return Center(
+                        child: CircularProgressIndicator(
+                            color: theme.colorScheme.primary),
+                      );
                     }
                     final list = snapshot.data!;
-                    return buildList(list,'Для получения большего числа сведений следует дальше проходить сюжет');
+                    return buildList(list,
+                        'Для получения большего числа сведений следует дальше проходить сюжет');
                   }),
-              Column(children: [
-                SizedBox(height: 15.v),
-                Container(
-                  decoration: AppDecoration.outlineGray
-                      .copyWith(borderRadius: BorderRadiusStyle.circleBorder5),
-                  width: 353.h,
-                  height: 90.v,
-                  child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        SizedBox(width: 16.v),
-                        Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Spacer(),
-                              Text('Как работает память',
-                                  style: CustomTextStyles.semiBold18Text),
-                              Spacer(),
-                              Text('На прочтение: 5 минуты',
-                                  style: CustomTextStyles.regular16Text),
-                              Spacer(),
-                            ]),
-                        Spacer(),
-                        CustomImageView(
-                            svgPath: ImageConstant.imgArrowright,
-                            height: 15.v,
-                            width: 9.h,
-                            margin: EdgeInsets.only(top: 2.v, bottom: 5.v)),
-                        SizedBox(width: 16.v),
-                      ]),
-                ),
-                SizedBox(height: 15.v),
-                Container(
-                  decoration: AppDecoration.outlineGray
-                      .copyWith(borderRadius: BorderRadiusStyle.circleBorder5),
-                  width: 353.h,
-                  height: 90.v,
-                  child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        SizedBox(width: 16.v),
-                        Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Spacer(),
-                              Text('Советы по развитию памяти',
-                                  style: CustomTextStyles.semiBold18Text),
-                              Spacer(),
-                              Text('На прочтение: 10 минуты',
-                                  style: CustomTextStyles.regular16Text),
-                              Spacer(),
-                            ]),
-                        Spacer(),
-                        CustomImageView(
-                            svgPath: ImageConstant.imgArrowright,
-                            height: 15.v,
-                            width: 9.h,
-                            margin: EdgeInsets.only(top: 2.v, bottom: 5.v)),
-                        SizedBox(width: 16.v),
-                      ]),
-                ),
-                SizedBox(height: 15.v),
-                Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.h),
-                    child: Text(
-                        'Для получения большего числа сведений следует дальше проходить сюжет',
-                        textAlign: TextAlign.center,
-                        style: CustomTextStyles.regular16Primary))
-              ]),
             ],
           ),
         ),
