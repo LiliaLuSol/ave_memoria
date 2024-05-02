@@ -90,6 +90,13 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
     return list;
   }
 
+  Future<dynamic> getShopList() async {
+    List<dynamic> list =
+        await supabase.from("usershope").select().lte('security', 1);
+
+    return list;
+  }
+
   @override
   Widget build(BuildContext context) {
     mediaQueryData = MediaQuery.of(context);
@@ -198,49 +205,18 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
                           controller: _tabController,
                           children: <Widget>[
                         NestedTabBar('библиотека'),
-                        Column(children: [
-                          Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Container(
-                                  decoration: AppDecoration.outlineGray
-                                      .copyWith(
-                                          borderRadius:
-                                              BorderRadiusStyle.circleBorder5),
-                                  width: 170.h,
-                                  height: 104.v,
-                                ),
-                                Container(
-                                  decoration: AppDecoration.outlineGray
-                                      .copyWith(
-                                          borderRadius:
-                                              BorderRadiusStyle.circleBorder5),
-                                  width: 170.h,
-                                  height: 104.v,
-                                ),
-                              ]),
-                          SizedBox(height: 20.v),
-                          Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Container(
-                                  decoration: AppDecoration.outlineGray
-                                      .copyWith(
-                                          borderRadius:
-                                              BorderRadiusStyle.circleBorder5),
-                                  width: 170.h,
-                                  height: 104.v,
-                                ),
-                                Container(
-                                  decoration: AppDecoration.outlineGray
-                                      .copyWith(
-                                          borderRadius:
-                                              BorderRadiusStyle.circleBorder5),
-                                  width: 170.h,
-                                  height: 104.v,
-                                ),
-                              ]),
-                        ]),
+                        FutureBuilder(
+                            future: getShopList(),
+                            builder: (context, snapshot) {
+                              if (!snapshot.hasData) {
+                                return Center(
+                                  child: CircularProgressIndicator(
+                                      color: theme.colorScheme.primary),
+                                );
+                              }
+                              final list = snapshot.data!;
+                              return buildListShop(list);
+                            }),
                         FutureBuilder(
                             future: getStoreList(),
                             builder: (context, snapshot) {
@@ -376,7 +352,12 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Container(
-                            color: Colors.blueGrey,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: NetworkImage(list[index]['micro_image']),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
                             height: 100.v,
                             width: 100.h,
                           ),
@@ -414,6 +395,92 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
                       )),
                 ));
           },
+        ),
+      ],
+    );
+  }
+
+  Widget buildListShop(List<dynamic> list) {
+    return Column(
+      children: [
+        GridView.builder(
+          gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+              maxCrossAxisExtent: 170.h,
+              childAspectRatio: 1,
+              mainAxisSpacing: 15.h,
+              crossAxisSpacing: 15.h),
+          shrinkWrap: true,
+          padding: EdgeInsets.all(16.h),
+          itemCount: list.length,
+          itemBuilder: (BuildContext ctx, index) {
+            return Container(
+                decoration: AppDecoration.outlineGray
+                    .copyWith(borderRadius: BorderRadiusStyle.circleBorder5),
+                width: 170.h,
+                height: 150.v,
+                child: Padding(
+                  padding: EdgeInsets.all(4.h),
+                  child: Column(
+                    children: [
+                      Text(
+                        list[index]['item_name'],
+                        style: CustomTextStyles.extraBold16Text,
+                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(height: 4.v),
+                      Divider(height: 1, color: appTheme.gray),
+                      SizedBox(height: 4.v),
+                      Spacer(),
+                      Text(
+                        list[index]['item_description'],
+                        style: CustomTextStyles.regular16Text,
+                        maxLines: 3,
+                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(height: 4.v),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text('цена: '),
+                            Spacer(),
+                            Text('${list[index]['item_price']} '),
+                            FaIcon(
+                              FontAwesomeIcons.coins,
+                              size: 16.h,
+                              color: appTheme.yellow,
+                            ),
+                            Spacer(),
+                          ]),
+                      Spacer(),
+                      SizedBox(height: 4.v),
+                      CustomElevatedButton(
+                        text: list[index]['is_buy'] ? 'куплено' : 'купить',
+                        height: 30.v,
+                        buttonStyle: list[index]['is_buy']
+                            ? ElevatedButton.styleFrom(
+                                backgroundColor: appTheme.gray,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5.h)),
+                              )
+                            : ElevatedButton.styleFrom(
+                                backgroundColor: theme.colorScheme.primary,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5.h)),
+                              ),
+                        buttonTextStyle: CustomTextStyles.regular16White,
+                      ),
+                    ],
+                  ),
+                ));
+          },
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.h),
+          child: Text(
+            'Для получения большего числа предметов следует дальше проходить сюжет',
+            textAlign: TextAlign.center,
+            style: CustomTextStyles.regular16Primary,
+          ),
         ),
       ],
     );
