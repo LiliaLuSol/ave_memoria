@@ -1,5 +1,4 @@
 class ImageConstant {
-
   static String imagePath = 'assets/images';
 
   static String imgArrowright = '$imagePath/img_arrow_right.svg';
@@ -10,11 +9,12 @@ class ImageConstant {
 
   static String imgStoryR = '$imagePath/img_rectangle_194.svg';
 
-  static String imgStoryL= '$imagePath/img_rectangle_195.svg';
+  static String imgStoryL = '$imagePath/img_rectangle_195.svg';
 
   static String imgEye = '$imagePath/img_eye.svg';
 
-  static String imgBrandicoyandexrect = '$imagePath/img_brandico_yandex_rect.svg';
+  static String imgBrandicoyandexrect =
+      '$imagePath/img_brandico_yandex_rect.svg';
 
   static String imgCevicongoogle = '$imagePath/img_devicon_google.svg';
 
@@ -44,5 +44,23 @@ class ImageConstant {
 
   static String imgImage_3 = '$imagePath/image_3.png';
 
+  static String imgPose_0 = '$imagePath/pose0.png';
+  static String imgPose_1 = '$imagePath/pose1.png';
+  static String imgPose_2 = '$imagePath/pose2.png';
+  static String imgPose_3 = '$imagePath/pose3.png';
+  static String imgPose_4 = '$imagePath/pose4.png';
+  static String imgPose_5 = '$imagePath/pose5.png';
+  static String imgPose_6 = '$imagePath/pose6.png';
+  static String imgPose_7 = '$imagePath/pose7.png';
+  static String imgPose_8 = '$imagePath/pose8.png';
 
+  static String imgPose_10 = '$imagePath/pose10.png';
+  static String imgPose_11 = '$imagePath/pose11.png';
+  static String imgPose_12 = '$imagePath/pose12.png';
+  static String imgPose_13 = '$imagePath/pose13.png';
+  static String imgPose_14 = '$imagePath/pose14.png';
+  static String imgPose_15 = '$imagePath/pose15.png';
+  static String imgPose_16 = '$imagePath/pose16.png';
+  static String imgPose_17 = '$imagePath/pose17.png';
+  static String imgPose_18 = '$imagePath/pose18.png';
 }

@@ -40,7 +40,6 @@ class _NumberDisplayState extends State<NumberDisplay> {
         }
       }
     });
-
   }
 
   @override
@@ -51,11 +50,11 @@ class _NumberDisplayState extends State<NumberDisplay> {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      currentIndex < widget.sequence.length
-          ? widget.numberImageMap[widget.sequence[currentIndex]] ?? '0'
-          : '0',
-      style: CustomTextStyles.bold30Text
-    );
+    return  Image.asset(
+        currentIndex < widget.sequence.length
+            ? widget.numberImageMap[widget.sequence[currentIndex]] ??
+                ImageConstant.imgPose_0
+            : ImageConstant.imgPose_0,
+        fit: BoxFit.cover);
   }
 }

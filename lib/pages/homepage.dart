@@ -20,17 +20,17 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
   GlobalData globalData = GlobalData();
   String emailAnon = '';
   int money = 0;
-  String nameGame1 = '';
-  String nameGame2 = '';
-  String nameGame3 = '';
-  String game1Rule1 = '';
-  String game1Rule2 = '';
-  String game1Rule3 = '';
-  String game2Rule1 = '';
-  String game2Rule2 = '';
-  String game2Rule3 = '';
-  String game3Rule1 = '';
-  String game3Rule2 = '';
+  late String nameGame1;
+  late String nameGame2;
+  late String nameGame3;
+  late String game1Rule1;
+  late String game1Rule2;
+  late String game1Rule3;
+  late String game2Rule1;
+  late String game2Rule2;
+  late String game2Rule3;
+  late String game3Rule1;
+  late String game3Rule2;
 
   bool _isConnection = false;
   late bool gameRulesFirst1;
@@ -209,7 +209,7 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                                               )),
                                           Positioned(
                                             top: 10.h,
-                                            left: 28.h,
+                                            left: 25.h,
                                             child: Text(
                                               nameGame1,
                                               style: TextStyle(
@@ -268,7 +268,7 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                                               )),
                                           Positioned(
                                             top: 10.h,
-                                            left: 28.h,
+                                            left: 25.h,
                                             child: Text(
                                               nameGame2,
                                               style: TextStyle(
@@ -321,15 +321,15 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                                               decoration: const BoxDecoration(
                                                 image: DecorationImage(
                                                   image: AssetImage(
-                                                      'assets/images/cards_game.png'),
+                                                      'assets/images/image_game.png'),
                                                   fit: BoxFit.fill,
                                                 ),
                                               )),
                                           Positioned(
                                             top: 10.h,
-                                            left: 28.h,
+                                            left: 25.h,
                                             child: Text(
-                                              nameGame1,
+                                              nameGame3,
                                               style: TextStyle(
                                                 color: Colors.brown,
                                                 fontSize: 16.h,

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:ave_memoria/games/sequence_game/utils.dart';
+import 'package:ave_memoria/theme/theme_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ave_memoria/other/app_export.dart';
@@ -23,24 +24,24 @@ class _SequenceGameState extends State<SequenceGame> {
   String game2Rule3 = '';
 
   Map<int, String> numberImageMap = {
-    0: "0",
-    1: "1",
-    2: "2",
-    3: "3",
-    4: "4",
-    5: "5",
-    6: "6",
-    7: "7",
-    8: "8",
-    10: "10",
-    11: "11",
-    12: "12",
-    13: "13",
-    14: "14",
-    15: "15",
-    16: "16",
-    17: "17",
-    18: "18"
+    0: ImageConstant.imgPose_0,
+    1: ImageConstant.imgPose_1,
+    2: ImageConstant.imgPose_2,
+    3: ImageConstant.imgPose_3,
+    4: ImageConstant.imgPose_4,
+    5: ImageConstant.imgPose_5,
+    6: ImageConstant.imgPose_6,
+    7: ImageConstant.imgPose_7,
+    8: ImageConstant.imgPose_8,
+    10: ImageConstant.imgPose_10,
+    11: ImageConstant.imgPose_11,
+    12: ImageConstant.imgPose_12,
+    13: ImageConstant.imgPose_13,
+    14: ImageConstant.imgPose_14,
+    15: ImageConstant.imgPose_15,
+    16: ImageConstant.imgPose_16,
+    17: ImageConstant.imgPose_17,
+    18: ImageConstant.imgPose_18
   };
 
   List<int> sequence = [];
@@ -238,14 +239,14 @@ class _SequenceGameState extends State<SequenceGame> {
                     Align(
                         alignment: Alignment.center,
                         child: Container(
-                          color: Colors.blue,
+                          // color: Colors.blue,
                           width: 353.h,
                           height: 353.v,
                           child: Center(
                             child: _canPlay
-                                ? Text(
-                                    "${sequenceUser.isNotEmpty ? numberImageMap[sequenceUser.last] : '10'}",
-                                    style: CustomTextStyles.bold30Text,
+                                ? Image.asset(
+                                    "${sequenceUser.isNotEmpty ? numberImageMap[sequenceUser.last] : ImageConstant.imgPose_10}",
+                                    fit: BoxFit.cover,
                                   )
                                 : NumberDisplay(
                                     sequence: sequence,
@@ -260,137 +261,232 @@ class _SequenceGameState extends State<SequenceGame> {
                           ),
                         )),
                     Spacer(),
-                    Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 16.v),
-                        child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      if (_start && _canPlay) {
-                                        handleButtonClick(1);
-                                      }
-                                    },
-                                    child: Container(
-                                        color: Colors.orangeAccent,
-                                        width: 115.h,
-                                        height: 80.v,
-                                        child: Text("Кнопка 1")),
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      if (_start && _canPlay) {
-                                        handleButtonClick(2);
-                                      }
-                                    },
-                                    child: Container(
-                                        color: Colors.orangeAccent,
-                                        width: 115.h,
-                                        height: 80.v,
-                                        child: Text("Кнопка 2")),
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      if (_start && _canPlay) {
-                                        handleButtonClick(3);
-                                      }
-                                    },
-                                    child: Container(
-                                        color: Colors.orangeAccent,
-                                        width: 115.h,
-                                        height: 80.v,
-                                        child: Text("Кнопка 3")),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 9.v),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      if (_start && _canPlay) {
-                                        handleButtonClick(4);
-                                      }
-                                    },
-                                    child: Container(
-                                        color: Colors.orangeAccent,
-                                        width: 115.h,
-                                        height: 60.v,
-                                        child: Text("Кнопка 4")),
-                                  ),
-                                  Container(
-                                      width: 115.h,
-                                      height: 60.v,
-                                      child: Center(
-                                          child: Text(
-                                        _canPlay ? "Нажимай!" : "Стой!",
-                                        style: CustomTextStyles.light20Text,
-                                        textAlign: TextAlign.center,
-                                      ))),
-                                  GestureDetector(
-                                    onTap: () {
-                                      if (_start && _canPlay) {
-                                        handleButtonClick(5);
-                                      }
-                                    },
-                                    child: Container(
-                                        color: Colors.orangeAccent,
-                                        width: 115.h,
-                                        height: 60.v,
-                                        child: Text("Кнопка 5")),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 9.v),
-                              Row(
+                    Divider(height: 1, color: appTheme.gray),
+                    Container(
+                      color: appTheme.white,
+                      width: 393.h,
+                      height: 4.v,
+                    ),
+                    Stack(children: [
+                      Container(
+                        color: appTheme.white,
+                        width: 393.h,
+                        height: 267.v,
+                      ),
+                      Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 16.v),
+                          child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceEvenly,
                                   children: [
                                     GestureDetector(
                                       onTap: () {
                                         if (_start && _canPlay) {
-                                          handleButtonClick(6);
+                                          handleButtonClick(1);
                                         }
                                       },
                                       child: Container(
-                                          color: Colors.orangeAccent,
-                                          width: 115.h,
-                                          height: 80.v,
-                                          child: Text("Кнопка 6")),
+                                        width: 115.h,
+                                        height: 80.v,
+                                        decoration: BoxDecoration(
+                                          image: const DecorationImage(
+                                            image: AssetImage(
+                                                'assets/images/sword1.png'),
+                                            fit: BoxFit.contain,
+                                          )
+                                        ),
+                                      ),
                                     ),
                                     GestureDetector(
                                       onTap: () {
                                         if (_start && _canPlay) {
-                                          handleButtonClick(7);
+                                          handleButtonClick(2);
                                         }
                                       },
                                       child: Container(
-                                          color: Colors.orangeAccent,
                                           width: 115.h,
                                           height: 80.v,
-                                          child: Text("Кнопка 7")),
+                                          decoration:  BoxDecoration(
+                                            image: const DecorationImage(
+                                              image: AssetImage(
+                                                  'assets/images/sword2.png'),
+                                              fit: BoxFit.contain,
+                                            ),
+                                            border: Border(
+                                                right: BorderSide(
+                                                  color: appTheme.gray,
+                                                  width: 1,
+                                                ),
+                                                left: BorderSide(
+                                                  color: appTheme.gray,
+                                                  width: 1,
+                                                )),
+                                          )),
                                     ),
                                     GestureDetector(
                                       onTap: () {
                                         if (_start && _canPlay) {
-                                          handleButtonClick(8);
+                                          handleButtonClick(3);
                                         }
                                       },
                                       child: Container(
-                                          color: Colors.orangeAccent,
                                           width: 115.h,
                                           height: 80.v,
-                                          child: Text("Кнопка 8")),
+                                          decoration: const BoxDecoration(
+                                            image: DecorationImage(
+                                              image: AssetImage(
+                                                  'assets/images/sword3.png'),
+                                              fit: BoxFit.contain,
+                                            ),
+                                          )),
                                     ),
-                                  ]),
-                              SizedBox(height: 16.v),
-                            ]))
+                                  ],
+                                ),
+                                SizedBox(height: 9.v),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () {
+                                        if (_start && _canPlay) {
+                                          handleButtonClick(4);
+                                        }
+                                      },
+                                      child: Container(
+                                          width: 90.h,
+                                          height: 60.v,
+                                          decoration: BoxDecoration(
+                                            image: const DecorationImage(
+                                              image: AssetImage(
+                                                  'assets/images/sword4.png'),
+                                              fit: BoxFit.contain,
+                                            ),border: Border(
+                                              top: BorderSide(
+                                                color: appTheme.gray,
+                                                width: 1,
+                                              ),
+                                              bottom: BorderSide(
+                                                color: appTheme.gray,
+                                                width: 1,
+                                              )),
+                                          )),
+                                    ),
+                                    Container(
+                                        width: 115.h,
+                                        height: 60.v,
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                            color: theme.colorScheme.onPrimary,
+                                            width: 1.h,
+                                          ),
+                                        ),
+                                        child: Center(
+                                            child: Text(
+                                          _canPlay ? "Нажимай!" : "Стой!",
+                                          style: CustomTextStyles.light20Text,
+                                          textAlign: TextAlign.center,
+                                        ))),
+                                    GestureDetector(
+                                      onTap: () {
+                                        if (_start && _canPlay) {
+                                          handleButtonClick(5);
+                                        }
+                                      },
+                                      child: Container(
+                                          width: 90.h,
+                                          height: 60.v,
+                                          decoration:  BoxDecoration(
+                                            image: const DecorationImage(
+                                              image: AssetImage(
+                                                  'assets/images/sword5.png'),
+                                              fit: BoxFit.contain,
+                                            ), border: Border(
+                                              top: BorderSide(
+                                                color: appTheme.gray,
+                                                width: 1,
+                                              ),
+                                              bottom: BorderSide(
+                                                color: appTheme.gray,
+                                                width: 1,
+                                              )),
+                                          )),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: 9.v),
+                                Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () {
+                                          if (_start && _canPlay) {
+                                            handleButtonClick(6);
+                                          }
+                                        },
+                                        child: Container(
+                                            width: 115.h,
+                                            height: 80.v,
+                                            decoration: const BoxDecoration(
+                                              image: DecorationImage(
+                                                image: AssetImage(
+                                                    'assets/images/sword6.png'),
+                                                fit: BoxFit.contain,
+                                              ),
+                                            )),
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          if (_start && _canPlay) {
+                                            handleButtonClick(7);
+                                          }
+                                        },
+                                        child: Container(
+                                            width: 115.h,
+                                            height: 80.v,
+                                            decoration:  BoxDecoration(
+                                              image: const DecorationImage(
+                                                image: AssetImage(
+                                                    'assets/images/sword7.png'),
+                                                fit: BoxFit.contain,
+                                              ), border: Border(
+                                                right: BorderSide(
+                                                  color: appTheme.gray,
+                                                  width: 1,
+                                                ),
+                                                left: BorderSide(
+                                                  color: appTheme.gray,
+                                                  width: 1,
+                                                )),
+                                            )),
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          if (_start && _canPlay) {
+                                            handleButtonClick(8);
+                                          }
+                                        },
+                                        child: Container(
+                                            width: 115.h,
+                                            height: 80.v,
+                                            decoration: const BoxDecoration(
+                                              image: DecorationImage(
+                                                image: AssetImage(
+                                                    'assets/images/sword8.png'),
+                                                fit: BoxFit.contain,
+                                              ),
+                                            )),
+                                      ),
+                                    ]),
+                                SizedBox(height: 14.v),
+                                Divider(height: 1, color: appTheme.gray),
+                                SizedBox(height: 12.v),
+                              ]))
+                    ])
                   ],
                 ),
               )));
