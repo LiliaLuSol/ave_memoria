@@ -235,7 +235,7 @@ class _SequenceGameState extends State<SequenceGame> {
                           SizedBox(height: 22.v),
                           Divider(height: 1, color: appTheme.gray)
                         ])),
-                    SizedBox(height: 22.v),
+                    SizedBox(height: 11.v),
                     Align(
                         alignment: Alignment.center,
                         child: Container(
