@@ -85,6 +85,7 @@ class GlobalData {
 
   String nameGame2 = 'Гладиаторская тренировка памяти';
   String nameGame2_ = "    Гладиаторская\nтренировка памяти";
+  String nameGame2__ = "Гладиаторская тренировка\nпамяти";
   String game2Rule1 =
       "В каждом раунде, гладиатор-учитель показывает последовательность движений";
   String game2Rule2 =

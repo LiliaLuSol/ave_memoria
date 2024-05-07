@@ -10,20 +10,14 @@ class CustomTextStyles {
         color: theme.colorScheme.onPrimary,
       );
 
-  static get extraBold20Text => theme.textTheme.headlineLarge!.copyWith(
-    color: theme.colorScheme.onPrimary,
-    fontSize: 20.fSize
-  );
+  static get extraBold20Text => theme.textTheme.headlineLarge!
+      .copyWith(color: theme.colorScheme.onPrimary, fontSize: 20.fSize);
 
-  static get extraBold20Primary => theme.textTheme.headlineLarge!.copyWith(
-      color: theme.colorScheme.primary,
-      fontSize: 20.fSize
-  );
+  static get extraBold20Primary => theme.textTheme.headlineLarge!
+      .copyWith(color: theme.colorScheme.primary, fontSize: 20.fSize);
 
-  static get extraBold16Text => theme.textTheme.headlineLarge!.copyWith(
-      color: theme.colorScheme.onPrimary,
-      fontSize: 16.fSize
-  );
+  static get extraBold16Text => theme.textTheme.headlineLarge!
+      .copyWith(color: theme.colorScheme.onPrimary, fontSize: 16.fSize);
 
   static get semiBold32Text => theme.textTheme.headlineLarge!.copyWith(
       color: theme.colorScheme.onPrimary, fontWeight: FontWeight.w600);
@@ -69,6 +63,9 @@ class CustomTextStyles {
   static get semiBold14Text => theme.textTheme.bodyMedium!.copyWith(
       color: theme.colorScheme.onPrimary, fontWeight: FontWeight.w600);
 
+  static get regular14Text => theme.textTheme.bodyMedium!.copyWith(
+      color: theme.colorScheme.onPrimary);
+
   static get regular24Text => theme.textTheme.bodyMedium!
       .copyWith(color: theme.colorScheme.onPrimary, fontSize: 24.fSize);
 
@@ -76,6 +73,11 @@ class CustomTextStyles {
       color: theme.colorScheme.onPrimary,
       fontSize: 20.fSize,
       fontWeight: FontWeight.w300);
+
+  static get bold16Text => theme.textTheme.bodyMedium!.copyWith(
+      color: theme.colorScheme.onPrimary,
+      fontSize: 16.fSize,
+      fontWeight: FontWeight.w700);
 }
 
 extension on TextStyle {

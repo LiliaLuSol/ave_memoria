@@ -48,7 +48,7 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
     _tryConnection();
     getFirstRule();
     nameGame1 = globalData.nameGame1;
-    nameGame2 = globalData.nameGame2;
+    nameGame2 = globalData.nameGame2__;
     nameGame3 = globalData.nameGame3;
     game1Rule1 = globalData.game1Rule1;
     game1Rule2 = globalData.game1Rule2;
@@ -210,15 +210,9 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                                           Positioned(
                                             top: 10.h,
                                             left: 25.h,
-                                            child: Text(
-                                              nameGame1,
-                                              style: TextStyle(
-                                                color: Colors.brown,
-                                                fontSize: 16.h,
-                                                fontFamily: 'fSize',
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
+                                            child: Text(nameGame1,
+                                                style: CustomTextStyles
+                                                    .bold16Text),
                                           )
                                         ]),
                                         onTap: () {
@@ -262,23 +256,36 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                                               decoration: const BoxDecoration(
                                                 image: DecorationImage(
                                                   image: AssetImage(
-                                                      'assets/images/cards_game.png'),
+                                                      'assets/images/quen_game.png'),
                                                   fit: BoxFit.fill,
                                                 ),
                                               )),
+                                          // Positioned(
+                                          //     top: 10.h,
+                                          //     child: Column(
+                                          //         crossAxisAlignment:
+                                          //             CrossAxisAlignment.start,
+                                          //         children: [
+                                          //           Container(
+                                          //             color: appTheme.white,
+                                          //             height: 22.v,
+                                          //             width: 224.h,
+                                          //           ),
+                                          //           SizedBox(
+                                          //             height: 6.v,
+                                          //           ),
+                                          //           Container(
+                                          //             color: appTheme.white,
+                                          //             height: 22.v,
+                                          //             width: 80.h,
+                                          //           )
+                                          //         ])),
                                           Positioned(
-                                            top: 10.h,
-                                            left: 25.h,
-                                            child: Text(
-                                              nameGame2,
-                                              style: TextStyle(
-                                                color: Colors.brown,
-                                                fontSize: 16.h,
-                                                fontFamily: 'fSize',
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          )
+                                              top: 10.h,
+                                              left: 25.h,
+                                              child: Text(nameGame2,
+                                                  style: CustomTextStyles
+                                                      .bold16Text))
                                         ]),
                                         onTap: () {
                                           gameRulesFirst2
@@ -328,15 +335,9 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                                           Positioned(
                                             top: 10.h,
                                             left: 25.h,
-                                            child: Text(
-                                              nameGame3,
-                                              style: TextStyle(
-                                                color: Colors.brown,
-                                                fontSize: 16.h,
-                                                fontFamily: 'fSize',
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
+                                            child: Text(nameGame3,
+                                                style: CustomTextStyles
+                                                    .bold16Text),
                                           )
                                         ]),
                                         onTap: () {

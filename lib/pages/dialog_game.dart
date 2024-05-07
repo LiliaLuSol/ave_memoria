@@ -54,7 +54,7 @@ class _DialogGameState extends State<DialogGame> {
 
   final Map<int, List<String>> characterSprites = {
     1: [
-      "assets/character1.png",
+      "assets/images/эван.png",
       "assets/character2.png",
       "assets/character1.png",
       "assets/character2.png",
@@ -89,7 +89,7 @@ class _DialogGameState extends State<DialogGame> {
               children: [
                 Positioned.fill(
                   child: Image.asset(
-                    'assets/background_image.jpg',
+                    'assets/images/back_forest.jpg',
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -118,9 +118,17 @@ class _DialogGameState extends State<DialogGame> {
                                   GoRouter.of(context).push(AppRoutes.authreg),
                               buttonsTextStyle: CustomTextStyles.regular16White,
                             ).show(),
+                            style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStateProperty.resolveWith<Color>(
+                                (Set<MaterialState> states) {
+                                  return Colors.grey.withOpacity(0.5);
+                                },
+                              ),
+                            ),
                             child: Text(
                               "Пропустить",
-                              style: CustomTextStyles.semiBold18TextGray,
+                              style: CustomTextStyles.semiBold18TextWhite,
                             ),
                           ),
                         ],
@@ -135,96 +143,119 @@ class _DialogGameState extends State<DialogGame> {
                                 fit: BoxFit.contain,
                               ),
                             ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                SizedBox(height: 450.v),
-                                Container(
-                                  width: 177.h,
-                                  height: 30.v,
-                                  decoration: BoxDecoration(
-                                    color: Color.fromRGBO(255, 255, 255, 0.9),
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  child: Column(
-                                    children: [
-                                      Spacer(),
-                                      Text(
-                                        dialoguesMap[currentLevel]![
-                                            currentDialogIndex],
-                                        maxLines: 2,
-                                      ),
-                                      Spacer(),
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  width: 177.h,
-                                  height: 30.v,
-                                  decoration: BoxDecoration(
-                                    color: Color.fromRGBO(255, 255, 255, 0.9),
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  child: Column(
-                                    children: [
-                                      Spacer(),
-                                      Text(
-                                        dialoguesMap[currentLevel]![
-                                            currentDialogIndex],
-                                        maxLines: 2,
-                                      ),
-                                      Spacer(),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Center(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  SizedBox(height: 500.v),
-                                  Container(
-                                    width: 353.h,
-                                    height: 150.v,
-                                    decoration: BoxDecoration(
-                                      color: Color.fromRGBO(255, 255, 255, 0.9),
-                                      borderRadius: BorderRadius.circular(15),
-                                    ),
+                            Expanded(
+                                child: Align(
+                                    alignment: FractionalOffset.bottomRight,
                                     child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
-                                        SizedBox(height: 8.v),
-                                        Text(
-                                          characterNamesMap[currentLevel]![
-                                              currentDialogIndex],
+                                        SizedBox(height: 450.v),
+                                        Container(
+                                          width: 295.h,
+                                          height: 50.v,
+                                          decoration: BoxDecoration(
+                                            color: Color.fromRGBO(
+                                                255, 255, 255, 0.9),
+                                            borderRadius:
+                                                BorderRadius.circular(15),
+                                          ),
+                                          child: Column(
+                                            children: [
+                                              Spacer(),
+                                              Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 16.v),
+                                                  child: Text(
+                                                    dialoguesMap[currentLevel]![
+                                                        currentDialogIndex],
+                                                    maxLines: 2,
+                                                  )),
+                                              Spacer(),
+                                            ],
+                                          ),
                                         ),
-                                        SizedBox(height: 8.v),
-                                        Divider(
-                                            height: 1, color: appTheme.gray),
-                                        Spacer(),
-                                        Text(
-                                          dialoguesMap[currentLevel]![
-                                              currentDialogIndex],
-                                          maxLines: 5,
+                                        Container(
+                                          width: 295.h,
+                                          height: 50.v,
+                                          decoration: BoxDecoration(
+                                            color: Color.fromRGBO(
+                                                255, 255, 255, 0.9),
+                                            borderRadius:
+                                                BorderRadius.circular(15),
+                                          ),
+                                          child: Column(
+                                            children: [
+                                              Spacer(),
+                                              Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 16.v),
+                                                  child: Text(
+                                                    dialoguesMap[currentLevel]![
+                                                        currentDialogIndex],
+                                                    maxLines: 2,
+                                                  )),
+                                              Spacer(),
+                                            ],
+                                          ),
                                         ),
-                                        Spacer(),
-                                        Row(
-                                          children: [
-                                            Spacer(),
-                                            Text('далее'),
-                                            SizedBox(width: 16.h)
-                                          ],
-                                        ),
-                                        SizedBox(height: 8.v),
+                                        SizedBox(
+                                          height: 200.v,
+                                        )
                                       ],
-                                    ),
+                                    ))),
+                            Expanded(
+                              child: Align(
+                                alignment: FractionalOffset.bottomCenter,
+                                child: Container(
+                                  width: 393.h,
+                                  height: 200.v,
+                                  decoration: BoxDecoration(
+                                    color: Color.fromRGBO(255, 255, 255, 0.9),
+                                    borderRadius: BorderRadius.circular(15),
                                   ),
-                                ],
+                                  child: Column(
+                                    children: [
+                                      SizedBox(height: 8.v),
+                                      Text(
+                                        characterNamesMap[currentLevel]![
+                                            currentDialogIndex],
+                                        style: CustomTextStyles.bold16Text,
+                                      ),
+                                      SizedBox(height: 8.v),
+                                      Divider(height: 1, color: appTheme.gray),
+                                      Spacer(),
+                                      Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 16.h),
+                                          child: Text(
+                                            dialoguesMap[currentLevel]![
+                                                currentDialogIndex],
+                                            maxLines: 6,
+                                            textAlign: TextAlign.center,
+                                            style:
+                                                CustomTextStyles.regular14Text,
+                                          )),
+                                      Spacer(),
+                                      Row(children: [
+                                        Spacer(),
+                                        Icon(
+                                          Icons.subdirectory_arrow_right,
+                                          size: 16.v,
+                                          color: theme.colorScheme.onPrimary
+                                        ),
+                                        SizedBox(width: 16.h)
+                                      ]),
+                                      SizedBox(height: 8.v),
+                                    ],
+                                  ),
+                                ),
                               ),
                             ),
                           ],
                         ),
                       ),
+                      SizedBox(height: 16.v),
                     ],
                   ),
                 ),
