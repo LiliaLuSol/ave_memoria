@@ -121,7 +121,7 @@ class _CardsGameState extends State<CardsGame> {
             goRoute: AppRoutes.game_cards,
             tries: tries,
             score: score,
-            time: tries,
+            time: time,
             minTries: 6,
             maxScore: 600,
             isGameCards: true,

@@ -31,6 +31,7 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
   late String game2Rule3;
   late String game3Rule1;
   late String game3Rule2;
+  late String moneyRule;
 
   bool _isConnection = false;
   late bool gameRulesFirst1;
@@ -58,6 +59,7 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
     game2Rule3 = globalData.game2Rule3;
     game3Rule1 = globalData.game3Rule1;
     game3Rule2 = globalData.game3Rule2;
+    moneyRule = globalData.moneyRule;
     super.initState();
   }
 
@@ -169,7 +171,21 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                         color: appTheme.yellow,
                       ),
                       onPressed: () {
-                        null;
+                        Navigator.push(
+                            context,
+                            PageRouteBuilder(
+                                pageBuilder: (_, __, ___) =>
+                                    //     GameRules(
+                                    //   firstTimes: false,
+                                    //   goRoute: "",
+                                    //   countRule: 1,
+                                    //   text1: moneyRule,
+                                    // ),
+                                    MoneyPage(
+                                      text: moneyRule,
+                                    ),
+                                opaque: false,
+                                fullscreenDialog: true));
                       },
                     )
                 ],
@@ -373,6 +389,57 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                                     SizedBox(height: 16.v)
                                   ]))))
                     ])))));
+  }
+}
+
+class MoneyPage extends StatelessWidget {
+  String text;
+
+  MoneyPage({
+    required this.text,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+        child: Scaffold(
+      backgroundColor: appTheme.black.withOpacity(0.2),
+      body: Center(
+          child: Container(
+              width: 353.h,
+              height: 300.v,
+              decoration: AppDecoration.outlineGray
+                  .copyWith(borderRadius: BorderRadiusStyle.circleBorder15),
+              child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.h),
+                  child: Column(children: [
+                    SizedBox(height: 10.v),
+                    Row(children: [
+                      SizedBox(width: 25.h),
+                      Spacer(),
+                      Text("Мемы", style: CustomTextStyles.extraBold32Text),
+                      Spacer(),
+                      IconButton(
+                        icon: FaIcon(
+                          FontAwesomeIcons.circleXmark,
+                          size: 25.h,
+                          color: theme.colorScheme.primary,
+                        ),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ]),
+                    SizedBox(height: 40.v),
+                    Expanded(
+                      child: Text(text,
+                          style: CustomTextStyles.semiBold18Text,
+                          maxLines: 6,
+                          textAlign: TextAlign.center),
+                    ),
+                    SizedBox(height: 25.v)
+                  ])))),
+    ));
   }
 }
 

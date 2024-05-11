@@ -11,6 +11,7 @@ class DialogGame extends StatefulWidget {
 class _DialogGameState extends State<DialogGame> {
   final Map<int, List<String>> dialoguesMap = {
     1: [
+      "Эв, ты же сам знаешь как братец Марц занят. Все эти дела апостола...",
       "Сила знания - твое оружие, сын мой. Вложи всю свою страсть и усилия в свое обучение, и никогда не забывай, что память - ключ к успеху",
       "Эван, ты здесь?",
       "Да, я здесь, Лава",
@@ -31,6 +32,7 @@ class _DialogGameState extends State<DialogGame> {
 
   final Map<int, List<String>> characterNamesMap = {
     1: [
+      "Лавиния",
       "Отец",
       "Лавиния",
       "Эван",
@@ -54,7 +56,7 @@ class _DialogGameState extends State<DialogGame> {
 
   final Map<int, List<String>> characterSprites = {
     1: [
-      "assets/images/эван.png",
+      "assets/images/lava_evan_0.png",
       "assets/character2.png",
       "assets/character1.png",
       "assets/character2.png",
@@ -167,8 +169,9 @@ class _DialogGameState extends State<DialogGame> {
                                                   padding: EdgeInsets.symmetric(
                                                       horizontal: 16.v),
                                                   child: Text(
-                                                    dialoguesMap[currentLevel]![
-                                                        currentDialogIndex],
+                                                    // dialoguesMap[currentLevel]![
+                                                    //     currentDialogIndex],
+                                                    "Я знаю, Лава. В конце концов, он старается и ради нас тоже.",
                                                     maxLines: 2,
                                                   )),
                                               Spacer(),
@@ -191,8 +194,9 @@ class _DialogGameState extends State<DialogGame> {
                                                   padding: EdgeInsets.symmetric(
                                                       horizontal: 16.v),
                                                   child: Text(
-                                                    dialoguesMap[currentLevel]![
-                                                        currentDialogIndex],
+                                                    // dialoguesMap[currentLevel]![
+                                                    //     currentDialogIndex],
+                                                    "Марц всегда занят! Однако мы тоже нуждаемся в нем…",
                                                     maxLines: 2,
                                                   )),
                                               Spacer(),

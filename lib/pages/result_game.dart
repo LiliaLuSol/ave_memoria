@@ -19,23 +19,24 @@ class ResultGame extends StatefulWidget {
   final bool? isGameCards;
   final bool? isGameSequence;
   final bool? isGameImage;
+  final bool? isStory;
 
-  const ResultGame({
-    super.key,
-    required this.nameGame,
-    required this.goRoute,
-    this.tries,
-    this.rounde,
-    this.score,
-    this.time,
-    this.minTries,
-    this.maxScore,
-    this.correctAnswers,
-    this.totalQuestions,
-    this.isGameCards,
-    this.isGameSequence,
-    this.isGameImage,
-  });
+  const ResultGame(
+      {super.key,
+      required this.nameGame,
+      required this.goRoute,
+      this.tries,
+      this.rounde,
+      this.score,
+      this.time,
+      this.minTries,
+      this.maxScore,
+      this.correctAnswers,
+      this.totalQuestions,
+      this.isGameCards,
+      this.isGameSequence,
+      this.isGameImage,
+      this.isStory});
 
   @override
   State<ResultGame> createState() => _ResultGameState();
@@ -112,8 +113,17 @@ class _ResultGameState extends State<ResultGame> {
                               Text(widget.nameGame,
                                   style: CustomTextStyles.regular24Text,
                                   textAlign: TextAlign.center),
-                              SizedBox(height: 60.v),
                               if (widget.isGameCards ?? false)
+                                SizedBox(height: 60.v),
+                              if (widget.isGameImage ?? false)
+                              SizedBox(height: 40.v),
+                              if (widget.isGameSequence ?? false)
+                                SizedBox(height: 30.v),
+                              if (widget.isGameSequence ?? false)
+                                Text('Супер!', style: CustomTextStyles.extraBold32Primary,),
+                              if (widget.isGameSequence ?? false)
+                                SizedBox(height: 30.v),
+                              if (widget.isStory ?? false)
                                 Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
@@ -159,9 +169,8 @@ class _ResultGameState extends State<ResultGame> {
                                       )
                                     ]),
                               if (widget.isGameCards ?? false)
-                                SizedBox(height: 60.v),
-                              if (widget.isGameImage ?? false)
-                                Spacer(),
+                                SizedBox(height: 30.v),
+                              if (widget.isGameImage ?? false) Spacer(),
                               Row(children: [
                                 Spacer(),
                                 if (widget.isGameImage ?? false)
@@ -180,11 +189,21 @@ class _ResultGameState extends State<ResultGame> {
                                   Spacer(),
                                 if (widget.isGameCards ?? false)
                                   info_card("Время", "${widget.time}"),
-                                if (widget.isGameCards ?? false)
-                                  Spacer(),
+                                if (widget.isGameCards ?? false) Spacer(),
                               ]),
-                              if ((widget.isGameCards ?? false) ||
-                                  (widget.isGameSequence ?? false))
+                              Spacer(),
+                              Row(mainAxisAlignment:MainAxisAlignment.center,children: [
+                                Text('+ 7', style: CustomTextStyles.light20Text,),
+                                SizedBox(width: 8.h,),
+                                FaIcon(
+                                  FontAwesomeIcons.coins,
+                                  size: 25.h,
+                                  color: appTheme.yellow,
+                                ),
+                              ]),
+                              if (widget.isGameCards ?? false)
+                                SizedBox(height: 30.v),
+                                  if (widget.isGameSequence ?? false)
                                 SizedBox(height: 60.v),
                               Spacer(),
                               CustomElevatedButton(

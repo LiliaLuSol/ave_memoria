@@ -189,19 +189,19 @@ class _AuthorizationState extends State<Authorization>
                                             })
                                           ])),
                                   SizedBox(height: 3.v),
-                                  Align(
-                                      alignment: Alignment.centerRight,
-                                      child: TextButton(
-                                          onPressed: () {
-                                            GoRouter.of(context)
-                                                .push(AppRoutes.forgetScreen);
-                                          },
-                                          child: Text(
-                                            "Забыли пароль?",
-                                            style: CustomTextStyles
-                                                .bodyMediumPrimary,
-                                            textAlign: TextAlign.right,
-                                          ))),
+                                  // Align(
+                                  //     alignment: Alignment.centerRight,
+                                  //     child: TextButton(
+                                  //         onPressed: () {
+                                  //           GoRouter.of(context)
+                                  //               .push(AppRoutes.forgetScreen);
+                                  //         },
+                                  //         child: Text(
+                                  //           "Забыли пароль?",
+                                  //           style: CustomTextStyles
+                                  //               .bodyMediumPrimary,
+                                  //           textAlign: TextAlign.right,
+                                  //         ))),
                                   Spacer(),
                                   BlocListener<AuthenticationBloc,
                                       AuthenticationState>(
