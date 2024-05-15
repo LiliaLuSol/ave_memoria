@@ -1,15 +1,14 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:ave_memoria/other/app_export.dart';
 
 class ThemeHelper {
-  var _appTheme = PrefUtils().getThemeData();
+  final _appTheme = PrefUtils().getThemeData();
 
-  Map<String, PrimaryColors> _supportedCustomColor = {
+  final Map<String, PrimaryColors> _supportedCustomColor = {
     'primary': PrimaryColors()
   };
 
-  Map<String, ColorScheme> _supportedColorScheme = {
+  final Map<String, ColorScheme> _supportedColorScheme = {
     'primary': ColorSchemes.primaryColorScheme
   };
 
@@ -69,7 +68,7 @@ class ThemeHelper {
           }
           return colorScheme.onSurface;
         }),
-        side: BorderSide(
+        side: const BorderSide(
           width: 1,
         ),
         visualDensity: const VisualDensity(
@@ -114,7 +113,7 @@ class TextThemes {
 }
 
 class ColorSchemes {
-  static final primaryColorScheme = const ColorScheme.light(
+  static const primaryColorScheme = ColorScheme.light(
     primary: Color(0XFF3498DB),
     background: Color(0XFFF0F0F0),
     //text
@@ -145,6 +144,8 @@ class PrimaryColors {
   Color get green => const Color(0XFF64D677);
 
   Color get yellow => const Color(0XFFFFD43B);
+
+  Color get flipCard => const Color(0xFF83B0C8);
 }
 
 PrimaryColors get appTheme => ThemeHelper().themeColor();
