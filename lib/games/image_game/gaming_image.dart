@@ -1,7 +1,5 @@
 import 'dart:async';
 import 'dart:math';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ave_memoria/other/app_export.dart';
 import '../../pages/pause_menu.dart';
@@ -12,15 +10,14 @@ class ImageGame extends StatefulWidget {
   const ImageGame({super.key});
 
   @override
-  _ImageGameState createState() => _ImageGameState();
+  ImageGameState createState() => ImageGameState();
 }
 
-class _ImageGameState extends State<ImageGame> {
+class ImageGameState extends State<ImageGame> {
   GlobalData globalData = GlobalData();
-  String nameGame3 = '';
-  String game3Rule1 = '';
-  String game3Rule2 = '';
-
+  late String nameGame3;
+  late String game3Rule1;
+  late String game3Rule2;
   int correctAnswers = 0;
   int currentQuestionIndex = 0;
   int questionNumber = 0;
@@ -29,7 +26,7 @@ class _ImageGameState extends State<ImageGame> {
   late int randomIndex;
   late Timer _timer;
 
-  List<ImageQuestion> imageQuestions = [
+  final List<ImageQuestion> imageQuestions = [
     ImageQuestion(
       imagePath: ImageConstant.imgImage_1,
       questions: [
@@ -197,26 +194,6 @@ class _ImageGameState extends State<ImageGame> {
     ),
   ];
 
-  void initializeGameData() {
-    correctAnswers = 0;
-    currentQuestionIndex = 0;
-    questionNumber = 1;
-    _isStart = true;
-    _isFinished = false;
-    randomIndex = Random().nextInt(imageQuestions.length);
-    imageQuestions[randomIndex].questions.shuffle();
-  }
-
-  void startGameIfTrue() {
-    _timer = Timer(Duration(seconds: 20), () {
-      if (_isStart) {
-        setState(() {
-          _isStart = false;
-        });
-      }
-    });
-  }
-
   @override
   void initState() {
     nameGame3 = globalData.nameGame3;
@@ -233,48 +210,34 @@ class _ImageGameState extends State<ImageGame> {
     super.dispose();
   }
 
+  void initializeGameData() {
+    correctAnswers = 0;
+    currentQuestionIndex = 0;
+    questionNumber = 1;
+    _isStart = true;
+    _isFinished = false;
+    randomIndex = Random().nextInt(imageQuestions.length);
+    imageQuestions[randomIndex].questions.shuffle();
+  }
+
+  void startGameIfTrue() {
+    _timer = Timer(const Duration(seconds: 20), () {
+      if (_isStart) {
+        setState(() {
+          _isStart = false;
+        });
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     mediaQueryData = MediaQuery.of(context);
     List<Question> questions =
         imageQuestions[randomIndex].questions.take(5).toList();
+
     return _isStart
-        ? SafeArea(
-            child: Scaffold(
-                body: Stack(children: [
-            Padding(
-                padding: EdgeInsets.all(16.v),
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(height: 70.v),
-                      Text(
-                        "Картинка будет представлена на 20 секунд. Запомните как можно больше деталей!",
-                        style: CustomTextStyles.regular24Text,
-                        textAlign: TextAlign.center,
-                      ),
-                      Spacer(),
-                      CustomElevatedButton(
-                        text: "Начать раньше",
-                        buttonTextStyle: CustomTextStyles.semiBold18TextWhite,
-                        buttonStyle: ElevatedButton.styleFrom(
-                            backgroundColor: theme.colorScheme.primary,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5))),
-                        onTap: () {
-                          setState(() {
-                            _isStart = false;
-                          });
-                        },
-                      ),
-                      SizedBox(height: 70.v),
-                    ])),
-            Center(
-                child: Image.asset(
-              imageQuestions[randomIndex].imagePath,
-              width: 393.h,
-            )),
-          ])))
+        ? buildImagePreparationScreen()
         : _isFinished
             ? ResultGame(
                 nameGame: nameGame3,
@@ -283,119 +246,177 @@ class _ImageGameState extends State<ImageGame> {
                 correctAnswers: correctAnswers,
                 totalQuestions: 5,
               )
-            : SafeArea(
-                child: Scaffold(
-                  body: Container(
-                    width: mediaQueryData.size.width,
-                    height: mediaQueryData.size.height,
-                    child: Column(
-                      children: [
-                        Container(
-                            color: theme.colorScheme.onPrimaryContainer,
-                            child: Column(children: [
-                              SizedBox(
-                                height: 22.v,
-                              ),
-                              Row(
-                                children: [
-                                  SizedBox(width: 49.h),
-                                  Spacer(),
-                                  Text(nameGame3,
-                                      style: CustomTextStyles.regular24Text),
-                                  Spacer(),
-                                  IconButton(
-                                      icon: FaIcon(FontAwesomeIcons.circlePause,
-                                          size: 25.h,
-                                          color: theme.colorScheme.primary),
-                                      onPressed: () {
-                                        Navigator.push(
-                                            context,
-                                            PageRouteBuilder(
-                                                pageBuilder: (_, __, ___) =>
-                                                    PauseMenu(
-                                                      goRoute:
-                                                          AppRoutes.game_image,
-                                                      countRule: 2,
-                                                      text1: game3Rule1,
-                                                      text2: game3Rule2,
-                                                    ),
-                                                opaque: false,
-                                                fullscreenDialog: true));
-                                      }),
-                                  SizedBox(width: 16.h),
-                                ],
-                              ),
-                              SizedBox(height: 22.v),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Spacer(),
-                                  info_card("Вопрос", "$questionNumber из 5"),
-                                  Spacer(),
-                                ],
-                              ),
-                              SizedBox(height: 22.v),
-                              Divider(height: 1, color: appTheme.gray)
-                            ])),
-                        Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 16.h),
-                            child: Column(children: [
-                              // Spacer(),
-                              SizedBox(height: 150.v),
-                              Text(
-                                questions[currentQuestionIndex].text,
-                                style: theme.textTheme.titleMedium,
-                                textAlign: TextAlign.center,
-                              ),
-                              //       Spacer(),
-                              SizedBox(height: 150.v),
-                              Column(
-                                children: questions[currentQuestionIndex]
-                                    .options
-                                    .map((option) => Padding(
-                                        padding:
-                                            EdgeInsets.symmetric(vertical: 8.v),
-                                        child: CustomElevatedButton(
-                                          buttonStyle: ElevatedButton.styleFrom(
-                                              backgroundColor:
-                                                  appTheme.lightGray,
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          5))),
-                                          onTap: () {
-                                            if (option ==
-                                                questions[currentQuestionIndex]
-                                                    .options[questions[
-                                                        currentQuestionIndex]
-                                                    .correctIndex]) {
-                                              setState(() {
-                                                correctAnswers++;
-                                              });
-                                            }
-                                            if (currentQuestionIndex <
-                                                questions.length - 1) {
-                                              setState(() {
-                                                currentQuestionIndex++;
-                                                questionNumber++;
-                                              });
-                                            } else {
-                                              setState(() {
-                                                _isFinished = true;
-                                              });
-                                            }
-                                          },
-                                          text: option,
-                                        )))
-                                    .toList(),
-                              )
-                            ]))
-                      ],
+            : buildQuestionScreen(questions);
+  }
+
+  Widget buildImagePreparationScreen() {
+    return SafeArea(
+      child: Scaffold(
+        body: Stack(
+          children: [
+            Padding(
+              padding: EdgeInsets.all(16.v),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(height: 70.v),
+                  Text(
+                    "Картинка будет представлена на 20 секунд. Запомните как можно больше деталей!",
+                    style: CustomTextStyles.regular24Text,
+                    textAlign: TextAlign.center,
+                  ),
+                  const Spacer(),
+                  CustomElevatedButton(
+                    text: "Начать раньше",
+                    buttonTextStyle: CustomTextStyles.semiBold18TextWhite,
+                    buttonStyle: ElevatedButton.styleFrom(
+                      backgroundColor: theme.colorScheme.primary,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                    ),
+                    onTap: () {
+                      setState(() {
+                        _isStart = false;
+                      });
+                    },
+                  ),
+                  SizedBox(height: 70.v),
+                ],
+              ),
+            ),
+            Center(
+              child: Image.asset(
+                imageQuestions[randomIndex].imagePath,
+                width: 393.h,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildQuestionScreen(List<Question> questions) {
+    return SafeArea(
+      child: Scaffold(
+        body: Container(
+          width: mediaQueryData.size.width,
+          height: mediaQueryData.size.height,
+          child: Column(
+            children: [
+              buildHeader(),
+              buildQuestionSection(questions),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget buildHeader() {
+    return Container(
+      color: theme.colorScheme.onPrimaryContainer,
+      child: Column(
+        children: [
+          SizedBox(height: 22.v),
+          Row(
+            children: [
+              SizedBox(width: 49.h),
+              const Spacer(),
+              Text(nameGame3, style: CustomTextStyles.regular24Text),
+              const Spacer(),
+              IconButton(
+                icon: FaIcon(
+                  FontAwesomeIcons.circlePause,
+                  size: 25.h,
+                  color: theme.colorScheme.primary,
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      pageBuilder: (_, __, ___) => PauseMenu(
+                        goRoute: AppRoutes.game_image,
+                        countRule: 2,
+                        text1: game3Rule1,
+                        text2: game3Rule2,
+                      ),
+                      opaque: false,
+                      fullscreenDialog: true,
+                    ),
+                  );
+                },
+              ),
+              SizedBox(width: 16.h),
+            ],
+          ),
+          SizedBox(height: 22.v),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const Spacer(),
+              info_card("Вопрос", "$questionNumber из 5"),
+              const Spacer(),
+            ],
+          ),
+          SizedBox(height: 22.v),
+          Divider(height: 1, color: appTheme.gray),
+        ],
+      ),
+    );
+  }
+
+  Widget buildQuestionSection(List<Question> questions) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16.h),
+      child: Column(
+        children: [
+          SizedBox(height: 150.v),
+          Text(
+            questions[currentQuestionIndex].text,
+            style: theme.textTheme.titleMedium,
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: 150.v),
+          Column(
+            children: questions[currentQuestionIndex].options.map((option) {
+              return Padding(
+                padding: EdgeInsets.symmetric(vertical: 8.v),
+                child: CustomElevatedButton(
+                  buttonStyle: ElevatedButton.styleFrom(
+                    backgroundColor: appTheme.lightGray,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5),
                     ),
                   ),
+                  onTap: () => onOptionSelected(option, questions),
+                  text: option,
                 ),
               );
+            }).toList(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void onOptionSelected(String option, List<Question> questions) {
+    if (option ==
+        questions[currentQuestionIndex]
+            .options[questions[currentQuestionIndex].correctIndex]) {
+      correctAnswers++;
+    }
+    if (currentQuestionIndex < questions.length - 1) {
+      setState(() {
+        currentQuestionIndex++;
+        questionNumber++;
+      });
+    } else {
+      setState(() {
+        _isFinished = true;
+      });
+    }
   }
 }
