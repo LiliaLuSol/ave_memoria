@@ -89,8 +89,17 @@ class _StoryState extends State<Story> with TickerProviderStateMixin {
                   children: [
                     Padding(
                         padding: EdgeInsets.only(left: 16.h, right: 16.h),
-                        child: Text("Сюжет. Глава I",
-                            style: CustomTextStyles.extraBold32Text)),
+                        child: RichText(
+                            text: TextSpan(children: [
+                          TextSpan(
+                              text: "Сюжет",
+                              style: CustomTextStyles.extraBold32Text),
+                          if (supabase.auth.currentUser?.email !=
+                              "anounymous@gmail.com")
+                            TextSpan(
+                                text: ". Глава I",
+                                style: CustomTextStyles.extraBold32Text)
+                        ]))),
                     Spacer(),
                     if (supabase.auth.currentUser?.email !=
                         "anounymous@gmail.com")
@@ -119,65 +128,75 @@ class _StoryState extends State<Story> with TickerProviderStateMixin {
                 height: mediaQueryData.size.height,
                 child: SizedBox(
                     width: double.maxFinite,
-                    child: Column(children: [
-                      SizedBox(
-                        height: 75.v,
-                      ),
-                      Divider(height: 1, color: appTheme.gray),
-                      Stack(children: [
-                        Expanded(
-                            child: Padding(
-                                padding:
-                                    EdgeInsets.only(left: 16.h, right: 16.h),
-                                child: SingleChildScrollView(
-                                    child: Column(children: [
-                                  SizedBox(height: 5.v),
-                                  Text("Глава I",
-                                      style: CustomTextStyles.extraBold32Text,
-                                      textAlign: TextAlign.center),
-                                  SizedBox(height: 28.v),
-                                  story_card(context,
-                                      levelText: "Уровень 1",
-                                      subText: "Пролог",
-                                      svgPath: ImageConstant.imgStoryR,
-                                      filledStars: 3),
-                                  SizedBox(height: 28.v),
-                                  story_card(context,
-                                      levelText: "Уровень 2",
-                                      subText: "Первая проблема",
-                                      svgPath: ImageConstant.imgStoryL,
-                                      filledStars: 2),
-                                ])))),
-                        Column(children: [
-                          SizedBox(height: 345.v),
-                          Container(
-                              width: 393.h,
-                              height: 343.v,
-                              child: Stack(children: [
+                    child: supabase.auth.currentUser?.email ==
+                            "anounymous@gmail.com"
+                        ? Column(children: [
+                            SizedBox(height: 75.v),
+                            Divider(height: 1, color: appTheme.gray),
+                            Expanded(child: lock())
+                          ])
+                        : Column(children: [
+                            SizedBox(
+                              height: 75.v,
+                            ),
+                            Divider(height: 1, color: appTheme.gray),
+                            Stack(children: [
+                              Expanded(
+                                  child: Padding(
+                                      padding: EdgeInsets.only(
+                                          left: 16.h, right: 16.h),
+                                      child: SingleChildScrollView(
+                                          child: Column(children: [
+                                        SizedBox(height: 5.v),
+                                        Text("Глава I",
+                                            style: CustomTextStyles
+                                                .extraBold32Text,
+                                            textAlign: TextAlign.center),
+                                        SizedBox(height: 28.v),
+                                        story_card(context,
+                                            levelText: "Уровень 1",
+                                            subText: "Пролог",
+                                            svgPath: ImageConstant.imgStoryR,
+                                            filledStars: 3),
+                                        SizedBox(height: 28.v),
+                                        story_card(context,
+                                            levelText: "Уровень 2",
+                                            subText: "Первая проблема",
+                                            svgPath: ImageConstant.imgStoryL,
+                                            filledStars: 2),
+                                      ])))),
+                              Column(children: [
+                                SizedBox(height: 345.v),
                                 Container(
                                     width: 393.h,
                                     height: 343.v,
-                                    decoration: const BoxDecoration(
-                                      image: DecorationImage(
-                                        image: AssetImage(
-                                            'assets/images/cloud.png'),
-                                        fit: BoxFit.fill,
-                                      ),
-                                    )),
-                                Center(
-                                    child: Padding(
-                                        padding: EdgeInsets.all(16.h),
-                                        child: Text(
-                                            'Скоро будет продолжение! Следите за обновлениями',
-                                            style: CustomTextStyles
-                                                .extraBold20Primary,
-                                            textAlign: TextAlign.center)))
-                              ])),
-                          Container(
-                              color: appTheme.white, width: 393.h, height: 25.v)
-                        ])
-                      ])
-                    ])))),
+                                    child: Stack(children: [
+                                      Container(
+                                          width: 393.h,
+                                          height: 343.v,
+                                          decoration: const BoxDecoration(
+                                            image: DecorationImage(
+                                              image: AssetImage(
+                                                  'assets/images/cloud.png'),
+                                              fit: BoxFit.fill,
+                                            ),
+                                          )),
+                                      Center(
+                                          child: Padding(
+                                              padding: EdgeInsets.all(16.h),
+                                              child: Text(
+                                                  'Скоро будет продолжение! Следите за обновлениями',
+                                                  style: CustomTextStyles
+                                                      .extraBold20Primary,
+                                                  textAlign: TextAlign.center)))
+                                    ])),
+                                Container(
+                                    color: appTheme.white,
+                                    width: 393.h,
+                                    height: 25.v)
+                              ])
+                            ])
+                          ])))),
       ),
       //  )
     );

@@ -1,6 +1,7 @@
 import 'package:ave_memoria/pages/dialog_game.dart';
 import 'package:ave_memoria/pages/new_password_screen.dart';
 import 'package:ave_memoria/pages/support.dart';
+import 'package:ave_memoria/theme/custom_text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:ave_memoria/pages/authorization.dart';
 import 'package:ave_memoria/pages/base_screen.dart';
@@ -38,7 +39,8 @@ class AppRoutes {
       GoRoute(
         path: root,
         builder: (context, state) {
-          if (supabase.auth.currentUser != null && supabase.auth.currentUser?.email != "anounymous@gmail.com") {
+          if (supabase.auth.currentUser != null &&
+              supabase.auth.currentUser?.email != "anounymous@gmail.com") {
             return const BaseScreen();
           } else {
             return const Onboard();
@@ -97,11 +99,12 @@ class AppRoutes {
         path: dialog,
         builder: (context, state) => const DialogGame(),
       ),
-     ],
+    ],
     initialLocation: root,
-    errorBuilder: (context, state) => const ScreenLayout(
+    errorBuilder: (context, state) => ScreenLayout(
         child: Center(
-      child: Text("Страница не найдена!"),
+      child: Text("Страница не найдена!",
+          style: CustomTextStyles.semiBold32Primary),
     )),
   );
 

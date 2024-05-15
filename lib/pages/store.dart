@@ -154,95 +154,102 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
               height: mediaQueryData.size.height,
               child: SizedBox(
                 width: double.maxFinite,
-                child: Column(children: [
-                  SizedBox(height: 75.v),
-                  Divider(height: 1, color: appTheme.gray),
-                  Padding(
-                      padding: EdgeInsets.symmetric(vertical: 16.v),
-                      child: SizedBox(
-                          height: 27.v,
-                          width: 359.h,
-                          child: TabBar(
-                              controller: _tabController,
-                              labelPadding: EdgeInsets.zero,
-                              indicatorPadding:
-                                  EdgeInsets.symmetric(horizontal: -10.h),
-                              labelStyle: CustomTextStyles.regular16White,
-                              unselectedLabelStyle:
-                                  CustomTextStyles.regular16Text,
-                              indicator: BoxDecoration(
-                                color: theme.colorScheme.primary,
-                                borderRadius: BorderRadius.circular(
-                                  50.h,
-                                ),
-                              ),
-                              tabs: const [
-                                Tab(
-                                  child: Text(
-                                    "библиотека",
-                                  ),
-                                ),
-                                Tab(
-                                  child: Text(
-                                    "рынок",
-                                  ),
-                                ),
-                                Tab(
-                                  child: Text(
-                                    "склад",
-                                  ),
-                                ),
-                                Tab(
-                                  child: Text(
-                                    "достижения",
-                                  ),
-                                ),
-                              ]))),
-                  Divider(height: 1, color: appTheme.gray),
-                  SizedBox(height: 15.v),
-                  Expanded(
-                      child: TabBarView(
-                          controller: _tabController,
-                          children: <Widget>[
-                        NestedTabBar('библиотека'),
-                        FutureBuilder(
-                            future: getShopList(),
-                            builder: (context, snapshot) {
-                              if (!snapshot.hasData) {
-                                return Center(
-                                  child: CircularProgressIndicator(
-                                      color: theme.colorScheme.primary),
-                                );
-                              }
-                              final list = snapshot.data!;
-                              return buildListShop(list);
-                            }),
-                        FutureBuilder(
-                            future: getStoreList(),
-                            builder: (context, snapshot) {
-                              if (!snapshot.hasData) {
-                                return Center(
-                                  child: CircularProgressIndicator(
-                                      color: theme.colorScheme.primary),
-                                );
-                              }
-                              final list = snapshot.data!;
-                              return buildListStore(list);
-                            }),
-                        FutureBuilder(
-                            future: getAchievementList(),
-                            builder: (context, snapshot) {
-                              if (!snapshot.hasData) {
-                                return Center(
-                                  child: CircularProgressIndicator(
-                                      color: theme.colorScheme.primary),
-                                );
-                              }
-                              final list = snapshot.data!;
-                              return buildListAch(list);
-                            }),
-                      ])),
-                ]),
+                child: supabase.auth.currentUser?.email ==
+                        "anounymous@gmail.com"
+                    ? Column(children: [
+                        SizedBox(height: 75.v),
+                        Divider(height: 1, color: appTheme.gray),
+                        Expanded(child: lock())
+                      ])
+                    : Column(children: [
+                        SizedBox(height: 75.v),
+                        Divider(height: 1, color: appTheme.gray),
+                        Padding(
+                            padding: EdgeInsets.symmetric(vertical: 16.v),
+                            child: SizedBox(
+                                height: 27.v,
+                                width: 359.h,
+                                child: TabBar(
+                                    controller: _tabController,
+                                    labelPadding: EdgeInsets.zero,
+                                    indicatorPadding:
+                                        EdgeInsets.symmetric(horizontal: -10.h),
+                                    labelStyle: CustomTextStyles.regular16White,
+                                    unselectedLabelStyle:
+                                        CustomTextStyles.regular16Text,
+                                    indicator: BoxDecoration(
+                                      color: theme.colorScheme.primary,
+                                      borderRadius: BorderRadius.circular(
+                                        50.h,
+                                      ),
+                                    ),
+                                    tabs: const [
+                                      Tab(
+                                        child: Text(
+                                          "библиотека",
+                                        ),
+                                      ),
+                                      Tab(
+                                        child: Text(
+                                          "рынок",
+                                        ),
+                                      ),
+                                      Tab(
+                                        child: Text(
+                                          "склад",
+                                        ),
+                                      ),
+                                      Tab(
+                                        child: Text(
+                                          "достижения",
+                                        ),
+                                      ),
+                                    ]))),
+                        Divider(height: 1, color: appTheme.gray),
+                        SizedBox(height: 15.v),
+                        Expanded(
+                            child: TabBarView(
+                                controller: _tabController,
+                                children: <Widget>[
+                              NestedTabBar('библиотека'),
+                              FutureBuilder(
+                                  future: getShopList(),
+                                  builder: (context, snapshot) {
+                                    if (!snapshot.hasData) {
+                                      return Center(
+                                        child: CircularProgressIndicator(
+                                            color: theme.colorScheme.primary),
+                                      );
+                                    }
+                                    final list = snapshot.data!;
+                                    return buildListShop(list);
+                                  }),
+                              FutureBuilder(
+                                  future: getStoreList(),
+                                  builder: (context, snapshot) {
+                                    if (!snapshot.hasData) {
+                                      return Center(
+                                        child: CircularProgressIndicator(
+                                            color: theme.colorScheme.primary),
+                                      );
+                                    }
+                                    final list = snapshot.data!;
+                                    return buildListStore(list);
+                                  }),
+                              FutureBuilder(
+                                  future: getAchievementList(),
+                                  builder: (context, snapshot) {
+                                    if (!snapshot.hasData) {
+                                      return Center(
+                                        child: CircularProgressIndicator(
+                                            color: theme.colorScheme.primary),
+                                      );
+                                    }
+                                    final list = snapshot.data!;
+                                    return buildListAch(list);
+                                  }),
+                            ])),
+                      ]),
               ),
             ),
           ),

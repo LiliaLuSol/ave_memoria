@@ -30,3 +30,5 @@ export 'package:ave_memoria/utils/global_date.dart';
 export 'package:flutter_offline/flutter_offline.dart';
 export 'package:ave_memoria/widgets/no_internet.dart';
 export 'package:ave_memoria/widgets/story_card.dart';
+export 'package:ave_memoria/widgets/lock_widget.dart';
+export 'package:ave_memoria/widgets/no_internet_widget.dart';

@@ -186,6 +186,24 @@ class _StatisticsState extends State<Statistics> with TickerProviderStateMixin {
                                   child: Column(children: [
                                     SizedBox(height: 20.v),
                                     Text("Общее число очков за...",
+              child: supabase.auth.currentUser?.email == "anounymous@gmail.com"
+                  ? Column(children: [
+                      SizedBox(height: 75.v),
+                      Divider(height: 1, color: appTheme.gray),
+                      Expanded(child: lock())
+                    ])
+                  : Column(
+                      children: [
+                        SizedBox(height: 75.v),
+                        Divider(height: 1, color: appTheme.gray),
+                        Expanded(
+                          child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 16.h),
+                              child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    SizedBox(height: 14.v),
+                                    Text("Очки за неделю:",
                                         style:
                                             CustomTextStyles.extraBold20Text),
                                     SizedBox(height: 9.v),
