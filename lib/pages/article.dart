@@ -1,7 +1,6 @@
 import 'package:ave_memoria/other/app_export.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
 import '../main.dart';
 
 class Article extends StatefulWidget {
@@ -10,16 +9,16 @@ class Article extends StatefulWidget {
   const Article({super.key, required this.title});
 
   @override
-  _ArticleState createState() => _ArticleState();
+  ArticleState createState() => ArticleState();
 }
 
-class _ArticleState extends State<Article> {
+class ArticleState extends State<Article> {
   late String image;
   late String text;
 
   void getArticleSelfList() async {
    final res = await supabase
-        .from("library")
+        .from("Library")
         .select().eq('title', widget.title).count(CountOption.exact);
     final data = res.data;
     setState(() {
@@ -45,6 +44,30 @@ class _ArticleState extends State<Article> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
+          extendBody: true,
+          extendBodyBehindAppBar: true,
+          resizeToAvoidBottomInset: false,
+          body: OfflineBuilder(
+            connectivityBuilder: (
+                BuildContext context,
+                ConnectivityResult connectivity,
+                Widget child,
+                ) {
+              final bool connected = connectivity != ConnectivityResult.none;
+              return connected ? _articlePage(context) : const BuildNoInternet();
+            },
+            child: Center(
+              child: CircularProgressIndicator(
+                color: theme.colorScheme.primary,
+              ),
+            ),
+          ),
+        ));
+  }
+
+  SafeArea _articlePage(BuildContext context) {
+    return SafeArea(
+        child: Scaffold(
             extendBody: true,
             extendBodyBehindAppBar: true,
             resizeToAvoidBottomInset: false,
@@ -67,7 +90,7 @@ class _ArticleState extends State<Article> {
                   ])),
               styleType: Style.bgFill,
             ),
-            body: Container(
+            body: SizedBox(
                 width: mediaQueryData.size.width,
                 height: mediaQueryData.size.height,
                 child: SizedBox(
