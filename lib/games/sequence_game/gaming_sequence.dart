@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:ave_memoria/games/sequence_game/utils.dart';
-import 'package:ave_memoria/theme/theme_helper.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ave_memoria/other/app_export.dart';
 import '../../pages/pause_menu.dart';
@@ -12,16 +10,16 @@ class SequenceGame extends StatefulWidget {
   const SequenceGame({super.key});
 
   @override
-  _SequenceGameState createState() => _SequenceGameState();
+  SequenceGameState createState() => SequenceGameState();
 }
 
-class _SequenceGameState extends State<SequenceGame> {
+class SequenceGameState extends State<SequenceGame> {
   GlobalData globalData = GlobalData();
-  String nameGame2 = '';
-  String _nameGame2 = '';
-  String game2Rule1 = '';
-  String game2Rule2 = '';
-  String game2Rule3 = '';
+  late String nameGame2;
+  late String _nameGame2;
+  late String game2Rule1;
+  late String game2Rule2;
+  late String game2Rule3;
 
   Map<int, String> numberImageMap = {
     0: ImageConstant.imgPose_0,
@@ -57,33 +55,6 @@ class _SequenceGameState extends State<SequenceGame> {
   late int score;
   late int rounde;
 
-  void startGameAfterDelay() {
-    Future.delayed(const Duration(seconds: 4), () {
-      setState(() {
-        _start = true;
-      });
-    });
-  }
-
-  void initializeGameData() {
-    life = 3;
-    score = 0;
-    rounde = 1;
-    _countdown = true;
-    _isFinished = false;
-    _canPlay = false;
-    sequenceUser.clear();
-    sequenceUser.add(10);
-    sequence.clear();
-    sequence.add(0);
-    for (int i = 0; i < 3; i++) {
-      int randomNumber = Random().nextInt(8) + 1;
-      sequence.add(randomNumber);
-      sequence.add(0);
-    }
-    startCountdown();
-  }
-
   @override
   void initState() {
     nameGame2 = globalData.nameGame2;
@@ -103,7 +74,33 @@ class _SequenceGameState extends State<SequenceGame> {
     super.dispose();
   }
 
-  void newRounde() {}
+  void startGameAfterDelay() {
+    Future.delayed(const Duration(seconds: 4), () {
+      setState(() {
+        _start = true;
+      });
+    });
+  }
+
+  void initializeGameData() {
+    life = 3;
+    score = 0;
+    rounde = 1;
+    _countdown = true;
+    _isFinished = false;
+    _canPlay = false;
+    sequenceUser
+      ..clear()
+      ..add(10);
+    sequence
+      ..clear()
+      ..add(0);
+    for (int i = 0; i < 3; i++) {
+      int randomNumber = Random().nextInt(8) + 1;
+      sequence.addAll([randomNumber, 0]);
+    }
+    startCountdown();
+  }
 
   void handleButtonClick(int number) {
     if (sequence[currentIndex] == 0) {
@@ -114,18 +111,22 @@ class _SequenceGameState extends State<SequenceGame> {
         score += 10;
         currentIndex++;
         sequenceUser.add(number + 10);
-        Future.delayed(Duration(seconds: 1), () {
+        Future.delayed(const Duration(seconds: 1), () {
           setState(() {
             sequenceUser.add(10);
           });
         });
         if (currentIndex == sequence.length - 1) {
-          rounde++;
-          sequence.add(Random().nextInt(8) + 1);
-          sequence.add(0);
-          sequenceUser.clear();
-          currentIndex = 0;
-          _canPlay = false;
+          Future.delayed(const Duration(seconds: 1), () {
+            setState(() {
+              rounde++;
+              sequence.add(Random().nextInt(8) + 1);
+              sequence.add(0);
+              sequenceUser.clear();
+              currentIndex = 0;
+              _canPlay = false;
+            });
+          });
         }
       });
     } else {
@@ -147,7 +148,7 @@ class _SequenceGameState extends State<SequenceGame> {
       setState(() {
         currentCountdownValue = value;
       });
-      await Future.delayed(Duration(seconds: 1));
+      await Future.delayed(const Duration(seconds: 1));
     }
     setState(() {
       _countdown = false;
@@ -157,6 +158,7 @@ class _SequenceGameState extends State<SequenceGame> {
   @override
   Widget build(BuildContext context) {
     mediaQueryData = MediaQuery.of(context);
+
     return _countdown
         ? SafeArea(
             child: Scaffold(
@@ -176,7 +178,7 @@ class _SequenceGameState extends State<SequenceGame> {
               )
             : SafeArea(
                 child: Scaffold(
-                    body: Container(
+                    body: SizedBox(
                 width: mediaQueryData.size.width,
                 height: mediaQueryData.size.height,
                 child: Column(
@@ -190,10 +192,10 @@ class _SequenceGameState extends State<SequenceGame> {
                           Row(
                             children: [
                               SizedBox(width: 49.h),
-                              Spacer(),
+                              const Spacer(),
                               Text(_nameGame2,
                                   style: CustomTextStyles.regular24Text),
-                              Spacer(),
+                              const Spacer(),
                               IconButton(
                                 icon: FaIcon(FontAwesomeIcons.circlePause,
                                     size: 25.h,
@@ -223,13 +225,13 @@ class _SequenceGameState extends State<SequenceGame> {
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Spacer(),
+                              const Spacer(),
                               info_card("Раунд", "$rounde"),
-                              Spacer(),
+                              const Spacer(),
                               info_card("Очки", "$score"),
-                              Spacer(),
+                              const Spacer(),
                               info_card("Жизни", "$life"),
-                              Spacer(),
+                              const Spacer(),
                             ],
                           ),
                           SizedBox(height: 22.v),
@@ -238,15 +240,16 @@ class _SequenceGameState extends State<SequenceGame> {
                     SizedBox(height: 11.v),
                     Align(
                         alignment: Alignment.center,
-                        child: Container(
+                        child: SizedBox(
                           // color: Colors.blue,
                           width: 353.h,
                           height: 353.v,
                           child: Center(
                             child: _canPlay
-                                ? Image.asset(
-                                    "${sequenceUser.isNotEmpty ? numberImageMap[sequenceUser.last] : ImageConstant.imgPose_10}",
-                                    fit: BoxFit.cover,
+                                ? CustomImageView(
+                                    svgPath:
+                                        "${sequenceUser.isNotEmpty ? numberImageMap[sequenceUser.last] : ImageConstant.imgPose_10}",
+                                    fit: BoxFit.contain,
                                   )
                                 : NumberDisplay(
                                     sequence: sequence,
@@ -260,7 +263,7 @@ class _SequenceGameState extends State<SequenceGame> {
                                   ),
                           ),
                         )),
-                    Spacer(),
+                    const Spacer(),
                     Divider(height: 1, color: appTheme.gray),
                     Container(
                       color: appTheme.white,
@@ -291,13 +294,12 @@ class _SequenceGameState extends State<SequenceGame> {
                                       child: Container(
                                         width: 115.h,
                                         height: 80.v,
-                                        decoration: BoxDecoration(
-                                          image: const DecorationImage(
-                                            image: AssetImage(
-                                                'assets/images/sword1.png'),
-                                            fit: BoxFit.contain,
-                                          )
-                                        ),
+                                        decoration: const BoxDecoration(
+                                            image: DecorationImage(
+                                          image: AssetImage(
+                                              'assets/images/sword1.png'),
+                                          fit: BoxFit.contain,
+                                        )),
                                       ),
                                     ),
                                     GestureDetector(
@@ -309,7 +311,7 @@ class _SequenceGameState extends State<SequenceGame> {
                                       child: Container(
                                           width: 115.h,
                                           height: 80.v,
-                                          decoration:  BoxDecoration(
+                                          decoration: BoxDecoration(
                                             image: const DecorationImage(
                                               image: AssetImage(
                                                   'assets/images/sword2.png'),
@@ -364,15 +366,16 @@ class _SequenceGameState extends State<SequenceGame> {
                                               image: AssetImage(
                                                   'assets/images/sword4.png'),
                                               fit: BoxFit.contain,
-                                            ),border: Border(
-                                              top: BorderSide(
-                                                color: appTheme.gray,
-                                                width: 1,
-                                              ),
-                                              bottom: BorderSide(
-                                                color: appTheme.gray,
-                                                width: 1,
-                                              )),
+                                            ),
+                                            border: Border(
+                                                top: BorderSide(
+                                                  color: appTheme.gray,
+                                                  width: 1,
+                                                ),
+                                                bottom: BorderSide(
+                                                  color: appTheme.gray,
+                                                  width: 1,
+                                                )),
                                           )),
                                     ),
                                     Container(
@@ -399,20 +402,21 @@ class _SequenceGameState extends State<SequenceGame> {
                                       child: Container(
                                           width: 90.h,
                                           height: 60.v,
-                                          decoration:  BoxDecoration(
+                                          decoration: BoxDecoration(
                                             image: const DecorationImage(
                                               image: AssetImage(
                                                   'assets/images/sword5.png'),
                                               fit: BoxFit.contain,
-                                            ), border: Border(
-                                              top: BorderSide(
-                                                color: appTheme.gray,
-                                                width: 1,
-                                              ),
-                                              bottom: BorderSide(
-                                                color: appTheme.gray,
-                                                width: 1,
-                                              )),
+                                            ),
+                                            border: Border(
+                                                top: BorderSide(
+                                                  color: appTheme.gray,
+                                                  width: 1,
+                                                ),
+                                                bottom: BorderSide(
+                                                  color: appTheme.gray,
+                                                  width: 1,
+                                                )),
                                           )),
                                     ),
                                   ],
@@ -448,20 +452,21 @@ class _SequenceGameState extends State<SequenceGame> {
                                         child: Container(
                                             width: 115.h,
                                             height: 80.v,
-                                            decoration:  BoxDecoration(
+                                            decoration: BoxDecoration(
                                               image: const DecorationImage(
                                                 image: AssetImage(
                                                     'assets/images/sword7.png'),
                                                 fit: BoxFit.contain,
-                                              ), border: Border(
-                                                right: BorderSide(
-                                                  color: appTheme.gray,
-                                                  width: 1,
-                                                ),
-                                                left: BorderSide(
-                                                  color: appTheme.gray,
-                                                  width: 1,
-                                                )),
+                                              ),
+                                              border: Border(
+                                                  right: BorderSide(
+                                                    color: appTheme.gray,
+                                                    width: 1,
+                                                  ),
+                                                  left: BorderSide(
+                                                    color: appTheme.gray,
+                                                    width: 1,
+                                                  )),
                                             )),
                                       ),
                                       GestureDetector(

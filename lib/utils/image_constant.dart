@@ -44,23 +44,23 @@ class ImageConstant {
 
   static String imgImage_3 = '$imagePath/image_3.png';
 
-  static String imgPose_0 = '$imagePath/pose0.png';
-  static String imgPose_1 = '$imagePath/pose1.png';
-  static String imgPose_2 = '$imagePath/pose2.png';
-  static String imgPose_3 = '$imagePath/pose3.png';
-  static String imgPose_4 = '$imagePath/pose4.png';
-  static String imgPose_5 = '$imagePath/pose5.png';
-  static String imgPose_6 = '$imagePath/pose6.png';
-  static String imgPose_7 = '$imagePath/pose7.png';
-  static String imgPose_8 = '$imagePath/pose8.png';
+  static String imgPose_0 = '$imagePath/pose0.svg';
+  static String imgPose_1 = '$imagePath/pose1.svg';
+  static String imgPose_2 = '$imagePath/pose2.svg';
+  static String imgPose_3 = '$imagePath/pose3.svg';
+  static String imgPose_4 = '$imagePath/pose4.svg';
+  static String imgPose_5 = '$imagePath/pose5.svg';
+  static String imgPose_6 = '$imagePath/pose6.svg';
+  static String imgPose_7 = '$imagePath/pose7.svg';
+  static String imgPose_8 = '$imagePath/pose8.svg';
 
-  static String imgPose_10 = '$imagePath/pose10.png';
-  static String imgPose_11 = '$imagePath/pose11.png';
-  static String imgPose_12 = '$imagePath/pose12.png';
-  static String imgPose_13 = '$imagePath/pose13.png';
-  static String imgPose_14 = '$imagePath/pose14.png';
-  static String imgPose_15 = '$imagePath/pose15.png';
-  static String imgPose_16 = '$imagePath/pose16.png';
-  static String imgPose_17 = '$imagePath/pose17.png';
-  static String imgPose_18 = '$imagePath/pose18.png';
+  static String imgPose_10 = '$imagePath/pose10.svg';
+  static String imgPose_11 = '$imagePath/pose11.svg';
+  static String imgPose_12 = '$imagePath/pose12.svg';
+  static String imgPose_13 = '$imagePath/pose13.svg';
+  static String imgPose_14 = '$imagePath/pose14.svg';
+  static String imgPose_15 = '$imagePath/pose15.svg';
+  static String imgPose_16 = '$imagePath/pose16.svg';
+  static String imgPose_17 = '$imagePath/pose17.svg';
+  static String imgPose_18 = '$imagePath/pose18.svg';
 }

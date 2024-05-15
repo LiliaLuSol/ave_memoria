@@ -18,10 +18,10 @@ class NumberDisplay extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _NumberDisplayState createState() => _NumberDisplayState();
+  NumberDisplayState createState() => NumberDisplayState();
 }
 
-class _NumberDisplayState extends State<NumberDisplay> {
+class NumberDisplayState extends State<NumberDisplay> {
   int currentIndex = 0;
   late Timer _timer;
 
@@ -50,11 +50,25 @@ class _NumberDisplayState extends State<NumberDisplay> {
 
   @override
   Widget build(BuildContext context) {
-    return  Image.asset(
-        currentIndex < widget.sequence.length
-            ? widget.numberImageMap[widget.sequence[currentIndex]] ??
-                ImageConstant.imgPose_0
-            : ImageConstant.imgPose_0,
-        fit: BoxFit.cover);
+    return currentIndex < widget.sequence.length
+        ? CustomImageView(
+            svgPath: widget.numberImageMap[widget.sequence[currentIndex]] ??
+                ImageConstant.imgPose_0,
+            fit: BoxFit.contain)
+        : const SizedBox.shrink();
   }
+
+// @override
+// Widget build(BuildContext context) {
+//   return AnimatedSwitcher(
+//     duration: widget.delay,
+//     child: currentIndex < widget.sequence.length
+//         ? Image.asset(
+//         widget.numberImageMap[widget.sequence[currentIndex]] ??
+//             ImageConstant.imgPose_0,
+//         key: ValueKey<int>(widget.sequence[currentIndex]),
+//         fit: BoxFit.cover)
+//         : const SizedBox(),
+//   );
+// }
 }
