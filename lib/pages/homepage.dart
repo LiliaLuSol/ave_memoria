@@ -32,6 +32,7 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
   late String game3Rule1;
   late String game3Rule2;
   late String moneyRule;
+  int user_id = 2;
 
   bool _isConnection = false;
   late bool gameRulesFirst1;
@@ -119,13 +120,11 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
   }
 
   Future<void> updateFirstRule(String nameGame) async {
-    String? email = getEmail();
-    email = email.toString();
     await supabase
         .from('GameRule')
         .update({'is_new': false})
-        .eq('email', email)
-        .eq('game', 'cards')
+        .eq('user_id', user_id)
+        .eq('game', nameGame)
         .count(CountOption.exact);
   }
 

@@ -53,7 +53,7 @@ class SequenceGameState extends State<SequenceGame> {
   int life = 3;
   late bool _isFinished;
   late int score;
-  late int rounde;
+  late int round;
 
   @override
   void initState() {
@@ -85,7 +85,7 @@ class SequenceGameState extends State<SequenceGame> {
   void initializeGameData() {
     life = 3;
     score = 0;
-    rounde = 1;
+    round = 1;
     _countdown = true;
     _isFinished = false;
     _canPlay = false;
@@ -119,7 +119,7 @@ class SequenceGameState extends State<SequenceGame> {
         if (currentIndex == sequence.length - 1) {
           Future.delayed(const Duration(seconds: 1), () {
             setState(() {
-              rounde++;
+              round++;
               sequence.add(Random().nextInt(8) + 1);
               sequence.add(0);
               sequenceUser.clear();
@@ -172,7 +172,7 @@ class SequenceGameState extends State<SequenceGame> {
             ? ResultGame(
                 nameGame: nameGame2,
                 goRoute: AppRoutes.game_sequence,
-                rounde: rounde,
+                round: round,
                 score: score,
                 isGameSequence: true,
               )
@@ -226,7 +226,7 @@ class SequenceGameState extends State<SequenceGame> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               const Spacer(),
-                              info_card("Раунд", "$rounde"),
+                              info_card("Раунд", "$round"),
                               const Spacer(),
                               info_card("Очки", "$score"),
                               const Spacer(),
