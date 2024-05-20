@@ -32,7 +32,7 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
   late String game3Rule1;
   late String game3Rule2;
   late String moneyRule;
-  int user_id = 2;
+  late int user_id;
 
   bool _isConnection = false;
   late bool gameRulesFirst1;
@@ -49,6 +49,8 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
     getMoney();
     _tryConnection();
     getFirstRule();
+    getQuantity();
+    getId();
     nameGame1 = globalData.nameGame1;
     nameGame2 = globalData.nameGame2__;
     nameGame3 = globalData.nameGame3;
@@ -103,6 +105,21 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
     });
   }
 
+  void getId() async {
+    String? email = getEmail();
+    email = email.toString();
+    final res = await supabase
+        .from('profileusergame')
+        .select('user_id')
+        .eq('email', email)
+        .count(CountOption.exact);
+    final data = res.data;
+    setState(() {
+      globalData.updateId(data[0]['user_id']);
+      user_id = data[0]['user_id'];
+    });
+  }
+
   void getFirstRule() async {
     String? email = getEmail();
     email = email.toString();
@@ -126,6 +143,24 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
         .eq('user_id', user_id)
         .eq('game', nameGame)
         .count(CountOption.exact);
+  }
+
+  void getQuantity() async {
+    String? email = getEmail();
+    email = email.toString();
+    final res =
+    supabase.from('usergamedata').select('quantity').eq('email', email);
+    final data01 = await res.eq('game', 'cards').count(CountOption.exact);
+    final data1 = data01.data;
+    final data02 = await res.eq('game', 'sequence').count(CountOption.exact);
+    final data2 = data02.data;
+    final data03 = await res.eq('game', 'image').count(CountOption.exact);
+    final data3 = data03.data;
+    setState(() {
+      globalData.updateCount(1,data1[0]['quantity']);
+      globalData.updateCount(2,data2[0]['quantity']);
+      globalData.updateCount(3,data3[0]['quantity']);
+    });
   }
 
   @override

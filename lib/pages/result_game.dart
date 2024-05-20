@@ -2,6 +2,9 @@ import 'dart:math';
 import 'package:ave_memoria/other/app_export.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+import '../main.dart';
 
 class ResultGame extends StatelessWidget {
   final String nameGame;
@@ -38,19 +41,32 @@ class ResultGame extends StatelessWidget {
   });
 
   GlobalData globalData = GlobalData();
-  late int countGame1 = globalData.countGame1;
-  late int countGame2;
+
+  void updateQuantity(String nameGame) async {
+    int query = 0;
+    if (nameGame == 'cards') query = globalData.countGame1;
+    if (nameGame == 'sequence') query = globalData.countGame2;
+    if (nameGame == 'image') query = globalData.countGame3;
+    await supabase
+        .from('GameRule')
+        .update({'quantity': query + 1})
+        .eq('user_id', globalData.user_id)
+        .eq('game', nameGame)
+        .count(CountOption.exact);
+  }
 
   @override
   Widget build(BuildContext context) {
     int? money = 1;
     if (isGameImage) {
+      updateQuantity('image');
       money = ((correctAnswers != null && totalQuestions != null)
-          ? (correctAnswers! / totalQuestions!).ceil() * 10
-          : 1) as int?;
-      globalData.updateCount(3);
+          ? ((correctAnswers! / totalQuestions!) * 10).toInt()
+          : 1);
+      globalData.updateCount(30, 1);
     }
     if (isGameCards) {
+      updateQuantity('cards');
       const int maxScore = 600;
       const int minTries = 6;
       const int maxTries = 100;
@@ -66,13 +82,14 @@ class ResultGame extends StatelessWidget {
       int maxMoney = 12;
       money = ((combinedNormalizedValue * (maxMoney - minMoney)) + minMoney)
           .toInt() as int?;
-      globalData.updateCount(1);
+      globalData.updateCount(10, 1);
     }
     if (isGameSequence) {
+      updateQuantity('image');
       int a = round! > 1 ? round! : 0;
       money = a * 2 + (score! / 100).ceil();
       money == 0 ? money = 1 : null;
-      globalData.updateCount(2);
+      globalData.updateCount(20, 1);
     }
     return SafeArea(
       child: Scaffold(

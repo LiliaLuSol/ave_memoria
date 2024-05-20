@@ -10,10 +10,16 @@ class GlobalData {
   //общее
   String emailAnon = 'anounymous@gmail.com';
   int money = 0;
+  int user_id = 0;
 
   void updateMoney(int newData) {
     money = newData;
   }
+
+  void updateId(int newData) {
+    user_id = newData;
+  }
+
 
   //статистика
   int mon = 0;
@@ -56,15 +62,24 @@ class GlobalData {
     }
   }
 
-  void updateCount(int numberGame) {
+  void updateCount(int numberGame, int current) {
     switch (numberGame) {
       case 1:
-        countGame1++;
+        countGame1 = current;
         break;
       case 2:
-        countGame2++;
+        countGame2 = current;
         break;
       case 3:
+        countGame3 = current;
+        break;
+      case 10:
+        countGame1++;
+        break;
+      case 20:
+        countGame2++;
+        break;
+      case 30:
         countGame3++;
         break;
       default:
@@ -72,7 +87,8 @@ class GlobalData {
     }
   }
 
-  String moneyRule = 'Внутриигровая валюта - Мем. Можно получить за мини-игры и достижения. Потратить можно на рынке или на открытие новых уровней в сюжете';
+  String moneyRule =
+      'Внутриигровая валюта - Мем. Можно получить за мини-игры и достижения. Потратить можно на рынке или на открытие новых уровней в сюжете';
 
   //игры
   String nameGame1 = 'Карточная игра\n'
@@ -101,6 +117,5 @@ class GlobalData {
   String game3Rule2 =
       "Затем задается ряд вопросов по картинке, на которые Вам предстоит ответить по памяти";
 
-  //проводник
-
+//проводник
 }
