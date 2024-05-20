@@ -30,6 +30,8 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
 
   TimeOfDay selectedTime = TimeOfDay.now();
 
+  late bool news;
+  late bool notification;
   late TextEditingController messageplaceholController;
   final msgFocusNode = FocusNode();
 
@@ -39,7 +41,12 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
     messageplaceholController = TextEditingController();
     emailAnon = globalData.emailAnon;
     money = globalData.money;
+    news = globalData.news;
+    notification = globalData.notification;
     _tryConnection();
+    getNews();
+    getNotification();
+    getNotificationTime();
     super.initState();
   }
 
@@ -47,6 +54,67 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
   void dispose() {
     messageplaceholController.dispose();
     super.dispose();
+  }
+
+  void getNews() async {
+    final res = await supabase
+        .from('Notifications')
+        .select('news')
+        .eq('user_id', globalData.user_id)
+        .count(CountOption.exact);
+    isSelectedSwitch1 = res.data[0]['news'];
+  }
+
+  void updateNews(bool status) async {
+    await supabase
+        .from('Notifications')
+        .update({'news': status})
+        .eq('user_id', globalData.user_id)
+        .count(CountOption.exact);
+  }
+
+  void getNotification() async {
+    final res = await supabase
+        .from('Notifications')
+        .select('notification')
+        .eq('user_id', globalData.user_id)
+        .count(CountOption.exact);
+    isSelectedSwitch = res.data[0]['notification'];
+  }
+
+  void updateNotification(bool status) async {
+    await supabase
+        .from('Notifications')
+        .update({'notification': status})
+        .eq('user_id', globalData.user_id)
+        .count(CountOption.exact);
+  }
+
+  void getNotificationTime() async {
+    final res = await supabase
+        .from('Notifications')
+        .select('notification_time')
+        .eq('user_id', globalData.user_id)
+        .count(CountOption.exact);
+    final data = res.data;
+    if (data[0]['notification_time'] != null) {
+      final timeString = data[0]['notification_time'] as String;
+      final timeParts = timeString.split(':');
+      final hour = int.parse(timeParts[0]);
+      final minute = int.parse(timeParts[1]);
+      selectedTime = TimeOfDay(hour: hour, minute: minute);
+    }
+  }
+
+  void updateNotificationTime(TimeOfDay status) async {
+    await supabase
+        .from('Notifications')
+        .update({
+          'notification_time':
+              '${status.hour.toString().padLeft(2, '0')}:${status.minute.toString().padLeft(2, '0')}:00'
+        })
+        .eq('user_id', globalData.user_id)
+        .count(CountOption.exact);
   }
 
   Future<void> _tryConnection() async {
@@ -112,10 +180,7 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
       setState(() {
         selectedTime = picked;
       });
-      // await supabase.from('Notifications')
-      //     .update({
-      //   'notification_time': selectedTime
-      // }).eq('email', 'email', getEmail == "Ваш email скоро здесь появится..." ? 0:getEmail );
+      updateNotificationTime(selectedTime);
     }
   }
 
@@ -152,7 +217,7 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
                           padding: EdgeInsets.only(left: 16.h, right: 16.h),
                           child: Text("Профиль",
                               style: CustomTextStyles.extraBold32Text)),
-                      Spacer(),
+                      const Spacer(),
                       if (getEmail() != 'anounymous@gmail.com')
                         Padding(
                             padding: EdgeInsets.only(
@@ -173,7 +238,7 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
                     ],
                   ),
                   styleType: Style.bgFill),
-              body: Container(
+              body: SizedBox(
                 width: mediaQueryData.size.width,
                 height: mediaQueryData.size.height,
                 child: SizedBox(
@@ -270,7 +335,7 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
                                                             backgroundColor: theme
                                                                 .colorScheme
                                                                 .onPrimaryContainer,
-                                                            title: Text(
+                                                            title: const Text(
                                                                 'Оценка',
                                                                 textAlign:
                                                                     TextAlign
@@ -465,6 +530,8 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
                                                                   isSelectedSwitch1 =
                                                                       value;
                                                                 });
+                                                                updateNews(
+                                                                    value);
                                                               })
                                                         ])),
                                               SizedBox(height: 16.v),
@@ -506,9 +573,11 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
                                                                     isSelectedSwitch =
                                                                         value;
                                                                   });
+                                                                  updateNotification(
+                                                                      value);
                                                                 })
                                                           ])),
-                                                  Spacer(),
+                                                  const Spacer(),
                                                   Container(
                                                       padding:
                                                           EdgeInsets.fromLTRB(

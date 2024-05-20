@@ -149,7 +149,7 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
     String? email = getEmail();
     email = email.toString();
     final res =
-    supabase.from('usergamedata').select('quantity').eq('email', email);
+        supabase.from('usergamedata').select('quantity').eq('email', email);
     final data01 = await res.eq('game', 'cards').count(CountOption.exact);
     final data1 = data01.data;
     final data02 = await res.eq('game', 'sequence').count(CountOption.exact);
@@ -157,10 +157,48 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
     final data03 = await res.eq('game', 'image').count(CountOption.exact);
     final data3 = data03.data;
     setState(() {
-      globalData.updateCount(1,data1[0]['quantity']);
-      globalData.updateCount(2,data2[0]['quantity']);
-      globalData.updateCount(3,data3[0]['quantity']);
+      globalData.updateCount(1, data1[0]['quantity']);
+      globalData.updateCount(2, data2[0]['quantity']);
+      globalData.updateCount(3, data3[0]['quantity']);
     });
+  }
+
+  void getNews() async {
+    final res = await supabase
+        .from('Notifications')
+        .select('news')
+        .eq('user_id', globalData.user_id)
+        .count(CountOption.exact);
+    setState(() {
+      globalData.news = res.data[0]['news'];
+    });
+  }
+
+  void getNotification() async {
+    final res = await supabase
+        .from('Notifications')
+        .select('notification')
+        .eq('user_id', globalData.user_id)
+        .count(CountOption.exact);
+    setState(() {
+      globalData.notification = res.data[0]['notification'];
+    });
+  }
+
+  void getNotificationTime() async {
+    final res = await supabase
+        .from('Notifications')
+        .select('notification_time')
+        .eq('user_id', globalData.user_id)
+        .count(CountOption.exact);
+    final data = res.data;
+    if (data[0]['notification_time'] != null) {
+      final timeString = data[0]['notification_time'] as String;
+      final timeParts = timeString.split(':');
+      final hour = int.parse(timeParts[0]);
+      final minute = int.parse(timeParts[1]);
+      globalData.notification_time = TimeOfDay(hour: hour, minute: minute);
+    }
   }
 
   @override

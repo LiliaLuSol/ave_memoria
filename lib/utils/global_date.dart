@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class GlobalData {
   static final GlobalData _instance = GlobalData._internal();
 
@@ -19,7 +21,6 @@ class GlobalData {
   void updateId(int newData) {
     user_id = newData;
   }
-
 
   //статистика
   int mon = 0;
@@ -118,4 +119,22 @@ class GlobalData {
       "Затем задается ряд вопросов по картинке, на которые Вам предстоит ответить по памяти";
 
 //проводник
+
+//профиль
+
+  bool news = false;
+  bool notification = false;
+  TimeOfDay notification_time = TimeOfDay.now();
+
+  void updateNews(bool newData) {
+    news = newData;
+  }
+
+  void updateNotification(bool newData) {
+    notification = newData;
+  }
+
+  void updateNotificationTime(TimeOfDay newData) {
+    notification_time = newData;
+  }
 }
