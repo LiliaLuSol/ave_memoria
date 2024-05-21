@@ -58,6 +58,7 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
     final data = res.data;
     setState(() {
       globalData.updateMoney(data[0]['money']);
+      money = globalData.money;
     });
   }
 

@@ -49,7 +49,7 @@ class ResultGame extends StatelessWidget {
     if (nameGame == 'image') query = globalData.countGame3;
     await supabase
         .from('GameRule')
-        .update({'quantity': query + 1})
+        .update({'quantity': query})
         .eq('user_id', globalData.user_id)
         .eq('game', nameGame)
         .count(CountOption.exact);
@@ -57,16 +57,15 @@ class ResultGame extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int? money = 1;
+    int money = 1;
     if (isGameImage) {
-      updateQuantity('image');
       money = ((correctAnswers != null && totalQuestions != null)
           ? ((correctAnswers! / totalQuestions!) * 10).toInt()
           : 1);
       globalData.updateCount(30, 1);
+      updateQuantity('image');
     }
     if (isGameCards) {
-      updateQuantity('cards');
       const int maxScore = 600;
       const int minTries = 6;
       const int maxTries = 100;
@@ -81,16 +80,19 @@ class ResultGame extends StatelessWidget {
       int minMoney = 1;
       int maxMoney = 12;
       money = ((combinedNormalizedValue * (maxMoney - minMoney)) + minMoney)
-          .toInt() as int?;
+          .toInt();
       globalData.updateCount(10, 1);
+      updateQuantity('cards');
     }
     if (isGameSequence) {
-      updateQuantity('image');
       int a = round! > 1 ? round! : 0;
       money = a * 2 + (score! / 100).ceil();
       money == 0 ? money = 1 : null;
       globalData.updateCount(20, 1);
+      updateQuantity('sequence');
     }
+    globalData.updateMoney(globalData.money + money);
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: Color(0xFFC0C0C0),
@@ -321,7 +323,17 @@ class ResultGame extends StatelessWidget {
               borderRadius: BorderRadius.circular(5),
             ),
           ),
-          onTap: () {
+          onTap: () async {
+            try {
+              await supabase
+                  .from('Characters')
+                  .update({'money': globalData.money})
+                  .eq('user_id', globalData.user_id)
+                  .count(CountOption.exact);
+            } catch (error) {
+              print('без денег $error');
+            }
+            ;
             GoRouter.of(context).push(goRoute);
           },
         ),
@@ -335,7 +347,17 @@ class ResultGame extends StatelessWidget {
               borderRadius: BorderRadius.circular(5),
             ),
           ),
-          onTap: () {
+          onTap: () async {
+            try {
+              await supabase
+                  .from('Characters')
+                  .update({'money': globalData.money})
+                  .eq('user_id', globalData.user_id)
+                  .count(CountOption.exact);
+            } catch (error) {
+              print('без денег $error');
+            }
+            ;
             GoRouter.of(context).push(AppRoutes.homepage);
           },
         ),

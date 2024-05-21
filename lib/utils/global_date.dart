@@ -35,6 +35,9 @@ class GlobalData {
   int countGame2 = 0;
   int countGame3 = 0;
 
+  int best1 = 0;
+  int best2 = 0;
+
   void updateDay(int dayOfWeek, int newData) {
     switch (dayOfWeek) {
       case DateTime.monday:
@@ -85,6 +88,19 @@ class GlobalData {
         break;
       default:
         throw ArgumentError('глобал апдейт каунт');
+    }
+  }
+
+  void updateBest(int game, int newDate) {
+    switch (game) {
+      case 1:
+        best1 = newDate;
+        break;
+      case 2:
+        best2 = newDate;
+        break;
+      default:
+        throw ArgumentError('глобал апдейт бест');
     }
   }
 

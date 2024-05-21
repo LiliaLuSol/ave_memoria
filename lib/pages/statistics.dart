@@ -32,6 +32,8 @@ class _StatisticsState extends State<Statistics> with TickerProviderStateMixin {
   late int quantityGame1;
   late int quantityGame2;
   late int quantityGame3;
+  late int best1;
+  late int best2;
 
   @override
   void initState() {
@@ -44,6 +46,8 @@ class _StatisticsState extends State<Statistics> with TickerProviderStateMixin {
     quantityGame1 =globalData.countGame1;
     quantityGame2 =globalData.countGame2;
     quantityGame3 =globalData.countGame3;
+    best1 = globalData.best1;
+    best2 = globalData.best2;
     getMoney();
     getQuantity();
     mon = globalData.mon;
@@ -109,6 +113,21 @@ class _StatisticsState extends State<Statistics> with TickerProviderStateMixin {
       quantityGame1 = data1[0]['quantity'];
       quantityGame2 = data2[0]['quantity'];
       quantityGame3 = data3[0]['quantity'];
+    });
+  }
+
+  void getBest() async {
+    String? email = getEmail();
+    email = email.toString();
+    final res =
+    supabase.from('usergamedata').select('best_score').eq('email', email);
+    final data01 = await res.eq('game', 'cards').count(CountOption.exact);
+    final data1 = data01.data;
+    final data02 = await res.eq('game', 'sequence').count(CountOption.exact);
+    final data2 = data02.data;
+    setState(() {
+      best1 = data1[0]['best_score'];
+      best2 = data2[0]['best_score'];
     });
   }
 
@@ -318,7 +337,7 @@ class _StatisticsState extends State<Statistics> with TickerProviderStateMixin {
                                             style: CustomTextStyles
                                                 .extraBold16Text),
                                         Spacer(),
-                                        Text("600 очков",
+                                        Text("$best1 очков",
                                             style: CustomTextStyles
                                                 .extraBold16Text),
                                       ],
@@ -329,7 +348,7 @@ class _StatisticsState extends State<Statistics> with TickerProviderStateMixin {
                                           style:
                                               CustomTextStyles.extraBold16Text),
                                       Spacer(),
-                                      Text("28 раунд",
+                                      Text("$best2 раунд",
                                           style:
                                               CustomTextStyles.extraBold16Text),
                                     ]),
