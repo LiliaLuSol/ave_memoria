@@ -506,7 +506,9 @@ class SequenceGameState extends State<SequenceGame> {
                 goRoute: AppRoutes.game_sequence,
                 round: round,
                 score: score,
-                isGameSequence: true)
+                isGameSequence: true,
+                game: 'sequence',
+              )
             : _buildGameScreen());
   }
 }

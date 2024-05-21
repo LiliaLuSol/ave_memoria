@@ -193,6 +193,7 @@ class CardsGameState extends State<CardsGame> {
             minTries: 6,
             maxScore: 600,
             isGameCards: true,
+            game: 'cards',
           )
         : SafeArea(
             child: Scaffold(

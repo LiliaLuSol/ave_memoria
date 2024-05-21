@@ -4,6 +4,7 @@ import 'package:ave_memoria/theme/custom_text_style.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ave_memoria/other/app_export.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../main.dart';
@@ -39,6 +40,16 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
   late bool gameRulesFirst2;
   late bool gameRulesFirst3;
 
+  Map<String, int> scores = {
+    'пн': 0,
+    'вт': 0,
+    'ср': 0,
+    'чт': 0,
+    'пт': 0,
+    'сб': 0,
+    'вс': 0,
+  };
+
   @override
   void initState() {
     gameRulesFirst1 = true;
@@ -49,8 +60,11 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
     getMoney();
     _tryConnection();
     getFirstRule();
+    getBest();
     getQuantity();
     getId();
+    checkAndAddDailyEntry();
+    fetchWeeklyScores();
     nameGame1 = globalData.nameGame1;
     nameGame2 = globalData.nameGame2__;
     nameGame3 = globalData.nameGame3;
@@ -144,6 +158,108 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
         .eq('user_id', user_id)
         .eq('game', nameGame)
         .count(CountOption.exact);
+  }
+
+  Future<void> fetchWeeklyScores() async {
+    final response = await supabase
+        .from('Statistics')
+        .select('score, date_game')
+        .gte('date_game',
+            DateTime.now().subtract(const Duration(days: 7)).toIso8601String())
+        .lte('date_game', DateTime.now().toIso8601String())
+        .eq('user_id', globalData.user_id)
+        .count();
+    if (response.count != 0) {
+      final data = response.data as List;
+      Map<String, int> tempScores = {
+        'пн': 0,
+        'вт': 0,
+        'ср': 0,
+        'чт': 0,
+        'пт': 0,
+        'сб': 0,
+        'вс': 0,
+      };
+
+      for (var entry in data) {
+        DateTime date = DateTime.parse(entry['date_game']);
+        String day = getCurrentDayForDate(date);
+
+        if (tempScores.containsKey(day)) {
+          tempScores[day] = entry['score'];
+        }
+      }
+
+      setState(() {
+        scores = tempScores;
+        globalData.updateDay(DateTime.monday, scores['пн']!);
+        globalData.updateDay(DateTime.tuesday, scores['вт']!);
+        globalData.updateDay(DateTime.wednesday, scores['ср']!);
+        globalData.updateDay(DateTime.thursday, scores['чт']!);
+        globalData.updateDay(DateTime.friday, scores['пт']!);
+        globalData.updateDay(DateTime.saturday, scores['сб']!);
+        globalData.updateDay(DateTime.sunday, scores['вс']!);
+      });
+    }
+  }
+
+  String getCurrentDayForDate(DateTime date) {
+    switch (date.weekday) {
+      case DateTime.monday:
+        return 'пн';
+      case DateTime.tuesday:
+        return 'вт';
+      case DateTime.wednesday:
+        return 'ср';
+      case DateTime.thursday:
+        return 'чт';
+      case DateTime.friday:
+        return 'пт';
+      case DateTime.saturday:
+        return 'сб';
+      case DateTime.sunday:
+        return 'вс';
+      default:
+        return '';
+    }
+  }
+
+  Future<void> checkAndAddDailyEntry() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String today = DateTime.now().toIso8601String().split('T')[0];
+
+    String? lastCheckIn = prefs.getString('last_check_in');
+    if (lastCheckIn == null || lastCheckIn != today) {
+      final response = await supabase
+          .from('Statistics')
+          .select()
+          .eq('user_id', globalData.user_id)
+          .eq('date_game', today)
+          .count();
+      if (response.count == 0) {
+        await supabase.from('Statistics').insert({
+          'user_id': globalData.user_id,
+          'date_game': today,
+          'score': 0
+        }).count();
+        await prefs.setString('last_check_in', today);
+      }
+    }
+  }
+
+  void getBest() async {
+    String? email = getEmail();
+    email = email.toString();
+    final res =
+    supabase.from('usergamedata').select('best_score').eq('email', email);
+    final data01 = await res.eq('game', 'cards').count(CountOption.exact);
+    final data1 = data01.data;
+    final data02 = await res.eq('game', 'sequence').count(CountOption.exact);
+    final data2 = data02.data;
+    setState(() {
+      globalData.updateBest(1, data1[0]['best_score']);
+      globalData.updateBest(2, data2[0]['best_score']);
+    });
   }
 
   void getQuantity() async {

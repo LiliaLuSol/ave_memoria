@@ -245,6 +245,7 @@ class ImageGameState extends State<ImageGame> {
                 isGameImage: true,
                 correctAnswers: correctAnswers,
                 totalQuestions: 5,
+                game: 'image',
               )
             : buildQuestionScreen(questions);
   }

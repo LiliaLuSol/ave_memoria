@@ -21,6 +21,7 @@ class ResultGame extends StatelessWidget {
   final bool isGameSequence;
   final bool isGameImage;
   final bool isStory;
+  final String game;
 
   ResultGame({
     super.key,
@@ -38,22 +39,10 @@ class ResultGame extends StatelessWidget {
     this.isGameSequence = false,
     this.isGameImage = false,
     this.isStory = false,
+    required this.game,
   });
 
   GlobalData globalData = GlobalData();
-
-  void updateQuantity(String nameGame) async {
-    int query = 0;
-    if (nameGame == 'cards') query = globalData.countGame1;
-    if (nameGame == 'sequence') query = globalData.countGame2;
-    if (nameGame == 'image') query = globalData.countGame3;
-    await supabase
-        .from('GameRule')
-        .update({'quantity': query})
-        .eq('user_id', globalData.user_id)
-        .eq('game', nameGame)
-        .count(CountOption.exact);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +52,6 @@ class ResultGame extends StatelessWidget {
           ? ((correctAnswers! / totalQuestions!) * 10).toInt()
           : 1);
       globalData.updateCount(30, 1);
-      updateQuantity('image');
     }
     if (isGameCards) {
       const int maxScore = 600;
@@ -82,14 +70,14 @@ class ResultGame extends StatelessWidget {
       money = ((combinedNormalizedValue * (maxMoney - minMoney)) + minMoney)
           .toInt();
       globalData.updateCount(10, 1);
-      updateQuantity('cards');
+      score! > globalData.best1 ? globalData.updateBest(1, score!) : null;
     }
     if (isGameSequence) {
       int a = round! > 1 ? round! : 0;
       money = a * 2 + (score! / 100).ceil();
       money == 0 ? money = 1 : null;
       globalData.updateCount(20, 1);
-      updateQuantity('sequence');
+      round! > globalData.best2 ? globalData.updateBest(2, round!) : null;
     }
     globalData.updateMoney(globalData.money + money);
 
@@ -299,6 +287,7 @@ class ResultGame extends StatelessWidget {
   }
 
   Widget buildFooter(BuildContext context, int money) {
+    int query = 0;
     return Column(
       children: [
         Row(
@@ -330,6 +319,23 @@ class ResultGame extends StatelessWidget {
                   .update({'money': globalData.money})
                   .eq('user_id', globalData.user_id)
                   .count(CountOption.exact);
+              if (game == 'cards') query = globalData.countGame1;
+              if (game == 'sequence') query = globalData.countGame2;
+              if (game == 'image') query = globalData.countGame3;
+              await supabase
+                  .from('GameRule')
+                  .update({'quantity': query})
+                  .eq('user_id', globalData.user_id)
+                  .eq('game', game)
+                  .count(CountOption.exact);
+              if (isGameSequence || isGameCards) {
+                await supabase
+                  .from('GameRule')
+                  .update({'best_score': game == 'cards'? score : round})
+                  .eq('user_id', globalData.user_id)
+                  .eq('game', game)
+                  .count(CountOption.exact);
+              }
             } catch (error) {
               print('без денег $error');
             }
@@ -353,6 +359,15 @@ class ResultGame extends StatelessWidget {
                   .from('Characters')
                   .update({'money': globalData.money})
                   .eq('user_id', globalData.user_id)
+                  .count(CountOption.exact);
+              if (game == 'cards') query = globalData.countGame1;
+              if (game == 'sequence') query = globalData.countGame2;
+              if (game == 'image') query = globalData.countGame3;
+              await supabase
+                  .from('GameRule')
+                  .update({'quantity': query})
+                  .eq('user_id', globalData.user_id)
+                  .eq('game', game)
                   .count(CountOption.exact);
             } catch (error) {
               print('без денег $error');
