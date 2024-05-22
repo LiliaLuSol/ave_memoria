@@ -280,7 +280,7 @@ class SequenceGameState extends State<SequenceGame> {
                               height: 80.v,
                               decoration: const BoxDecoration(
                                   image: DecorationImage(
-                                image: AssetImage('assets/images/sword1.png'),
+                                image: AssetImage('assets/images/sword1.svg'),
                                 fit: BoxFit.contain,
                               )),
                             ),
@@ -297,7 +297,7 @@ class SequenceGameState extends State<SequenceGame> {
                                 decoration: BoxDecoration(
                                   image: const DecorationImage(
                                     image:
-                                        AssetImage('assets/images/sword2.png'),
+                                        AssetImage('assets/images/sword2.svg'),
                                     fit: BoxFit.contain,
                                   ),
                                   border: Border(
@@ -323,7 +323,7 @@ class SequenceGameState extends State<SequenceGame> {
                                 decoration: const BoxDecoration(
                                   image: DecorationImage(
                                     image:
-                                        AssetImage('assets/images/sword3.png'),
+                                        AssetImage('assets/images/sword3.svg'),
                                     fit: BoxFit.contain,
                                   ),
                                 )),
@@ -346,7 +346,7 @@ class SequenceGameState extends State<SequenceGame> {
                                 decoration: BoxDecoration(
                                   image: const DecorationImage(
                                     image:
-                                        AssetImage('assets/images/sword4.png'),
+                                        AssetImage('assets/images/sword4.svg'),
                                     fit: BoxFit.contain,
                                   ),
                                   border: Border(
@@ -387,7 +387,7 @@ class SequenceGameState extends State<SequenceGame> {
                                 decoration: BoxDecoration(
                                   image: const DecorationImage(
                                     image:
-                                        AssetImage('assets/images/sword5.png'),
+                                        AssetImage('assets/images/sword5.svg'),
                                     fit: BoxFit.contain,
                                   ),
                                   border: Border(
@@ -419,7 +419,7 @@ class SequenceGameState extends State<SequenceGame> {
                                   decoration: const BoxDecoration(
                                     image: DecorationImage(
                                       image: AssetImage(
-                                          'assets/images/sword6.png'),
+                                          'assets/images/sword6.svg'),
                                       fit: BoxFit.contain,
                                     ),
                                   )),
@@ -436,7 +436,7 @@ class SequenceGameState extends State<SequenceGame> {
                                   decoration: BoxDecoration(
                                     image: const DecorationImage(
                                       image: AssetImage(
-                                          'assets/images/sword7.png'),
+                                          'assets/images/sword7.svg'),
                                       fit: BoxFit.contain,
                                     ),
                                     border: Border(
@@ -462,7 +462,7 @@ class SequenceGameState extends State<SequenceGame> {
                                   decoration: const BoxDecoration(
                                     image: DecorationImage(
                                       image: AssetImage(
-                                          'assets/images/sword8.png'),
+                                          'assets/images/sword8.svg'),
                                       fit: BoxFit.contain,
                                     ),
                                   )),
