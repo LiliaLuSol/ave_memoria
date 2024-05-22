@@ -44,6 +44,26 @@ class ResultGame extends StatelessWidget {
 
   GlobalData globalData = GlobalData();
 
+  void getCurrentDay(int score) {
+    final now = DateTime.now();
+    switch (now.weekday) {
+      case DateTime.monday:
+        globalData.updateDay(DateTime.monday, globalData.mon + score);
+      case DateTime.tuesday:
+        globalData.updateDay(DateTime.tuesday, globalData.tue + score);
+      case DateTime.wednesday:
+        globalData.updateDay(DateTime.wednesday, globalData.wen + score);
+      case DateTime.thursday:
+        globalData.updateDay(DateTime.thursday, globalData.thu + score);
+      case DateTime.friday:
+        globalData.updateDay(DateTime.friday, globalData.fri + score);
+      case DateTime.saturday:
+        globalData.updateDay(DateTime.saturday, globalData.sat + score);
+      case DateTime.sunday:
+        globalData.updateDay(DateTime.sunday, globalData.sun + score);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     int money = 1;
@@ -52,6 +72,7 @@ class ResultGame extends StatelessWidget {
           ? ((correctAnswers! / totalQuestions!) * 10).toInt()
           : 1);
       globalData.updateCount(30, 1);
+      getCurrentDay(money * 10);
     }
     if (isGameCards) {
       const int maxScore = 600;
@@ -71,6 +92,7 @@ class ResultGame extends StatelessWidget {
           .toInt();
       globalData.updateCount(10, 1);
       score! > globalData.best1 ? globalData.updateBest(1, score!) : null;
+      getCurrentDay(score!);
     }
     if (isGameSequence) {
       int a = round! > 1 ? round! : 0;
@@ -78,6 +100,7 @@ class ResultGame extends StatelessWidget {
       money == 0 ? money = 1 : null;
       globalData.updateCount(20, 1);
       round! > globalData.best2 ? globalData.updateBest(2, round!) : null;
+      getCurrentDay(score!);
     }
     globalData.updateMoney(globalData.money + money);
 
@@ -330,14 +353,31 @@ class ResultGame extends StatelessWidget {
                   .count(CountOption.exact);
               if (isGameSequence || isGameCards) {
                 await supabase
-                  .from('GameRule')
-                  .update({'best_score': game == 'cards'? score : round})
-                  .eq('user_id', globalData.user_id)
-                  .eq('game', game)
-                  .count(CountOption.exact);
+                    .from('GameRule')
+                    .update({'best_score': game == 'cards' ? score : round})
+                    .eq('user_id', globalData.user_id)
+                    .eq('game', game)
+                    .count(CountOption.exact);
               }
+              final res = await supabase
+                  .from('Statistics')
+                  .select('score')
+                  .eq('user_id', globalData.user_id)
+                  .eq('date_game',
+                      DateTime.now().toIso8601String().split('T')[0])
+                  .count();
+              globalData.updateScore(res.data[0]['score']);
+              await supabase
+                  .from('Statistics')
+                  .update({
+                    'score':
+                        globalData.score + (isGameImage ? money * 10 : score!)
+                  })
+                  .eq('user_id', globalData.user_id)
+                  .eq('date_game', DateTime.now().toIso8601String())
+                  .count();
             } catch (error) {
-              print('без денег $error');
+              print('$error');
             }
             ;
             GoRouter.of(context).push(goRoute);
@@ -369,8 +409,26 @@ class ResultGame extends StatelessWidget {
                   .eq('user_id', globalData.user_id)
                   .eq('game', game)
                   .count(CountOption.exact);
+              final res = await supabase
+                  .from('Statistics')
+                  .select('score')
+                  .eq('user_id', globalData.user_id)
+                  .eq('date_game',
+                      DateTime.now().toIso8601String().split('T')[0])
+                  .count();
+              globalData.updateScore(res.data[0]['score']);
+              await supabase
+                  .from('Statistics')
+                  .update({
+                    'score':
+                        globalData.score + (isGameImage ? money * 10 : score!)
+                  })
+                  .eq('user_id', globalData.user_id)
+                  .eq('date_game',
+                      DateTime.now().toIso8601String().split('T')[0])
+                  .count();
             } catch (error) {
-              print('без денег $error');
+              print('$error');
             }
             ;
             GoRouter.of(context).push(AppRoutes.homepage);

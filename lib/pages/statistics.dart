@@ -61,6 +61,7 @@ class _StatisticsState extends State<Statistics> with TickerProviderStateMixin {
     quantityGame3 = globalData.countGame3;
     best1 = globalData.best1;
     best2 = globalData.best2;
+    streakCount = globalData.streakCount;
     getMoney();
     getQuantity();
     mon = globalData.mon;

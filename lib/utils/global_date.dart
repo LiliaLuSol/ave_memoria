@@ -38,6 +38,13 @@ class GlobalData {
   int best1 = 0;
   int best2 = 0;
 
+  int score = 0;
+  int streakCount = 0;
+
+  void updateScore(int newData) {
+   score = newData;
+  }
+
   void updateDay(int dayOfWeek, int newData) {
     switch (dayOfWeek) {
       case DateTime.monday:

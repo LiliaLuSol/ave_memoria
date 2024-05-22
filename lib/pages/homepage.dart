@@ -65,6 +65,7 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
     getId();
     checkAndAddDailyEntry();
     fetchWeeklyScores();
+    fetchStreakCount();
     nameGame1 = globalData.nameGame1;
     nameGame2 = globalData.nameGame2__;
     nameGame3 = globalData.nameGame3;
@@ -224,6 +225,37 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
     }
   }
 
+  Future<void> fetchStreakCount() async {
+    final response = await supabase
+        .from('Statistics')
+        .select('date_game')
+        .order('date_game', ascending: true)
+        .count();
+
+    final data = response.data as List;
+    List<DateTime> playDates =
+        data.map((entry) => DateTime.parse(entry['date_game'])).toList();
+
+    setState(() {
+      globalData.streakCount = calculateStreak(playDates);
+    });
+  }
+
+  int calculateStreak(List<DateTime> dates) {
+    if (dates.isEmpty) return 0;
+
+    int streak = 1;
+    for (int i = 1; i < dates.length; i++) {
+      final difference = dates[i].difference(dates[i - 1]).inDays;
+      if (difference == 1) {
+        streak++;
+      } else if (difference > 1) {
+        streak = 1;
+      }
+    }
+    return streak;
+  }
+
   Future<void> checkAndAddDailyEntry() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String today = DateTime.now().toIso8601String().split('T')[0];
@@ -251,7 +283,7 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
     String? email = getEmail();
     email = email.toString();
     final res =
-    supabase.from('usergamedata').select('best_score').eq('email', email);
+        supabase.from('usergamedata').select('best_score').eq('email', email);
     final data01 = await res.eq('game', 'cards').count(CountOption.exact);
     final data1 = data01.data;
     final data02 = await res.eq('game', 'sequence').count(CountOption.exact);
