@@ -11,6 +11,7 @@ class GlobalData {
 
   //общее
   String emailAnon = 'anounymous@gmail.com';
+  bool isAnon = false;
   int money = 0;
   int user_id = 0;
 
@@ -20,6 +21,10 @@ class GlobalData {
 
   void updateId(int newData) {
     user_id = newData;
+  }
+
+  void updateAnonStatus(bool newData) {
+    isAnon = newData;
   }
 
   //статистика
@@ -124,6 +129,8 @@ class GlobalData {
       "В начале игры на несколько секунд показывают все картинки. Ваша задача запомнить как можно больше карт";
   String game1Rule3 =
       "А затем все карты перевернут рубашкой вверх. Надо с меньшим числом попыток найти и перевернуть парные карты, если картинки различаются, тогда они снова повернутся";
+
+  String image1Game1 = '';
 
   String nameGame2 = 'Гладиаторская тренировка памяти';
   String nameGame2_ = "    Гладиаторская\nтренировка памяти";

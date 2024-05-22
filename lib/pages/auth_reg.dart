@@ -14,6 +14,8 @@ class AuthReg extends StatefulWidget {
 }
 
 class _AuthRegState extends State<AuthReg> {
+  GlobalData globalData = GlobalData();
+
   @override
   Widget build(BuildContext context) {
     mediaQueryData = MediaQuery.of(context);
@@ -63,6 +65,7 @@ class _AuthRegState extends State<AuthReg> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5))),
                   onTap: () {
+                    globalData.updateAnonStatus(false);
                     GoRouter.of(context).push(AppRoutes.authorization);
                   },
                 ),
@@ -75,6 +78,7 @@ class _AuthRegState extends State<AuthReg> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5))),
                   onTap: () {
+                    globalData.updateAnonStatus(false);
                     GoRouter.of(context).push(AppRoutes.registration);
                   },
                 ),
@@ -103,13 +107,14 @@ class _AuthRegState extends State<AuthReg> {
                               borderRadius: BorderRadius.circular(5)),
                           side: BorderSide(width: 1, color: appTheme.gray)),
                       onTap: () {
+                        globalData.updateAnonStatus(true);
                         blocProvider.add(const AnounymousAuthEvent());
                         // GoRouter.of(context).push(AppRoutes.homepage);
                       },
                     );
                   }
                 })),
-                Spacer(),
+                const Spacer(),
               ],
             ),
           ),
