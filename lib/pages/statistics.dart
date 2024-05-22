@@ -1,9 +1,7 @@
 import 'package:ave_memoria/blocs/Auth/bloc/authentication_bloc.dart';
-
 import 'package:flutter/material.dart';
 import 'package:ave_memoria/other/app_export.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
 import '../main.dart';
 
 class Statistics extends StatefulWidget {
@@ -37,6 +35,9 @@ class _StatisticsState extends State<Statistics> with TickerProviderStateMixin {
   late int best1;
   late int best2;
 
+  bool isConnected = true;
+  late Stream<ConnectivityResult> connectivityStream;
+
   Map<String, int> scores = {
     'пн': 0,
     'вт': 0,
@@ -50,7 +51,21 @@ class _StatisticsState extends State<Statistics> with TickerProviderStateMixin {
 
   @override
   void initState() {
+    super.initState();
     _tabController = TabController(length: 3, vsync: this);
+    connectivityStream = Connectivity().onConnectivityChanged;
+    checkInitialConnection();
+    initializeData();
+  }
+
+  void checkInitialConnection() async {
+    var connectivityResult = await Connectivity().checkConnectivity();
+    setState(() {
+      isConnected = connectivityResult != ConnectivityResult.none;
+    });
+  }
+
+  void initializeData() {
     emailAnon = globalData.emailAnon;
     money = globalData.money;
     nameGame1 = globalData.nameGame1_;
@@ -62,8 +77,6 @@ class _StatisticsState extends State<Statistics> with TickerProviderStateMixin {
     best1 = globalData.best1;
     best2 = globalData.best2;
     streakCount = globalData.streakCount;
-    getMoney();
-    getQuantity();
     mon = globalData.mon;
     tue = globalData.tue;
     wen = globalData.wen;
@@ -71,12 +84,20 @@ class _StatisticsState extends State<Statistics> with TickerProviderStateMixin {
     fri = globalData.fri;
     sat = globalData.sat;
     sun = globalData.sun;
-    fetchMonthlyScore();
-    fetchYearlyScore();
-    fetchWeeklyScores();
     currentDay = getCurrentDay();
-    fetchStreakCount();
-    super.initState();
+    fetchAllData();
+  }
+
+  Future<void> fetchAllData() async {
+    await Future.wait([
+      getMoney(),
+      getQuantity(),
+      getBest(),
+      fetchMonthlyScore(),
+      fetchYearlyScore(),
+      fetchWeeklyScores(),
+      fetchStreakCount(),
+    ]);
   }
 
   String getCurrentDay() {
@@ -172,13 +193,15 @@ class _StatisticsState extends State<Statistics> with TickerProviderStateMixin {
         .order('date_game', ascending: true)
         .count();
 
-    final data = response.data as List;
-    List<DateTime> playDates =
-        data.map((entry) => DateTime.parse(entry['date_game'])).toList();
+    if (response.count != 0) {
+      final data = response.data as List;
+      List<DateTime> playDates =
+          data.map((entry) => DateTime.parse(entry['date_game'])).toList();
 
-    setState(() {
-      streakCount = calculateStreak(playDates);
-    });
+      setState(() {
+        streakCount = calculateStreak(playDates);
+      });
+    }
   }
 
   int calculateStreak(List<DateTime> dates) {
@@ -209,12 +232,15 @@ class _StatisticsState extends State<Statistics> with TickerProviderStateMixin {
         .lt('date_game', firstDayOfNextMonth.toIso8601String())
         .count();
 
-    final data = response.data as List;
-    int totalScore = data.fold(0, (sum, entry) => sum + entry['score'] as int);
+    if (response.count != 0) {
+      final data = response.data as List;
+      int totalScore =
+          data.fold(0, (sum, entry) => sum + entry['score'] as int);
 
-    setState(() {
-      monthlyScore = totalScore;
-    });
+      setState(() {
+        monthlyScore = totalScore;
+      });
+    }
   }
 
   Future<void> fetchYearlyScore() async {
@@ -230,83 +256,75 @@ class _StatisticsState extends State<Statistics> with TickerProviderStateMixin {
         .lt('date_game', firstDayOfNextYear.toIso8601String())
         .count();
 
-    final data = response.data as List;
-    int totalScore = data.fold(0, (sum, entry) => sum + entry['score'] as int);
+    if (response.count != 0) {
+      final data = response.data as List;
+      int totalScore =
+          data.fold(0, (sum, entry) => sum + entry['score'] as int);
 
-    setState(() {
-      yearlyScore = totalScore;
-    });
+      setState(() {
+        yearlyScore = totalScore;
+      });
+    }
   }
 
   String? getEmail() {
     final currentUser = supabase.auth.currentUser;
     if (currentUser != null) {
-      final email = currentUser.email!;
-      return email;
+      return currentUser.email;
     } else {
-      return "Ваш email скоро здесь появится...";
+      return '';
     }
   }
 
-  void getMoney() async {
+  Future<void> getMoney() async {
     String? email = getEmail();
-    email = email.toString();
-    final res = await supabase
-        .from('profileusergame')
-        .select('money')
-        .eq('email', email)
-        .count(CountOption.exact);
-    final data = res.data;
-    setState(() {
-      globalData.updateMoney(data[0]['money']);
-    });
+    if (email != null) {
+      final res = await supabase
+          .from('profileusergame')
+          .select('money')
+          .eq('email', email)
+          .single()
+          .count(CountOption.exact);
+      if (res.count != 0) {
+        setState(() {
+          globalData.updateMoney(res.data['money']);
+        });
+      }
+    }
   }
 
-  void getDayScore() async {
+  Future<void> getQuantity() async {
     String? email = getEmail();
-    email = email.toString();
-    final res = await supabase
-        .from('profileusergame')
-        .select('money')
-        .eq('email', email)
-        .count(CountOption.exact);
-    final data = res.data;
-    setState(() {
-      globalData.updateMoney(data[0]['money']);
-    });
+    if (email != null) {
+      final res =
+          supabase.from('usergamedata').select('quantity').eq('email', email);
+      final data01 = await res.eq('game', 'cards').single().count();
+      final data02 = await res.eq('game', 'sequence').single().count();
+      final data03 = await res.eq('game', 'image').single().count();
+      if (data01.count != 0 && data02.count != 0 && data03.count != 0) {
+        setState(() {
+          quantityGame1 = data01.data['quantity'];
+          quantityGame2 = data02.data['quantity'];
+          quantityGame3 = data03.data['quantity'];
+        });
+      }
+    }
   }
 
-  void getQuantity() async {
+  Future<void> getBest() async {
     String? email = getEmail();
-    email = email.toString();
-    final res =
-        supabase.from('usergamedata').select('quantity').eq('email', email);
-    final data01 = await res.eq('game', 'cards').count(CountOption.exact);
-    final data1 = data01.data;
-    final data02 = await res.eq('game', 'sequence').count(CountOption.exact);
-    final data2 = data02.data;
-    final data03 = await res.eq('game', 'image').count(CountOption.exact);
-    final data3 = data03.data;
-    setState(() {
-      quantityGame1 = data1[0]['quantity'];
-      quantityGame2 = data2[0]['quantity'];
-      quantityGame3 = data3[0]['quantity'];
-    });
-  }
-
-  void getBest() async {
-    String? email = getEmail();
-    email = email.toString();
-    final res =
-        supabase.from('usergamedata').select('best_score').eq('email', email);
-    final data01 = await res.eq('game', 'cards').count(CountOption.exact);
-    final data1 = data01.data;
-    final data02 = await res.eq('game', 'sequence').count(CountOption.exact);
-    final data2 = data02.data;
-    setState(() {
-      best1 = data1[0]['best_score'];
-      best2 = data2[0]['best_score'];
-    });
+    if (email != null) {
+      final res =
+          supabase.from('usergamedata').select('best_score').eq('email', email);
+      final data01 = await res.eq('game', 'cards').single().count();
+      final data02 = await res.eq('game', 'sequence').single().count();
+      if (data01.count != 0 && data02.count != 0) {
+        setState(() {
+          best1 = data01.data['best_score'];
+          best2 = data02.data['best_score'];
+        });
+      }
+    }
   }
 
   @override
@@ -319,264 +337,217 @@ class _StatisticsState extends State<Statistics> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     mediaQueryData = MediaQuery.of(context);
 
-    //   return SafeArea(
-    //       child: Scaffold(
-    //     extendBody: true,
-    //     extendBodyBehindAppBar: true,
-    //     resizeToAvoidBottomInset: false,
-    //     body: OfflineBuilder(
-    //       connectivityBuilder: (
-    //         BuildContext context,
-    //         ConnectivityResult connectivity,
-    //         Widget child,
-    //       ) {
-    //         final bool connected = connectivity != ConnectivityResult.none;
-    //         return connected ? _StatisticsPage(context) : const BuildNoInternet();
-    //       },
-    //       child: Center(
-    //         child: CircularProgressIndicator(
-    //           color: theme.colorScheme.primary,
-    //         ),
-    //       ),
-    //     ),
-    //   ));
-    // }
-    //
-    // BlocListener _StatisticsPage(BuildContext context) {
-    return BlocListener<AuthenticationBloc, AuthenticationState>(
-      listener: (context, state) {
-        if (state is UnAuthenticatedState) {
-          GoRouter.of(context).pushReplacement(AppRoutes.authreg);
-        } else if (state is AuthErrorState) {
-          context.showsnackbar(title: 'Что-то пошло не так!');
-        }
-      },
-      child: SafeArea(
-        child: Scaffold(
-          extendBody: true,
-          extendBodyBehindAppBar: true,
-          resizeToAvoidBottomInset: false,
-          appBar: CustomAppBar(
-              height: 75.v,
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Padding(
-                      padding: EdgeInsets.only(left: 16.h, right: 16.h),
-                      child: Text("Статистика",
-                          style: CustomTextStyles.extraBold32Text)),
-                  const Spacer(),
-                  if (supabase.auth.currentUser?.email !=
-                      "anounymous@gmail.com")
-                    Padding(
-                        padding: EdgeInsets.only(
-                          top: 14.v,
-                          bottom: 9.v,
-                        ),
-                        child: Text(money.toString(),
-                            style: CustomTextStyles.semiBold18Text)),
-                  if (supabase.auth.currentUser?.email !=
-                      "anounymous@gmail.com")
-                    IconButton(
-                      icon: FaIcon(
-                        FontAwesomeIcons.coins,
-                        size: 25.h,
-                        color: appTheme.yellow,
+    return StreamBuilder<ConnectivityResult>(
+        stream: connectivityStream,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            if (!globalData.isAnon) {
+              return no_internet();
+            }
+          }
+
+          isConnected = snapshot.data != ConnectivityResult.none;
+
+          return SafeArea(
+              child: Scaffold(
+                  extendBody: true,
+                  extendBodyBehindAppBar: true,
+                  resizeToAvoidBottomInset: false,
+                  appBar: CustomAppBar(
+                      height: 75.v,
+                      title: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Padding(
+                              padding: EdgeInsets.only(left: 16.h, right: 16.h),
+                              child: Text("Статистика",
+                                  style: CustomTextStyles.extraBold32Text)),
+                          const Spacer(),
+                          if (!globalData.isAnon)
+                            Padding(
+                                padding: EdgeInsets.only(
+                                  top: 14.v,
+                                  bottom: 9.v,
+                                ),
+                                child: Text(money.toString(),
+                                    style: CustomTextStyles.semiBold18Text)),
+                          if (!globalData.isAnon)
+                            IconButton(
+                              icon: FaIcon(
+                                FontAwesomeIcons.coins,
+                                size: 25.h,
+                                color: appTheme.yellow,
+                              ),
+                              onPressed: () {},
+                            )
+                        ],
                       ),
-                      onPressed: () {},
-                    )
+                      styleType: Style.bgFill),
+                  body: globalData.isAnon
+                      ? buildContent()
+                      : isConnected
+                          ? buildContent()
+                          : no_internet()));
+        });
+  }
+
+  Widget buildContent() {
+    return SizedBox(
+      width: mediaQueryData.size.width,
+      height: mediaQueryData.size.height,
+      child: SizedBox(
+        width: double.maxFinite,
+        child: globalData.isAnon
+            ? Column(children: [
+                SizedBox(height: 75.v),
+                Divider(height: 1, color: appTheme.gray),
+                Expanded(child: lock())
+              ])
+            : Column(
+                children: [
+                  SizedBox(height: 75.v),
+                  Divider(height: 1, color: appTheme.gray),
+                  Expanded(
+                    child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16.h),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(height: 14.v),
+                              Text("Очки за неделю:",
+                                  style: CustomTextStyles.extraBold20Text),
+                              SizedBox(height: 14.v),
+                              Row(children: [
+                                day_score("пн", mon, currentDay == 'пн'),
+                                const SizedBox(width: 8),
+                                day_score("вт", tue, currentDay == 'вт'),
+                                const SizedBox(width: 8),
+                                day_score("ср", wen, currentDay == 'ср'),
+                                const SizedBox(width: 8),
+                                day_score("чт", thu, currentDay == 'чт'),
+                                const SizedBox(width: 8),
+                                day_score("пт", fri, currentDay == 'пт'),
+                                const SizedBox(width: 8),
+                                day_score("сб", sat, currentDay == 'сб'),
+                                const SizedBox(width: 8),
+                                day_score("вс", sun, currentDay == 'вс')
+                              ]),
+                              SizedBox(height: 14.v),
+                              Text(
+                                  "Вы занимаетесь уже $streakCount день(-ей) подряд!",
+                                  style: theme.textTheme.bodyMedium),
+                              SizedBox(height: 20.v),
+                              Container(
+                                  decoration: AppDecoration.outlineGray,
+                                  child: Column(children: [
+                                    SizedBox(height: 20.v),
+                                    Text("Общее число очков за...",
+                                        style:
+                                            CustomTextStyles.extraBold20Text),
+                                    SizedBox(height: 9.v),
+                                    TabBar(
+                                        controller: _tabController,
+                                        labelPadding: EdgeInsets.zero,
+                                        indicatorPadding: EdgeInsets.symmetric(
+                                            horizontal: -15.h),
+                                        labelStyle:
+                                            CustomTextStyles.regular16White,
+                                        unselectedLabelStyle:
+                                            CustomTextStyles.regular16Text,
+                                        indicator: BoxDecoration(
+                                          color: theme.colorScheme.primary,
+                                          borderRadius: BorderRadius.circular(
+                                            50.h,
+                                          ),
+                                        ),
+                                        tabs: const [
+                                          Tab(child: Text("неделя")),
+                                          Tab(child: Text("месяц")),
+                                          Tab(child: Text("год"))
+                                        ]),
+                                    //  Divider(height: 1, color: appTheme.gray),
+                                    SizedBox(
+                                        height: 75.v,
+                                        width: 361.h,
+                                        child: TabBarView(
+                                            controller: _tabController,
+                                            children: <Widget>[
+                                              Center(
+                                                  child: Text(
+                                                      '${mon + tue + wen + thu + fri + sat + sun}'
+                                                      ' оч.',
+                                                      style: CustomTextStyles
+                                                          .extraBold20Text)),
+                                              Center(
+                                                  child: Text(
+                                                      '$monthlyScore оч.',
+                                                      style: CustomTextStyles
+                                                          .extraBold20Text)),
+                                              Center(
+                                                  child: Text(
+                                                      '$yearlyScore оч.',
+                                                      style: CustomTextStyles
+                                                          .extraBold20Text)),
+                                            ])),
+                                  ])),
+                              SizedBox(height: 20.v),
+                              Text("Рекорды за все время:",
+                                  style: CustomTextStyles.extraBold20Text),
+                              SizedBox(height: 9.v),
+                              Row(
+                                children: [
+                                  Text(nameGame1,
+                                      style: CustomTextStyles.extraBold16Text),
+                                  const Spacer(),
+                                  Text("$best1 очков",
+                                      style: CustomTextStyles.extraBold16Text),
+                                ],
+                              ),
+                              SizedBox(height: 9.v),
+                              Row(children: [
+                                Text(nameGame2,
+                                    style: CustomTextStyles.extraBold16Text),
+                                const Spacer(),
+                                Text("$best2 раунд",
+                                    style: CustomTextStyles.extraBold16Text),
+                              ]),
+                              SizedBox(height: 20.v),
+                              Text(
+                                  "Количество сыгранных мини-игр за все время:",
+                                  style: CustomTextStyles.extraBold20Text),
+                              SizedBox(height: 9.v),
+                              Row(
+                                children: [
+                                  Text(nameGame1,
+                                      style: CustomTextStyles.extraBold16Text),
+                                  const Spacer(),
+                                  Text("$quantityGame1 раз",
+                                      style: CustomTextStyles.extraBold16Text),
+                                ],
+                              ),
+                              SizedBox(height: 9.v),
+                              Row(children: [
+                                Text(nameGame2,
+                                    style: CustomTextStyles.extraBold16Text),
+                                const Spacer(),
+                                Text("$quantityGame2 раз",
+                                    style: CustomTextStyles.extraBold16Text),
+                              ]),
+                              SizedBox(height: 9.v),
+                              Row(children: [
+                                Text(nameGame3,
+                                    style: CustomTextStyles.extraBold16Text),
+                                const Spacer(),
+                                Text("$quantityGame3 раз",
+                                    style: CustomTextStyles.extraBold16Text),
+                              ]),
+                              SizedBox(height: 14.v),
+                            ])),
+                  )
                 ],
               ),
-              styleType: Style.bgFill),
-          body: SizedBox(
-            width: mediaQueryData.size.width,
-            height: mediaQueryData.size.height,
-            child: SizedBox(
-              width: double.maxFinite,
-              child: supabase.auth.currentUser?.email == "anounymous@gmail.com"
-                  ? Column(children: [
-                      SizedBox(height: 75.v),
-                      Divider(height: 1, color: appTheme.gray),
-                      Expanded(child: lock())
-                    ])
-                  : Column(
-                      children: [
-                        SizedBox(height: 75.v),
-                        Divider(height: 1, color: appTheme.gray),
-                        Expanded(
-                          child: Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 16.h),
-                              child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    SizedBox(height: 14.v),
-                                    Text("Очки за неделю:",
-                                        style:
-                                            CustomTextStyles.extraBold20Text),
-                                    SizedBox(height: 14.v),
-                                    Row(children: [
-                                      day_score("пн", mon, currentDay == 'пн'),
-                                      const SizedBox(width: 8),
-                                      day_score("вт", tue, currentDay == 'вт'),
-                                      const SizedBox(width: 8),
-                                      day_score("ср", wen, currentDay == 'ср'),
-                                      const SizedBox(width: 8),
-                                      day_score("чт", thu, currentDay == 'чт'),
-                                      const SizedBox(width: 8),
-                                      day_score("пт", fri, currentDay == 'пт'),
-                                      const SizedBox(width: 8),
-                                      day_score("сб", sat, currentDay == 'сб'),
-                                      const SizedBox(width: 8),
-                                      day_score("вс", sun, currentDay == 'вс')
-                                    ]),
-                                    SizedBox(height: 14.v),
-                                    Text(
-                                        "Вы занимаетесь уже $streakCount день(-ей) подряд!",
-                                        style: theme.textTheme.bodyMedium),
-                                    SizedBox(height: 20.v),
-                                    Container(
-                                        decoration: AppDecoration.outlineGray,
-                                        child: Column(children: [
-                                          SizedBox(height: 20.v),
-                                          Text("Общее число очков за...",
-                                              style: CustomTextStyles
-                                                  .extraBold20Text),
-                                          SizedBox(height: 9.v),
-                                          TabBar(
-                                              controller: _tabController,
-                                              labelPadding: EdgeInsets.zero,
-                                              indicatorPadding:
-                                                  EdgeInsets.symmetric(
-                                                      horizontal: -15.h),
-                                              labelStyle: CustomTextStyles
-                                                  .regular16White,
-                                              unselectedLabelStyle:
-                                                  CustomTextStyles
-                                                      .regular16Text,
-                                              indicator: BoxDecoration(
-                                                color:
-                                                    theme.colorScheme.primary,
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                  50.h,
-                                                ),
-                                              ),
-                                              tabs: const [
-                                                Tab(
-                                                  child: Text(
-                                                    "неделя",
-                                                  ),
-                                                ),
-                                                Tab(
-                                                  child: Text(
-                                                    "месяц",
-                                                  ),
-                                                ),
-                                                Tab(
-                                                  child: Text(
-                                                    "год",
-                                                  ),
-                                                )
-                                              ]),
-                                          //  Divider(height: 1, color: appTheme.gray),
-                                          SizedBox(
-                                              height: 75.v,
-                                              width: 361.h,
-                                              child: TabBarView(
-                                                  controller: _tabController,
-                                                  children: <Widget>[
-                                                    Center(
-                                                        child: Text(
-                                                            '${mon + tue + wen + thu + fri + sat + sun}'
-                                                            ' оч.',
-                                                            style: CustomTextStyles
-                                                                .extraBold20Text)),
-                                                    Center(
-                                                        child: Text(
-                                                            '$monthlyScore оч.',
-                                                            style: CustomTextStyles
-                                                                .extraBold20Text)),
-                                                    Center(
-                                                        child: Text(
-                                                            '$yearlyScore оч.',
-                                                            style: CustomTextStyles
-                                                                .extraBold20Text)),
-                                                  ])),
-                                        ])),
-                                    SizedBox(height: 20.v),
-                                    Text("Рекорды за все время:",
-                                        style:
-                                            CustomTextStyles.extraBold20Text),
-                                    SizedBox(height: 9.v),
-                                    Row(
-                                      children: [
-                                        Text(nameGame1,
-                                            style: CustomTextStyles
-                                                .extraBold16Text),
-                                        const Spacer(),
-                                        Text("$best1 очков",
-                                            style: CustomTextStyles
-                                                .extraBold16Text),
-                                      ],
-                                    ),
-                                    SizedBox(height: 9.v),
-                                    Row(children: [
-                                      Text(nameGame2,
-                                          style:
-                                              CustomTextStyles.extraBold16Text),
-                                      const Spacer(),
-                                      Text("$best2 раунд",
-                                          style:
-                                              CustomTextStyles.extraBold16Text),
-                                    ]),
-                                    SizedBox(height: 20.v),
-                                    Text(
-                                        "Количество сыгранных мини-игр за все время:",
-                                        style:
-                                            CustomTextStyles.extraBold20Text),
-                                    SizedBox(height: 9.v),
-                                    Row(
-                                      children: [
-                                        Text(nameGame1,
-                                            style: CustomTextStyles
-                                                .extraBold16Text),
-                                        Spacer(),
-                                        Text("$quantityGame1 раз",
-                                            style: CustomTextStyles
-                                                .extraBold16Text),
-                                      ],
-                                    ),
-                                    SizedBox(height: 9.v),
-                                    Row(children: [
-                                      Text(nameGame2,
-                                          style:
-                                              CustomTextStyles.extraBold16Text),
-                                      const Spacer(),
-                                      Text("$quantityGame2 раз",
-                                          style:
-                                              CustomTextStyles.extraBold16Text),
-                                    ]),
-                                    SizedBox(height: 9.v),
-                                    Row(children: [
-                                      Text(nameGame3,
-                                          style:
-                                              CustomTextStyles.extraBold16Text),
-                                      const Spacer(),
-                                      Text("$quantityGame3 раз",
-                                          style:
-                                              CustomTextStyles.extraBold16Text),
-                                    ]),
-                                    SizedBox(height: 14.v),
-                                  ])),
-                        )
-                      ],
-                    ),
-            ),
-          ),
-        ),
       ),
-      //  )
     );
   }
 }
