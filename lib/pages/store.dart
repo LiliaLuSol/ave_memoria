@@ -1,12 +1,7 @@
-import 'package:ave_memoria/blocs/Auth/bloc/authentication_bloc.dart';
 import 'package:ave_memoria/main.dart';
 import 'package:ave_memoria/pages/article.dart';
-import 'package:ave_memoria/theme/theme_helper.dart';
-import 'package:flutter/cupertino.dart';
-
 import 'package:flutter/material.dart';
 import 'package:ave_memoria/other/app_export.dart';
-import 'package:flutter/rendering.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class Store extends StatefulWidget {
@@ -18,6 +13,8 @@ class Store extends StatefulWidget {
 
 class _StoreState extends State<Store> with TickerProviderStateMixin {
   late final TabController _tabController;
+  late Stream<ConnectivityResult> connectivityStream;
+  bool isConnected = true;
   GlobalData globalData = GlobalData();
   String emailAnon = '';
   int money = 0;
@@ -28,6 +25,7 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    checkInitialConnection();
     _tabController = TabController(length: 4, vsync: this);
     emailAnon = globalData.emailAnon;
     money = globalData.money;
@@ -35,6 +33,13 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
     countGame1 = globalData.countGame1;
     countGame2 = globalData.countGame2;
     countGame3 = globalData.countGame3;
+  }
+
+  void checkInitialConnection() async {
+    var connectivityResult = await Connectivity().checkConnectivity();
+    setState(() {
+      isConnected = connectivityResult != ConnectivityResult.none;
+    });
   }
 
   String? getEmail() {
@@ -68,10 +73,6 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
     super.dispose();
   }
 
-  Future<dynamic> has_internet() async {
-    return await Connectivity().checkConnectivity();
-  }
-
   Future<dynamic> getAchievementList() async {
     String? email = getEmail();
     email = email.toString();
@@ -102,159 +103,162 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     mediaQueryData = MediaQuery.of(context);
 
-    return BlocListener<AuthenticationBloc, AuthenticationState>(
-        listener: (context, state) {
-          if (state is UnAuthenticatedState) {
-            GoRouter.of(context).pushReplacement(AppRoutes.authreg);
-          } else if (state is AuthErrorState) {
-            Future<dynamic> has_internet() async {
-              return await Connectivity().checkConnectivity();
-            }
+    return StreamBuilder<ConnectivityResult>(
+        stream: connectivityStream,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+          } else {
+            isConnected = snapshot.data != ConnectivityResult.none;
           }
-        },
-        child: SafeArea(
-          child: Scaffold(
-            extendBody: true,
-            extendBodyBehindAppBar: true,
-            resizeToAvoidBottomInset: false,
-            appBar: CustomAppBar(
-                height: 75.v,
-                title: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Padding(
-                        padding: EdgeInsets.only(left: 16.h, right: 16.h),
-                        child: Text("Проводник",
-                            style: CustomTextStyles.extraBold32Text)),
-                    Spacer(),
-                    if (supabase.auth.currentUser?.email !=
-                        "anounymous@gmail.com")
-                      Padding(
-                          padding: EdgeInsets.only(
-                            top: 14.v,
-                            bottom: 9.v,
-                          ),
-                          child: Text(money.toString(),
-                              style: CustomTextStyles.semiBold18Text)),
-                    if (supabase.auth.currentUser?.email !=
-                        "anounymous@gmail.com")
-                      IconButton(
-                        icon: FaIcon(
-                          FontAwesomeIcons.coins,
-                          size: 25.h,
-                          color: appTheme.yellow,
-                        ),
-                        onPressed: () {},
-                      )
-                  ],
-                ),
-                styleType: Style.bgFill),
-            body: Container(
-              width: mediaQueryData.size.width,
-              height: mediaQueryData.size.height,
-              child: SizedBox(
-                width: double.maxFinite,
-                child: supabase.auth.currentUser?.email ==
-                        "anounymous@gmail.com"
-                    ? Column(children: [
-                        SizedBox(height: 75.v),
-                        Divider(height: 1, color: appTheme.gray),
-                        Expanded(child: lock())
-                      ])
-                    : Column(children: [
-                        SizedBox(height: 75.v),
-                        Divider(height: 1, color: appTheme.gray),
-                        Padding(
-                            padding: EdgeInsets.symmetric(vertical: 16.v),
-                            child: SizedBox(
-                                height: 27.v,
-                                width: 359.h,
-                                child: TabBar(
-                                    controller: _tabController,
-                                    labelPadding: EdgeInsets.zero,
-                                    indicatorPadding:
-                                        EdgeInsets.symmetric(horizontal: -10.h),
-                                    labelStyle: CustomTextStyles.regular16White,
-                                    unselectedLabelStyle:
-                                        CustomTextStyles.regular16Text,
-                                    indicator: BoxDecoration(
-                                      color: theme.colorScheme.primary,
-                                      borderRadius: BorderRadius.circular(
-                                        50.h,
-                                      ),
-                                    ),
-                                    tabs: const [
-                                      Tab(
-                                        child: Text(
-                                          "библиотека",
-                                        ),
-                                      ),
-                                      Tab(
-                                        child: Text(
-                                          "рынок",
-                                        ),
-                                      ),
-                                      Tab(
-                                        child: Text(
-                                          "склад",
-                                        ),
-                                      ),
-                                      Tab(
-                                        child: Text(
-                                          "достижения",
-                                        ),
-                                      ),
-                                    ]))),
-                        Divider(height: 1, color: appTheme.gray),
-                        SizedBox(height: 15.v),
-                        Expanded(
-                            child: TabBarView(
-                                controller: _tabController,
-                                children: <Widget>[
-                              NestedTabBar('библиотека'),
-                              FutureBuilder(
-                                  future: getShopList(),
-                                  builder: (context, snapshot) {
-                                    if (!snapshot.hasData) {
-                                      return Center(
-                                        child: CircularProgressIndicator(
-                                            color: theme.colorScheme.primary),
-                                      );
-                                    }
-                                    final list = snapshot.data!;
-                                    return buildListShop(list);
-                                  }),
-                              FutureBuilder(
-                                  future: getStoreList(),
-                                  builder: (context, snapshot) {
-                                    if (!snapshot.hasData) {
-                                      return Center(
-                                        child: CircularProgressIndicator(
-                                            color: theme.colorScheme.primary),
-                                      );
-                                    }
-                                    final list = snapshot.data!;
-                                    return buildListStore(list);
-                                  }),
-                              FutureBuilder(
-                                  future: getAchievementList(),
-                                  builder: (context, snapshot) {
-                                    if (!snapshot.hasData) {
-                                      return Center(
-                                        child: CircularProgressIndicator(
-                                            color: theme.colorScheme.primary),
-                                      );
-                                    }
-                                    final list = snapshot.data!;
-                                    return buildListAch(list);
-                                  }),
-                            ])),
-                      ]),
-              ),
-            ),
-          ),
-        ));
+          return SafeArea(
+              child: Scaffold(
+                  extendBody: true,
+                  extendBodyBehindAppBar: true,
+                  resizeToAvoidBottomInset: false,
+                  appBar: CustomAppBar(
+                      height: 75.v,
+                      title: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Padding(
+                              padding: EdgeInsets.only(left: 16.h, right: 16.h),
+                              child: Text("Проводник",
+                                  style: CustomTextStyles.extraBold32Text)),
+                          const Spacer(),
+                          if (supabase.auth.currentUser?.email !=
+                              "anounymous@gmail.com")
+                            Padding(
+                                padding: EdgeInsets.only(
+                                  top: 14.v,
+                                  bottom: 9.v,
+                                ),
+                                child: Text(money.toString(),
+                                    style: CustomTextStyles.semiBold18Text)),
+                          if (supabase.auth.currentUser?.email !=
+                              "anounymous@gmail.com")
+                            IconButton(
+                              icon: FaIcon(
+                                FontAwesomeIcons.coins,
+                                size: 25.h,
+                                color: appTheme.yellow,
+                              ),
+                              onPressed: () {},
+                            )
+                        ],
+                      ),
+                      styleType: Style.bgFill),
+                  body: globalData.isAnon
+                      ? buildContent()
+                      : isConnected
+                          ? buildContent()
+                          : no_internet()));
+        });
+  }
+
+  Widget buildContent() {
+    return SizedBox(
+      width: mediaQueryData.size.width,
+      height: mediaQueryData.size.height,
+      child: SizedBox(
+        width: double.maxFinite,
+        child: supabase.auth.currentUser?.email == "anounymous@gmail.com"
+            ? Column(children: [
+                SizedBox(height: 75.v),
+                Divider(height: 1, color: appTheme.gray),
+                Expanded(child: lock())
+              ])
+            : Column(children: [
+                SizedBox(height: 75.v),
+                Divider(height: 1, color: appTheme.gray),
+                Padding(
+                    padding: EdgeInsets.symmetric(vertical: 16.v),
+                    child: SizedBox(
+                        height: 27.v,
+                        width: 359.h,
+                        child: TabBar(
+                            controller: _tabController,
+                            labelPadding: EdgeInsets.zero,
+                            indicatorPadding:
+                                EdgeInsets.symmetric(horizontal: -10.h),
+                            labelStyle: CustomTextStyles.regular16White,
+                            unselectedLabelStyle:
+                                CustomTextStyles.regular16Text,
+                            indicator: BoxDecoration(
+                              color: theme.colorScheme.primary,
+                              borderRadius: BorderRadius.circular(
+                                50.h,
+                              ),
+                            ),
+                            tabs: const [
+                              Tab(
+                                child: Text(
+                                  "библиотека",
+                                ),
+                              ),
+                              Tab(
+                                child: Text(
+                                  "рынок",
+                                ),
+                              ),
+                              Tab(
+                                child: Text(
+                                  "склад",
+                                ),
+                              ),
+                              Tab(
+                                child: Text(
+                                  "достижения",
+                                ),
+                              ),
+                            ]))),
+                Divider(height: 1, color: appTheme.gray),
+                SizedBox(height: 15.v),
+                Expanded(
+                    child: TabBarView(
+                        controller: _tabController,
+                        children: <Widget>[
+                      const NestedTabBar('библиотека'),
+                      FutureBuilder(
+                          future: getShopList(),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData) {
+                              return Center(
+                                child: CircularProgressIndicator(
+                                    color: theme.colorScheme.primary),
+                              );
+                            }
+                            final list = snapshot.data!;
+                            return buildListShop(list);
+                          }),
+                      FutureBuilder(
+                          future: getStoreList(),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData) {
+                              return Center(
+                                child: CircularProgressIndicator(
+                                    color: theme.colorScheme.primary),
+                              );
+                            }
+                            final list = snapshot.data!;
+                            return buildListStore(list);
+                          }),
+                      FutureBuilder(
+                          future: getAchievementList(),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData) {
+                              return Center(
+                                child: CircularProgressIndicator(
+                                    color: theme.colorScheme.primary),
+                              );
+                            }
+                            final list = snapshot.data!;
+                            return buildListAch(list);
+                          }),
+                    ])),
+              ]),
+      ),
+    );
   }
 
   Widget buildListAch(List<dynamic> list) {
@@ -290,7 +294,7 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
                       SizedBox(height: 4.v),
                       Divider(height: 1, color: appTheme.gray),
                       SizedBox(height: 4.v),
-                      Spacer(),
+                      const Spacer(),
                       Text(
                         list[index]['achievement_desc'],
                         style: CustomTextStyles.regular16Text,
@@ -308,7 +312,7 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
                               color: appTheme.yellow,
                             ),
                           ]),
-                      Spacer(),
+                      const Spacer(),
                       SizedBox(height: 4.v),
                       CustomElevatedButton(
                         text: isCountValid ? 'Получить' : 'Не выполнено',
@@ -438,7 +442,7 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
                       SizedBox(height: 4.v),
                       Divider(height: 1, color: appTheme.gray),
                       SizedBox(height: 4.v),
-                      Spacer(),
+                      const Spacer(),
                       Text(
                         list[index]['item_description'],
                         style: CustomTextStyles.regular16Text,
@@ -449,17 +453,17 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
                       Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text('цена: '),
-                            Spacer(),
+                            const Text('цена: '),
+                            const Spacer(),
                             Text('${list[index]['item_price']} '),
                             FaIcon(
                               FontAwesomeIcons.coins,
                               size: 16.h,
                               color: appTheme.yellow,
                             ),
-                            Spacer(),
+                            const Spacer(),
                           ]),
-                      Spacer(),
+                      const Spacer(),
                       SizedBox(height: 4.v),
                       CustomElevatedButton(
                         text: list[index]['is_buy'] ? 'куплено' : 'купить',
@@ -626,20 +630,20 @@ class _NestedTabBarState extends State<NestedTabBar>
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Spacer(),
+                        const Spacer(),
                         Text(
                           list[index]["title"],
                           style: CustomTextStyles.semiBold18Text,
                         ),
-                        Spacer(),
+                        const Spacer(),
                         Text(
                           'На прочтение: ${list[index]["time_read"]} минут',
                           style: CustomTextStyles.regular16Text,
                         ),
-                        Spacer(),
+                        const Spacer(),
                       ],
                     ),
-                    Spacer(),
+                    const Spacer(),
                     CustomImageView(
                       svgPath: ImageConstant.imgArrowright,
                       height: 15.v,

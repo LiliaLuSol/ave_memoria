@@ -340,14 +340,12 @@ class _StatisticsState extends State<Statistics> with TickerProviderStateMixin {
     return StreamBuilder<ConnectivityResult>(
         stream: connectivityStream,
         builder: (context, snapshot) {
+
           if (snapshot.connectionState == ConnectionState.waiting) {
-            if (!globalData.isAnon) {
-              return no_internet();
-            }
+
+          } else {
+            isConnected = snapshot.data != ConnectivityResult.none;
           }
-
-          isConnected = snapshot.data != ConnectivityResult.none;
-
           return SafeArea(
               child: Scaffold(
                   extendBody: true,
