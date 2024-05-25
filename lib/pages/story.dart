@@ -20,6 +20,7 @@ class _StoryState extends State<Story> with TickerProviderStateMixin {
 
   @override
   void initState() {
+    connectivityStream = Connectivity().onConnectivityChanged;
     checkInitialConnection();
     emailAnon = globalData.emailAnon;
     money = globalData.money;

@@ -25,6 +25,7 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    connectivityStream = Connectivity().onConnectivityChanged;
     checkInitialConnection();
     _tabController = TabController(length: 4, vsync: this);
     emailAnon = globalData.emailAnon;

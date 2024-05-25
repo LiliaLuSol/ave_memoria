@@ -120,6 +120,14 @@ class GlobalData {
       'Внутриигровая валюта - Мем. Можно получить за мини-игры и достижения. Потратить можно на рынке или на открытие новых уровней в сюжете';
 
   //игры
+  String image1 = "";
+  String image2 = "";
+  String image3 = "";
+  void updateImage(String newData1, String? newData2, String? newData3) {
+    image1 = newData1;
+    image2 = newData2!;
+    image3 = newData3!;
+  }
   String nameGame1 = 'Карточная игра\n'
       '"Река памяти"';
   String nameGame1_ = 'Река памяти';
@@ -130,7 +138,9 @@ class GlobalData {
   String game1Rule3 =
       "А затем все карты перевернут рубашкой вверх. Надо с меньшим числом попыток найти и перевернуть парные карты, если картинки различаются, тогда они снова повернутся";
 
-  String image1Game1 = '';
+  String image1Game1 = "assets/images/image1Game1.png";
+  String image2Game1 = 'assets/images/image2Game1.png';
+  String image3Game1 = 'assets/images/image3Game1.png';
 
   String nameGame2 = 'Гладиаторская тренировка памяти';
   String nameGame2_ = "    Гладиаторская\nтренировка памяти";
@@ -142,11 +152,18 @@ class GlobalData {
   String game2Rule3 =
       "С каждым раундом последовательность становится все длинее, а за ошибку Вы теярете по одной жизни";
 
+  String image1Game2 = "assets/images/image1Game2.png";
+  String image2Game2 = 'assets/images/image2Game2.png';
+  String image3Game2 = 'assets/images/image3Game2.png';
+
   String nameGame3 = 'Взгляд в будущее';
   String game3Rule1 =
       "В начале игры Вам показывается картинка на 20 секунд, Вы должны запомнить как можно больше деталей";
   String game3Rule2 =
       "Затем задается ряд вопросов по картинке, на которые Вам предстоит ответить по памяти";
+
+  String image1Game3 = "assets/images/image1Game3.png";
+  String image2Game3 = 'assets/images/image2Game3.png';
 
 //проводник
 

@@ -27,6 +27,14 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
   late String game1Rule1;
   late String game1Rule2;
   late String game1Rule3;
+  late String image1Game1;
+  late String image2Game1;
+  late String image3Game1;
+  late String image1Game2;
+  late String image2Game2;
+  late String image3Game2;
+  late String image1Game3;
+  late String image2Game3;
   late String game2Rule1;
   late String game2Rule2;
   late String game2Rule3;
@@ -77,6 +85,14 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
     game2Rule3 = globalData.game2Rule3;
     game3Rule1 = globalData.game3Rule1;
     game3Rule2 = globalData.game3Rule2;
+    image1Game1 = globalData.image1Game1;
+    image2Game1 = globalData.image2Game1;
+    image3Game1 = globalData.image3Game1;
+    image1Game2 = globalData.image1Game2;
+    image2Game2 = globalData.image2Game2;
+    image3Game2 = globalData.image3Game2;
+    image1Game3 = globalData.image1Game3;
+    image2Game3 = globalData.image2Game3;
     moneyRule = globalData.moneyRule;
     super.initState();
   }
@@ -476,13 +492,17 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                                                                     game1Rule2,
                                                                 text3:
                                                                     game1Rule3,
+                                                                image1: image1Game1,
+                                                                image2: image2Game1,
+                                                                image3: image3Game1,
                                                               ),
                                                           opaque: false,
                                                           fullscreenDialog:
-                                                              true))
+                                                              true)),
                                                 }
                                               : GoRouter.of(context)
                                                   .push(AppRoutes.game_cards);
+                                          globalData.updateImage(image1Game1,image2Game1,image3Game1);
                                         }),
                                     SizedBox(height: 16.v),
                                     GestureDetector(
@@ -497,26 +517,6 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                                                   fit: BoxFit.fill,
                                                 ),
                                               )),
-                                          // Positioned(
-                                          //     top: 10.h,
-                                          //     child: Column(
-                                          //         crossAxisAlignment:
-                                          //             CrossAxisAlignment.start,
-                                          //         children: [
-                                          //           Container(
-                                          //             color: appTheme.white,
-                                          //             height: 22.v,
-                                          //             width: 224.h,
-                                          //           ),
-                                          //           SizedBox(
-                                          //             height: 6.v,
-                                          //           ),
-                                          //           Container(
-                                          //             color: appTheme.white,
-                                          //             height: 22.v,
-                                          //             width: 80.h,
-                                          //           )
-                                          //         ])),
                                           Positioned(
                                               top: 10.h,
                                               left: 25.h,
@@ -551,10 +551,11 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                                                               ),
                                                           opaque: false,
                                                           fullscreenDialog:
-                                                              true))
+                                                              true)),
                                                 }
                                               : GoRouter.of(context).push(
                                                   AppRoutes.game_sequence);
+                                          globalData.updateImage(image1Game2,image2Game2,image3Game2);
                                         }),
                                     SizedBox(height: 16.v),
                                     GestureDetector(
@@ -606,6 +607,7 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                                                 }
                                               : GoRouter.of(context)
                                                   .push(AppRoutes.game_image);
+                                          globalData.updateImage(image1Game3,image2Game3, '');
                                         }),
                                     SizedBox(height: 16.v)
                                   ]))))
