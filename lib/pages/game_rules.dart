@@ -1,5 +1,4 @@
 import 'package:ave_memoria/other/app_export.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:page_view_indicators/circle_page_indicator.dart';
 
@@ -31,6 +30,7 @@ class GameRules extends StatefulWidget {
 }
 
 class _GameRulesState extends State<GameRules> {
+  GlobalData globalData = GlobalData();
   final PageController pageController = PageController();
   final _currentPageNotifier = ValueNotifier<int>(0);
   late List<Widget> pages;
@@ -39,13 +39,13 @@ class _GameRulesState extends State<GameRules> {
   void initState() {
     super.initState();
     pages = [
-      RulePage(text: widget.text1),
+      RulePage(text: widget.text1, image: globalData.image1),
     ];
     if (widget.text2 != null) {
-      pages.add(RulePage(text: widget.text2!));
+      pages.add(RulePage(text: widget.text2!, image: globalData.image2));
     }
     if (widget.text3 != null) {
-      pages.add(RulePage(text: widget.text3!));
+      pages.add(RulePage(text: widget.text3!, image: globalData.image3));
     }
   }
 
@@ -74,10 +74,13 @@ class _GameRulesState extends State<GameRules> {
 
   @override
   Widget build(BuildContext context) {
+    print(
+        '${globalData.image1} image1: ${widget.image1}\ntext1: ${widget.text1}');
     return SafeArea(
         child: Scaffold(
-            backgroundColor:
-                widget.firstTimes ? Color(0xFFC0C0C0) : Colors.transparent,
+            backgroundColor: widget.firstTimes
+                ? const Color(0xFFC0C0C0)
+                : Colors.transparent,
             body: Center(
                 child: Container(
                     width: 353.h,
@@ -90,10 +93,10 @@ class _GameRulesState extends State<GameRules> {
                           SizedBox(height: 10.v),
                           Row(children: [
                             SizedBox(width: 25.h),
-                            Spacer(),
+                            const Spacer(),
                             Text("Правила",
                                 style: CustomTextStyles.extraBold32Text),
-                            Spacer(),
+                            const Spacer(),
                             IconButton(
                               icon: FaIcon(
                                 FontAwesomeIcons.circleXmark,
@@ -102,8 +105,7 @@ class _GameRulesState extends State<GameRules> {
                               ),
                               onPressed: () {
                                 widget.firstTimes
-                                    ? GoRouter.of(context)
-                                        .push(widget.goRoute)
+                                    ? GoRouter.of(context).push(widget.goRoute)
                                     : Navigator.pop(context);
                               },
                             ),
@@ -136,7 +138,7 @@ class _GameRulesState extends State<GameRules> {
                               ),
                             ),
                           ),
-                           SizedBox(height: 40.v),
+                          SizedBox(height: 40.v),
                           ValueListenableBuilder<String>(
                               valueListenable: buttonTextNotifier,
                               builder: (context, label, child) {
@@ -157,8 +159,8 @@ class _GameRulesState extends State<GameRules> {
                                             pages.length - 1) {
                                           pageController.animateToPage(
                                               currentPageIndex + 1,
-                                              duration:
-                                                  Duration(milliseconds: 500),
+                                              duration: const Duration(
+                                                  milliseconds: 500),
                                               curve: Curves.ease);
                                         }
                                       } else {
@@ -175,11 +177,12 @@ class _GameRulesState extends State<GameRules> {
 }
 
 class RulePage extends StatelessWidget {
-  final String? image;
+  final String image;
   final String text;
 
-  RulePage({
-    this.image,
+  const RulePage({
+    super.key,
+    required this.image,
     required this.text,
   });
 
@@ -187,18 +190,16 @@ class RulePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(
-          height: 205.v,
-          width: 260.h,
-          color: appTheme.lightGray,
-          // decoration: BoxDecoration(
-          //   image: DecorationImage(
-          //     image: AssetImage(
-          //         'assets/images/cards_game.png'),
-          //     fit: BoxFit.fill,
-          //   ),
-          // )
-        ),
+        if (image.isNotEmpty)
+          Container(
+            height: 205.v,
+            width: 260.h,
+            decoration: BoxDecoration(
+                image: DecorationImage(
+              image: AssetImage(image),
+              fit: BoxFit.cover,
+            )),
+          ),
         SizedBox(height: 40.v),
         Text(text,
             style: CustomTextStyles.semiBold18Text,
