@@ -278,11 +278,10 @@ class SequenceGameState extends State<SequenceGame> {
                             child: Container(
                               width: 115.h,
                               height: 80.v,
-                              decoration: const BoxDecoration(
-                                  image: DecorationImage(
-                                image: AssetImage('assets/images/sword1.svg'),
+                              child: CustomImageView(
+                                svgPath: 'assets/images/sword1.svg',
                                 fit: BoxFit.contain,
-                              )),
+                              ),
                             ),
                           ),
                           GestureDetector(
@@ -295,11 +294,6 @@ class SequenceGameState extends State<SequenceGame> {
                                 width: 115.h,
                                 height: 80.v,
                                 decoration: BoxDecoration(
-                                  image: const DecorationImage(
-                                    image:
-                                        AssetImage('assets/images/sword2.svg'),
-                                    fit: BoxFit.contain,
-                                  ),
                                   border: Border(
                                       right: BorderSide(
                                         color: appTheme.gray,
@@ -309,25 +303,26 @@ class SequenceGameState extends State<SequenceGame> {
                                         color: appTheme.gray,
                                         width: 1,
                                       )),
+                                ),
+                                child: CustomImageView(
+                                  svgPath: 'assets/images/sword2.svg',
+                                  fit: BoxFit.contain,
                                 )),
                           ),
                           GestureDetector(
-                            onTap: () {
-                              if (_start && _canPlay) {
-                                handleButtonClick(3);
-                              }
-                            },
-                            child: Container(
+                              onTap: () {
+                                if (_start && _canPlay) {
+                                  handleButtonClick(3);
+                                }
+                              },
+                              child: Container(
                                 width: 115.h,
                                 height: 80.v,
-                                decoration: const BoxDecoration(
-                                  image: DecorationImage(
-                                    image:
-                                        AssetImage('assets/images/sword3.svg'),
-                                    fit: BoxFit.contain,
-                                  ),
-                                )),
-                          ),
+                                child: CustomImageView(
+                                  svgPath: 'assets/images/sword3.svg',
+                                  fit: BoxFit.contain,
+                                ),
+                              )),
                         ],
                       ),
                       SizedBox(height: 9.v),
@@ -344,11 +339,6 @@ class SequenceGameState extends State<SequenceGame> {
                                 width: 90.h,
                                 height: 60.v,
                                 decoration: BoxDecoration(
-                                  image: const DecorationImage(
-                                    image:
-                                        AssetImage('assets/images/sword4.svg'),
-                                    fit: BoxFit.contain,
-                                  ),
                                   border: Border(
                                       top: BorderSide(
                                         color: appTheme.gray,
@@ -358,6 +348,10 @@ class SequenceGameState extends State<SequenceGame> {
                                         color: appTheme.gray,
                                         width: 1,
                                       )),
+                                ),
+                                child: CustomImageView(
+                                  svgPath: 'assets/images/sword4.svg',
+                                  fit: BoxFit.contain,
                                 )),
                           ),
                           Container(
@@ -384,12 +378,11 @@ class SequenceGameState extends State<SequenceGame> {
                             child: Container(
                                 width: 90.h,
                                 height: 60.v,
+                                child: CustomImageView(
+                                  svgPath: 'assets/images/sword5.svg',
+                                  fit: BoxFit.contain,
+                                ),
                                 decoration: BoxDecoration(
-                                  image: const DecorationImage(
-                                    image:
-                                        AssetImage('assets/images/sword5.svg'),
-                                    fit: BoxFit.contain,
-                                  ),
                                   border: Border(
                                       top: BorderSide(
                                         color: appTheme.gray,
@@ -416,12 +409,9 @@ class SequenceGameState extends State<SequenceGame> {
                               child: Container(
                                   width: 115.h,
                                   height: 80.v,
-                                  decoration: const BoxDecoration(
-                                    image: DecorationImage(
-                                      image: AssetImage(
-                                          'assets/images/sword6.svg'),
-                                      fit: BoxFit.contain,
-                                    ),
+                                  child: CustomImageView(
+                                    svgPath: 'assets/images/sword6.svg',
+                                    fit: BoxFit.contain,
                                   )),
                             ),
                             GestureDetector(
@@ -434,11 +424,6 @@ class SequenceGameState extends State<SequenceGame> {
                                   width: 115.h,
                                   height: 80.v,
                                   decoration: BoxDecoration(
-                                    image: const DecorationImage(
-                                      image: AssetImage(
-                                          'assets/images/sword7.svg'),
-                                      fit: BoxFit.contain,
-                                    ),
                                     border: Border(
                                         right: BorderSide(
                                           color: appTheme.gray,
@@ -448,6 +433,10 @@ class SequenceGameState extends State<SequenceGame> {
                                           color: appTheme.gray,
                                           width: 1,
                                         )),
+                                  ),
+                                  child: CustomImageView(
+                                    svgPath: 'assets/images/sword7.svg',
+                                    fit: BoxFit.contain,
                                   )),
                             ),
                             GestureDetector(
@@ -459,12 +448,9 @@ class SequenceGameState extends State<SequenceGame> {
                               child: Container(
                                   width: 115.h,
                                   height: 80.v,
-                                  decoration: const BoxDecoration(
-                                    image: DecorationImage(
-                                      image: AssetImage(
-                                          'assets/images/sword8.svg'),
-                                      fit: BoxFit.contain,
-                                    ),
+                                  child: CustomImageView(
+                                    svgPath: 'assets/images/sword8.svg',
+                                    fit: BoxFit.contain,
                                   )),
                             ),
                           ]),
