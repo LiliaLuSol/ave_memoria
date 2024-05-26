@@ -167,6 +167,12 @@ class GlobalData {
 
 //проводник
 
+  int curSecurity = 0;
+
+  void updateCurSecurity(int newData) {
+    curSecurity = newData;
+  }
+
 //профиль
 
   bool news = false;

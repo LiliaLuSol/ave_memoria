@@ -1,5 +1,6 @@
 import 'package:ave_memoria/main.dart';
 import 'package:ave_memoria/pages/article.dart';
+import 'package:ave_memoria/utils/global_date.dart';
 import 'package:flutter/material.dart';
 import 'package:ave_memoria/other/app_export.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -31,6 +32,7 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
     emailAnon = globalData.emailAnon;
     money = globalData.money;
     getMoney();
+    getSecurity();
     countGame1 = globalData.countGame1;
     countGame2 = globalData.countGame2;
     countGame3 = globalData.countGame3;
@@ -98,6 +100,18 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
         await supabase.from("usershope").select().lte('security', 1);
 
     return list;
+  }
+
+  void getSecurity() async {
+    final res = await supabase
+        .from('Characters')
+        .select('security')
+        .eq('user_id', globalData.user_id)
+        .single()
+        .count(CountOption.exact);
+    final data = res.data;
+    print(data['security']);
+    globalData.updateCurSecurity(data['security']);
   }
 
   @override
@@ -193,24 +207,16 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
                             ),
                             tabs: const [
                               Tab(
-                                child: Text(
-                                  "библиотека",
-                                ),
+                                child: Text("библиотека"),
                               ),
                               Tab(
-                                child: Text(
-                                  "рынок",
-                                ),
+                                child: Text("рынок"),
                               ),
                               Tab(
-                                child: Text(
-                                  "склад",
-                                ),
+                                child: Text("склад"),
                               ),
                               Tab(
-                                child: Text(
-                                  "достижения",
-                                ),
+                                child: Text("достижения"),
                               ),
                             ]))),
                 Divider(height: 1, color: appTheme.gray),
@@ -512,11 +518,14 @@ class NestedTabBar extends StatefulWidget {
 class _NestedTabBarState extends State<NestedTabBar>
     with TickerProviderStateMixin {
   late final TabController _tabController;
+  GlobalData globalData = GlobalData();
+  late int curSecurity;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    curSecurity = globalData.curSecurity;
   }
 
   @override
@@ -527,21 +536,19 @@ class _NestedTabBarState extends State<NestedTabBar>
 
   Future<dynamic> getArticleSelfList() async {
     List<dynamic> list = await supabase
-        .from("Library")
+        .from("librarylist")
         .select()
         .eq("type", "self-development")
-        .lte('security', 1);
-
+        .lte('security', curSecurity);
     return list;
   }
 
   Future<dynamic> getArticleStoryList() async {
     List<dynamic> list = await supabase
-        .from("Library")
+        .from("librarylist")
         .select()
         .eq("type", "story")
-        .lte('security', 1);
-
+        .lte('security', curSecurity);
     return list;
   }
 
@@ -606,7 +613,8 @@ class _NestedTabBarState extends State<NestedTabBar>
   }
 
   Widget buildList(List<dynamic> list, String footerText) {
-    return Column(
+    return SingleChildScrollView(
+        child: Column(
       children: [
         GridView.builder(
           gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
@@ -615,6 +623,7 @@ class _NestedTabBarState extends State<NestedTabBar>
             mainAxisSpacing: 15.h,
           ),
           shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
           padding: EdgeInsets.all(16.h),
           itemCount: list.length,
           itemBuilder: (BuildContext ctx, index) {
@@ -632,10 +641,13 @@ class _NestedTabBarState extends State<NestedTabBar>
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Spacer(),
-                        Text(
-                          list[index]["title"],
-                          style: CustomTextStyles.semiBold18Text,
-                        ),
+                        SizedBox(
+                            width: 320.h,
+                            child: Text(
+                              list[index]["title"],
+                              maxLines: 2,
+                              style: CustomTextStyles.semiBold18Text,
+                            )),
                         const Spacer(),
                         Text(
                           'На прочтение: ${list[index]["time_read"]} минут',
@@ -674,7 +686,8 @@ class _NestedTabBarState extends State<NestedTabBar>
             style: CustomTextStyles.regular16Primary,
           ),
         ),
+        SizedBox(height: 16.v),
       ],
-    );
+    ));
   }
 }
