@@ -1,6 +1,5 @@
 import 'package:ave_memoria/main.dart';
 import 'package:ave_memoria/pages/article.dart';
-import 'package:ave_memoria/utils/global_date.dart';
 import 'package:flutter/material.dart';
 import 'package:ave_memoria/other/app_export.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -22,6 +21,8 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
   int countGame1 = 0;
   int countGame2 = 0;
   int countGame3 = 0;
+  late int curSecurity;
+  late int user_id;
 
   @override
   void initState() {
@@ -31,6 +32,8 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
     _tabController = TabController(length: 4, vsync: this);
     emailAnon = globalData.emailAnon;
     money = globalData.money;
+    curSecurity = globalData.curSecurity;
+    user_id = globalData.user_id;
     getMoney();
     getSecurity();
     countGame1 = globalData.countGame1;
@@ -62,10 +65,11 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
         .from('profileusergame')
         .select('money')
         .eq('email', email)
+        .single()
         .count(CountOption.exact);
     final data = res.data;
     setState(() {
-      globalData.updateMoney(data[0]['money']);
+      globalData.updateMoney(data['money']);
       money = globalData.money;
     });
   }
@@ -89,15 +93,18 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
   }
 
   Future<dynamic> getStoreList() async {
-    List<dynamic> list =
-        await supabase.from("Store").select().lte('lv_availble', 1);
+    List<dynamic> list = await supabase
+        .from("storelist")
+        .select()
+        .lte('security', curSecurity)
+        .eq('available', true);
 
     return list;
   }
 
   Future<dynamic> getShopList() async {
     List<dynamic> list =
-        await supabase.from("usershope").select().lte('security', 1);
+        await supabase.from("usershope").select().lte('security', curSecurity);
 
     return list;
   }
@@ -110,7 +117,6 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
         .single()
         .count(CountOption.exact);
     final data = res.data;
-    print(data['security']);
     globalData.updateCurSecurity(data['security']);
   }
 
@@ -141,8 +147,7 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
                               child: Text("Проводник",
                                   style: CustomTextStyles.extraBold32Text)),
                           const Spacer(),
-                          if (supabase.auth.currentUser?.email !=
-                              "anounymous@gmail.com")
+                          if (!globalData.isAnon)
                             Padding(
                                 padding: EdgeInsets.only(
                                   top: 14.v,
@@ -150,8 +155,7 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
                                 ),
                                 child: Text(money.toString(),
                                     style: CustomTextStyles.semiBold18Text)),
-                          if (supabase.auth.currentUser?.email !=
-                              "anounymous@gmail.com")
+                          if (!globalData.isAnon)
                             IconButton(
                               icon: FaIcon(
                                 FontAwesomeIcons.coins,
@@ -177,7 +181,7 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
       height: mediaQueryData.size.height,
       child: SizedBox(
         width: double.maxFinite,
-        child: supabase.auth.currentUser?.email == "anounymous@gmail.com"
+        child: globalData.isAnon || !isConnected
             ? Column(children: [
                 SizedBox(height: 75.v),
                 Divider(height: 1, color: appTheme.gray),
@@ -270,7 +274,8 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
 
   Widget buildListAch(List<dynamic> list) {
     final List<int> countGame = [countGame1, countGame2, countGame3];
-    return Column(
+    return SingleChildScrollView(
+        child: Column(
       children: [
         GridView.builder(
           gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
@@ -278,6 +283,7 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
               childAspectRatio: 1,
               mainAxisSpacing: 15.h,
               crossAxisSpacing: 15.h),
+          physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           padding: EdgeInsets.all(16.h),
           itemCount: list.length,
@@ -343,17 +349,19 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
           },
         ),
       ],
-    );
+    ));
   }
 
   Widget buildListStore(List<dynamic> list) {
-    return Column(
+    return SingleChildScrollView(
+        child: Column(
       children: [
         GridView.builder(
           gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
               maxCrossAxisExtent: 706.h,
               childAspectRatio: 2.35,
               mainAxisSpacing: 15.h),
+          physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           padding: EdgeInsets.all(16.h),
           itemCount: list.length,
@@ -416,11 +424,12 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
           },
         ),
       ],
-    );
+    ));
   }
 
   Widget buildListShop(List<dynamic> list) {
-    return Column(
+    return SingleChildScrollView(
+        child: Column(
       children: [
         GridView.builder(
           gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
@@ -429,12 +438,15 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
               mainAxisSpacing: 15.h,
               crossAxisSpacing: 15.h),
           shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
           padding: EdgeInsets.all(16.h),
           itemCount: list.length,
           itemBuilder: (BuildContext ctx, index) {
+            bool is_buy = list[index]['is_buy'];
             return Container(
                 decoration: AppDecoration.outlineGray
                     .copyWith(borderRadius: BorderRadiusStyle.circleBorder5),
+                key: ValueKey(list[index]['item_id']),
                 width: 170.h,
                 height: 150.v,
                 child: Padding(
@@ -473,9 +485,9 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
                       const Spacer(),
                       SizedBox(height: 4.v),
                       CustomElevatedButton(
-                        text: list[index]['is_buy'] ? 'куплено' : 'купить',
+                        text: is_buy ? 'куплено' : 'купить',
                         height: 30.v,
-                        buttonStyle: list[index]['is_buy']
+                        buttonStyle: is_buy
                             ? ElevatedButton.styleFrom(
                                 backgroundColor: appTheme.gray,
                                 shape: RoundedRectangleBorder(
@@ -487,6 +499,41 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
                                     borderRadius: BorderRadius.circular(5.h)),
                               ),
                         buttonTextStyle: CustomTextStyles.regular16White,
+                        onTap: () async {
+                          list[index]['item_price'] <= globalData.money
+                              ? {
+                                  setState(() {
+                                    globalData.updateMoney((globalData.money -
+                                            list[index]['item_price'])
+                                        .toInt());
+                                    money = globalData.money;
+                                    is_buy = true;
+                                    if (list[index]['item_id'] == 1) {
+                                      globalData.updateCurSecurity(2);
+                                    }
+                                  }),
+                                  await supabase
+                                      .from('Characters')
+                                      .update({'money': globalData.money})
+                                      .eq('user_id', globalData.user_id)
+                                      .count(CountOption.exact),
+                                  await supabase
+                                      .from("Purchases")
+                                      .update({'is_buy': true})
+                                      .eq('user_id', user_id)
+                                      .eq('item_id', list[index]['item_id']),
+                                  if (list[index]['item_id'] == 1)
+                                    {
+                                      await supabase
+                                          .from("Characters")
+                                          .update({'security': 2}).eq(
+                                              'user_id', user_id)
+                                    },
+                                }
+                              : context.showsnackbar(
+                                  title: 'Недостаточно средств для покупки!',
+                                  color: Colors.grey);
+                        },
                       ),
                     ],
                   ),
@@ -502,7 +549,7 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
           ),
         ),
       ],
-    );
+    ));
   }
 }
 
@@ -590,7 +637,7 @@ class _NestedTabBarState extends State<NestedTabBar>
                     }
                     final list = snapshot.data!;
                     return buildList(list,
-                        'Для получения большего числа сведений необходимо иметь Карту доступа ур. 2 и выше');
+                        'Для получения большего числа сведений необходимо иметь Карту доступа ур. ${curSecurity + 1} и выше');
                   }),
               FutureBuilder(
                   future: getArticleStoryList(),
