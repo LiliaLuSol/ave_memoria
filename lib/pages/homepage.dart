@@ -74,6 +74,10 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
     checkAndAddDailyEntry();
     fetchWeeklyScores();
     fetchStreakCount();
+    getNews();
+    getNotification();
+    getNotificationTime();
+    getSecurity();
     nameGame1 = globalData.nameGame1;
     nameGame2 = globalData.nameGame2__;
     nameGame3 = globalData.nameGame3;
@@ -129,10 +133,11 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
         .from('profileusergame')
         .select('money')
         .eq('email', email)
+        .single()
         .count(CountOption.exact);
     final data = res.data;
     setState(() {
-      globalData.updateMoney(data[0]['money']);
+      globalData.updateMoney(data['money']);
       money = globalData.money;
     });
   }
@@ -144,11 +149,12 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
         .from('profileusergame')
         .select('user_id')
         .eq('email', email)
+        .single()
         .count(CountOption.exact);
     final data = res.data;
     setState(() {
-      globalData.updateId(data[0]['user_id']);
-      user_id = data[0]['user_id'];
+      globalData.updateId(data['user_id']);
+      user_id = data['user_id'];
     });
   }
 
@@ -300,13 +306,15 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
     email = email.toString();
     final res =
         supabase.from('usergamedata').select('best_score').eq('email', email);
-    final data01 = await res.eq('game', 'cards').count(CountOption.exact);
+    final data01 =
+        await res.eq('game', 'cards').single().count(CountOption.exact);
     final data1 = data01.data;
-    final data02 = await res.eq('game', 'sequence').count(CountOption.exact);
+    final data02 =
+        await res.eq('game', 'sequence').single().count(CountOption.exact);
     final data2 = data02.data;
     setState(() {
-      globalData.updateBest(1, data1[0]['best_score']);
-      globalData.updateBest(2, data2[0]['best_score']);
+      globalData.updateBest(1, data1['best_score']);
+      globalData.updateBest(2, data2['best_score']);
     });
   }
 
@@ -315,16 +323,19 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
     email = email.toString();
     final res =
         supabase.from('usergamedata').select('quantity').eq('email', email);
-    final data01 = await res.eq('game', 'cards').count(CountOption.exact);
+    final data01 =
+        await res.eq('game', 'cards').single().count(CountOption.exact);
     final data1 = data01.data;
-    final data02 = await res.eq('game', 'sequence').count(CountOption.exact);
+    final data02 =
+        await res.eq('game', 'sequence').single().count(CountOption.exact);
     final data2 = data02.data;
-    final data03 = await res.eq('game', 'image').count(CountOption.exact);
+    final data03 =
+        await res.eq('game', 'image').single().count(CountOption.exact);
     final data3 = data03.data;
     setState(() {
-      globalData.updateCount(1, data1[0]['quantity']);
-      globalData.updateCount(2, data2[0]['quantity']);
-      globalData.updateCount(3, data3[0]['quantity']);
+      globalData.updateCount(1, data1['quantity']);
+      globalData.updateCount(2, data2['quantity']);
+      globalData.updateCount(3, data3['quantity']);
     });
   }
 
@@ -333,9 +344,10 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
         .from('Notifications')
         .select('news')
         .eq('user_id', globalData.user_id)
+        .single()
         .count(CountOption.exact);
     setState(() {
-      globalData.news = res.data[0]['news'];
+      globalData.news = res.data['news'];
     });
   }
 
@@ -344,9 +356,10 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
         .from('Notifications')
         .select('notification')
         .eq('user_id', globalData.user_id)
+        .single()
         .count(CountOption.exact);
     setState(() {
-      globalData.notification = res.data[0]['notification'];
+      globalData.notification = res.data['notification'];
     });
   }
 
@@ -355,15 +368,27 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
         .from('Notifications')
         .select('notification_time')
         .eq('user_id', globalData.user_id)
+        .single()
         .count(CountOption.exact);
     final data = res.data;
     if (data[0]['notification_time'] != null) {
-      final timeString = data[0]['notification_time'] as String;
+      final timeString = data['notification_time'] as String;
       final timeParts = timeString.split(':');
       final hour = int.parse(timeParts[0]);
       final minute = int.parse(timeParts[1]);
       globalData.notification_time = TimeOfDay(hour: hour, minute: minute);
     }
+  }
+
+  void getSecurity() async {
+    final res = await supabase
+        .from('Characters')
+        .select('security')
+        .eq('user_id', globalData.user_id)
+        .single()
+        .count(CountOption.exact);
+    final data = res.data;
+    globalData.updateCurSecurity(data['security']);
   }
 
   @override
@@ -492,9 +517,12 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                                                                     game1Rule2,
                                                                 text3:
                                                                     game1Rule3,
-                                                                image1: image1Game1,
-                                                                image2: image2Game1,
-                                                                image3: image3Game1,
+                                                                image1:
+                                                                    image1Game1,
+                                                                image2:
+                                                                    image2Game1,
+                                                                image3:
+                                                                    image3Game1,
                                                               ),
                                                           opaque: false,
                                                           fullscreenDialog:
@@ -502,7 +530,8 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                                                 }
                                               : GoRouter.of(context)
                                                   .push(AppRoutes.game_cards);
-                                          globalData.updateImage(image1Game1,image2Game1,image3Game1);
+                                          globalData.updateImage(image1Game1,
+                                              image2Game1, image3Game1);
                                         }),
                                     SizedBox(height: 16.v),
                                     GestureDetector(
@@ -555,7 +584,8 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                                                 }
                                               : GoRouter.of(context).push(
                                                   AppRoutes.game_sequence);
-                                          globalData.updateImage(image1Game2,image2Game2,image3Game2);
+                                          globalData.updateImage(image1Game2,
+                                              image2Game2, image3Game2);
                                         }),
                                     SizedBox(height: 16.v),
                                     GestureDetector(
@@ -607,7 +637,8 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                                                 }
                                               : GoRouter.of(context)
                                                   .push(AppRoutes.game_image);
-                                          globalData.updateImage(image1Game3,image2Game3, '');
+                                          globalData.updateImage(
+                                              image1Game3, image2Game3, '');
                                         }),
                                     SizedBox(height: 16.v)
                                   ]))))
