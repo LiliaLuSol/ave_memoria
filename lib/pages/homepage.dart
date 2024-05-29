@@ -437,12 +437,6 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                             context,
                             PageRouteBuilder(
                                 pageBuilder: (_, __, ___) =>
-                                    //     GameRules(
-                                    //   firstTimes: false,
-                                    //   goRoute: "",
-                                    //   countRule: 1,
-                                    //   text1: moneyRule,
-                                    // ),
                                     MoneyPage(
                                       text: moneyRule,
                                     ),

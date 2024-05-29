@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:ave_memoria/other/app_export.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../main.dart';
+import 'homepage.dart';
 
 class Statistics extends StatefulWidget {
   const Statistics({super.key});
@@ -34,6 +35,7 @@ class _StatisticsState extends State<Statistics> with TickerProviderStateMixin {
   late int quantityGame3;
   late int best1;
   late int best2;
+  late String moneyRule;
 
   bool isConnected = true;
   late Stream<ConnectivityResult> connectivityStream;
@@ -84,6 +86,7 @@ class _StatisticsState extends State<Statistics> with TickerProviderStateMixin {
     fri = globalData.fri;
     sat = globalData.sat;
     sun = globalData.sun;
+    moneyRule = globalData.moneyRule;
     currentDay = getCurrentDay();
     fetchAllData();
   }
@@ -377,7 +380,17 @@ class _StatisticsState extends State<Statistics> with TickerProviderStateMixin {
                                 size: 25.h,
                                 color: appTheme.yellow,
                               ),
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    PageRouteBuilder(
+                                        pageBuilder: (_, __, ___) =>
+                                            MoneyPage(
+                                              text: moneyRule,
+                                            ),
+                                        opaque: false,
+                                        fullscreenDialog: true));
+                              },
                             )
                         ],
                       ),

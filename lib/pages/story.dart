@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:ave_memoria/other/app_export.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import 'homepage.dart';
+
 class Story extends StatefulWidget {
   const Story({super.key});
 
@@ -17,6 +19,7 @@ class _StoryState extends State<Story> with TickerProviderStateMixin {
   String emailAnon = '';
   int money = 0;
   int filledStars = 0;
+  late String moneyRule;
 
   @override
   void initState() {
@@ -25,6 +28,7 @@ class _StoryState extends State<Story> with TickerProviderStateMixin {
     emailAnon = globalData.emailAnon;
     money = globalData.money;
     filledStars = 3;
+    moneyRule = globalData.moneyRule;
     getMoney();
     super.initState();
   }
@@ -89,15 +93,13 @@ class _StoryState extends State<Story> with TickerProviderStateMixin {
                                 TextSpan(
                                     text: "Сюжет",
                                     style: CustomTextStyles.extraBold32Text),
-                                if (supabase.auth.currentUser?.email !=
-                                    "anounymous@gmail.com")
+                                if (!isConnected)
                                   TextSpan(
                                       text: ". Глава I",
                                       style: CustomTextStyles.extraBold32Text)
                               ]))),
                           const Spacer(),
-                          if (supabase.auth.currentUser?.email !=
-                              "anounymous@gmail.com")
+                          if (!globalData.isAnon)
                             Padding(
                                 padding: EdgeInsets.only(
                                   top: 14.v,
@@ -105,15 +107,24 @@ class _StoryState extends State<Story> with TickerProviderStateMixin {
                                 ),
                                 child: Text(money.toString(),
                                     style: CustomTextStyles.semiBold18Text)),
-                          if (supabase.auth.currentUser?.email !=
-                              "anounymous@gmail.com")
+                          if (!globalData.isAnon)
                             IconButton(
                               icon: FaIcon(
                                 FontAwesomeIcons.coins,
                                 size: 25.h,
                                 color: appTheme.yellow,
                               ),
-                              onPressed: () {},
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      PageRouteBuilder(
+                                          pageBuilder: (_, __, ___) =>
+                                              MoneyPage(
+                                                text: moneyRule,
+                                              ),
+                                          opaque: false,
+                                          fullscreenDialog: true));
+                                },
                             )
                         ],
                       ),

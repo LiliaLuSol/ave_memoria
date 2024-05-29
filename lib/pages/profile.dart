@@ -6,6 +6,8 @@ import 'package:ave_memoria/other/app_export.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import 'homepage.dart';
+
 class Profile extends StatefulWidget {
   const Profile({super.key});
 
@@ -25,6 +27,7 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
   bool isSelectedSwitch = false;
   bool isSelectedSwitch1 = false;
   int money = 0;
+  late String moneyRule;
 
   TimeOfDay selectedTime = TimeOfDay.now();
 
@@ -40,6 +43,7 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
     money = globalData.money;
     isSelectedSwitch1 = globalData.news;
     isSelectedSwitch = globalData.notification;
+    moneyRule = globalData.moneyRule;
     getNews();
     getNotification();
     getNotificationTime();
@@ -229,7 +233,17 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
                         size: 25.h,
                         color: appTheme.yellow,
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            PageRouteBuilder(
+                                pageBuilder: (_, __, ___) =>
+                                    MoneyPage(
+                                      text: moneyRule,
+                                    ),
+                                opaque: false,
+                                fullscreenDialog: true));
+                      },
                     )
                 ],
               ),

@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:ave_memoria/other/app_export.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import 'homepage.dart';
+
 class Store extends StatefulWidget {
   const Store({super.key});
 
@@ -18,11 +20,12 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
   GlobalData globalData = GlobalData();
   String emailAnon = '';
   int money = 0;
-  int countGame1 = 0;
-  int countGame2 = 0;
-  int countGame3 = 0;
+  late int countGame1;
+  late int countGame2;
+  late int countGame3;
   late int curSecurity;
   late int user_id;
+  late String moneyRule;
 
   @override
   void initState() {
@@ -39,6 +42,7 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
     countGame1 = globalData.countGame1;
     countGame2 = globalData.countGame2;
     countGame3 = globalData.countGame3;
+    moneyRule = globalData.moneyRule;
   }
 
   void checkInitialConnection() async {
@@ -87,7 +91,8 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
         .from("userachievements")
         .select()
         .eq('email', email)
-        .eq('availble', true);
+        .eq('availble', true)
+        .order('achievement_name', ascending: true);
 
     return list;
   }
@@ -162,7 +167,16 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
                                 size: 25.h,
                                 color: appTheme.yellow,
                               ),
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    PageRouteBuilder(
+                                        pageBuilder: (_, __, ___) => MoneyPage(
+                                              text: moneyRule,
+                                            ),
+                                        opaque: false,
+                                        fullscreenDialog: true));
+                              },
                             )
                         ],
                       ),
@@ -273,7 +287,7 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
   }
 
   Widget buildListAch(List<dynamic> list) {
-    final List<int> countGame = [countGame1, countGame2, countGame3];
+    final List<int> countGame = [countGame2, countGame1, countGame3];
     return SingleChildScrollView(
         child: Column(
       children: [
@@ -288,11 +302,16 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
           padding: EdgeInsets.all(16.h),
           itemCount: list.length,
           itemBuilder: (BuildContext ctx, index) {
-            final bool isCountValid =
-                countGame[index] == 1 || countGame[index] == 5;
+            final bool isCountValid = countGame[index] == 1 ||
+                countGame[index] == 5 ||
+                countGame[index] == 15 ||
+                countGame[index] > 1 && countGame[index] < 5 ||
+                countGame[index] > 5 && countGame[index] < 15 ||
+                countGame[index] >= 15;
             return Container(
                 decoration: AppDecoration.outlineGray
                     .copyWith(borderRadius: BorderRadiusStyle.circleBorder5),
+                key: ValueKey(list[index]['achievement_id']),
                 width: 170.h,
                 height: 150.v,
                 child: Padding(
@@ -303,6 +322,7 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
                         list[index]['achievement_name'],
                         style: CustomTextStyles.extraBold16Text,
                         textAlign: TextAlign.center,
+                        maxLines: 1,
                       ),
                       SizedBox(height: 4.v),
                       Divider(height: 1, color: appTheme.gray),
@@ -342,6 +362,50 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
                                     borderRadius: BorderRadius.circular(5.h)),
                               ),
                         buttonTextStyle: CustomTextStyles.regular16White,
+                        onTap: () async {
+                          PostgrestMap res;
+                          isCountValid
+                              ? {
+                                  setState(() {
+                                    globalData.updateMoney((globalData.money +
+                                            list[index]['money'])
+                                        .toInt());
+                                    money = globalData.money;
+                                  }),
+                                  await supabase
+                                      .from('Characters')
+                                      .update({'money': globalData.money})
+                                      .eq('user_id', globalData.user_id)
+                                      .count(CountOption.exact),
+                                  await supabase
+                                      .from("UserAchievements")
+                                      .update({'availble': false})
+                                      .eq('user_id', user_id)
+                                      .eq('achievement_id',
+                                          list[index]['achievement_id']),
+                                  res = await supabase
+                                      .from('Achievements')
+                                      .select()
+                                      .ilike('achievement_name',
+                                          '${list[index]['achievement_name']}%')
+                                      .gt('achievement_id',
+                                          list[index]['achievement_id'])
+                                      .order('achievement_name',
+                                          ascending: true)
+                                      .limit(1)
+                                      .single(),
+                                  await supabase
+                                      .from("UserAchievements")
+                                      .update({'availble': true})
+                                      .eq('user_id', user_id)
+                                      .eq('achievement_id',
+                                          res['achievement_id']),
+                                  setState(() {
+                                    list.length;
+                                  })
+                                }
+                              : null;
+                        },
                       ),
                     ],
                   ),
