@@ -1,12 +1,8 @@
 import 'dart:core';
-import 'dart:io';
-import 'package:ave_memoria/theme/custom_text_style.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ave_memoria/other/app_export.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
 import '../main.dart';
 import 'game_rules.dart';
 
@@ -43,7 +39,6 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
   late String moneyRule;
   late int user_id;
 
-  bool _isConnection = false;
   late bool gameRulesFirst1;
   late bool gameRulesFirst2;
   late bool gameRulesFirst3;
@@ -66,7 +61,6 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
     emailAnon = globalData.emailAnon;
     money = globalData.money;
     getMoney();
-    _tryConnection();
     getFirstRule();
     getBest();
     getQuantity();
@@ -101,28 +95,12 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
     super.initState();
   }
 
-  Future<void> _tryConnection() async {
-    try {
-      final response = await InternetAddress.lookup('www.google.com');
-      setState(() {
-        _isConnection = response.isNotEmpty;
-      });
-    } on SocketException catch (e) {
-      setState(() {
-        _isConnection = false;
-      });
-    }
-  }
-
   String? getEmail() {
     final currentUser = supabase.auth.currentUser;
     if (currentUser != null) {
-      final email = currentUser.email!;
-      return email;
-    } else if (_isConnection) {
-      return emailAnon;
+      return currentUser.email;
     } else {
-      return "Ваш email скоро здесь появится...";
+      return '';
     }
   }
 
@@ -392,11 +370,6 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
   }
 
   @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     mediaQueryData = MediaQuery.of(context);
     return SafeArea(
@@ -414,9 +387,8 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                       padding: EdgeInsets.only(left: 16.h, right: 16.h),
                       child: Text("AveMemoria",
                           style: CustomTextStyles.extraBold32Primary)),
-                  Spacer(),
-                  if (supabase.auth.currentUser?.email !=
-                      "anounymous@gmail.com")
+                  const Spacer(),
+                  if (!globalData.isAnon)
                     Padding(
                         padding: EdgeInsets.only(
                           top: 14.v,
@@ -424,8 +396,7 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                         ),
                         child: Text(money.toString(),
                             style: CustomTextStyles.semiBold18Text)),
-                  if (supabase.auth.currentUser?.email !=
-                      "anounymous@gmail.com")
+                  if (!globalData.isAnon)
                     IconButton(
                       icon: FaIcon(
                         FontAwesomeIcons.coins,
@@ -436,8 +407,7 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                         Navigator.push(
                             context,
                             PageRouteBuilder(
-                                pageBuilder: (_, __, ___) =>
-                                    MoneyPage(
+                                pageBuilder: (_, __, ___) => MoneyPage(
                                       text: moneyRule,
                                     ),
                                 opaque: false,
@@ -448,15 +418,13 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
               ),
               styleType: Style.bgFill,
             ),
-            body: Container(
+            body: SizedBox(
                 width: mediaQueryData.size.width,
                 height: mediaQueryData.size.height,
                 child: SizedBox(
                     width: double.maxFinite,
                     child: Column(children: [
-                      SizedBox(
-                        height: 75.v,
-                      ),
+                      SizedBox(height: 75.v),
                       Divider(height: 1, color: appTheme.gray),
                       Expanded(
                           child: Padding(
@@ -473,19 +441,16 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                                               width: 353.h,
                                               height: 167.v,
                                               decoration: const BoxDecoration(
-                                                image: DecorationImage(
-                                                  image: AssetImage(
-                                                      'assets/images/cards_game.png'),
-                                                  fit: BoxFit.fill,
-                                                ),
-                                              )),
+                                                  image: DecorationImage(
+                                                      image: AssetImage(
+                                                          'assets/images/cards_game.png'),
+                                                      fit: BoxFit.fill))),
                                           Positioned(
-                                            top: 10.h,
-                                            left: 25.h,
-                                            child: Text(nameGame1,
-                                                style: CustomTextStyles
-                                                    .bold16Text),
-                                          )
+                                              top: 10.h,
+                                              left: 25.h,
+                                              child: Text(nameGame1,
+                                                  style: CustomTextStyles
+                                                      .bold16Text))
                                         ]),
                                         onTap: () {
                                           gameRulesFirst1
@@ -520,7 +485,7 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                                                               ),
                                                           opaque: false,
                                                           fullscreenDialog:
-                                                              true)),
+                                                              true))
                                                 }
                                               : GoRouter.of(context)
                                                   .push(AppRoutes.game_cards);
@@ -534,12 +499,11 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                                               width: 353.h,
                                               height: 167.v,
                                               decoration: const BoxDecoration(
-                                                image: DecorationImage(
-                                                  image: AssetImage(
-                                                      'assets/images/quen_game.png'),
-                                                  fit: BoxFit.fill,
-                                                ),
-                                              )),
+                                                  image: DecorationImage(
+                                                image: AssetImage(
+                                                    'assets/images/quen_game.png'),
+                                                fit: BoxFit.fill,
+                                              ))),
                                           Positioned(
                                               top: 10.h,
                                               left: 25.h,
@@ -574,7 +538,7 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                                                               ),
                                                           opaque: false,
                                                           fullscreenDialog:
-                                                              true)),
+                                                              true))
                                                 }
                                               : GoRouter.of(context).push(
                                                   AppRoutes.game_sequence);
@@ -588,19 +552,16 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                                               width: 353.h,
                                               height: 167.v,
                                               decoration: const BoxDecoration(
-                                                image: DecorationImage(
-                                                  image: AssetImage(
-                                                      'assets/images/image_game.png'),
-                                                  fit: BoxFit.fill,
-                                                ),
-                                              )),
+                                                  image: DecorationImage(
+                                                      image: AssetImage(
+                                                          'assets/images/image_game.png'),
+                                                      fit: BoxFit.fill))),
                                           Positioned(
-                                            top: 10.h,
-                                            left: 25.h,
-                                            child: Text(nameGame3,
-                                                style: CustomTextStyles
-                                                    .bold16Text),
-                                          )
+                                              top: 10.h,
+                                              left: 25.h,
+                                              child: Text(nameGame3,
+                                                  style: CustomTextStyles
+                                                      .bold16Text))
                                         ]),
                                         onTap: () {
                                           gameRulesFirst3
@@ -644,6 +605,7 @@ class MoneyPage extends StatelessWidget {
   String text;
 
   MoneyPage({
+    super.key,
     required this.text,
   });
 
@@ -664,9 +626,9 @@ class MoneyPage extends StatelessWidget {
                     SizedBox(height: 10.v),
                     Row(children: [
                       SizedBox(width: 25.h),
-                      Spacer(),
+                      const Spacer(),
                       Text("Мемы", style: CustomTextStyles.extraBold32Text),
-                      Spacer(),
+                      const Spacer(),
                       IconButton(
                         icon: FaIcon(
                           FontAwesomeIcons.circleXmark,
@@ -688,22 +650,5 @@ class MoneyPage extends StatelessWidget {
                     SizedBox(height: 25.v)
                   ])))),
     ));
-  }
-}
-
-class ListBuilder extends StatefulWidget {
-  @override
-  State<ListBuilder> createState() => _ListBuilderState();
-}
-
-class _ListBuilderState extends State<ListBuilder> {
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-        itemCount: 1,
-        itemBuilder: (_, int index) {
-          return ListTile(
-              trailing: const SizedBox.shrink(), title: Text('item $index'));
-        });
   }
 }

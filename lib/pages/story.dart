@@ -43,10 +43,9 @@ class _StoryState extends State<Story> with TickerProviderStateMixin {
   String? getEmail() {
     final currentUser = supabase.auth.currentUser;
     if (currentUser != null) {
-      final email = currentUser.email!;
-      return email;
+      return currentUser.email;
     } else {
-      return "Ваш email скоро здесь появится...";
+      return '';
     }
   }
 
