@@ -7,7 +7,13 @@ import '../../pages/pause_menu.dart';
 import '../../pages/result_game.dart';
 
 class SequenceGame extends StatefulWidget {
-  const SequenceGame({super.key});
+  final bool? isStory;
+  final int? cond;
+  final int? scoreStory;
+  final int? currentLevel;
+
+  const SequenceGame(
+      {super.key, this.isStory, this.cond, this.scoreStory, this.currentLevel});
 
   @override
   SequenceGameState createState() => SequenceGameState();
@@ -494,6 +500,10 @@ class SequenceGameState extends State<SequenceGame> {
                 score: score,
                 isGameSequence: true,
                 game: 'sequence',
+                isStory: widget.isStory ?? false,
+                cond: widget.cond ?? 0,
+                scoreStory: widget.scoreStory ?? 0,
+                currentLevel: widget.currentLevel ?? 0,
               )
             : _buildGameScreen());
   }

@@ -190,4 +190,22 @@ class GlobalData {
   void updateNotificationTime(TimeOfDay newData) {
     notification_time = newData;
   }
+
+//сюжет
+  dynamic gameData = {};
+  int stars = 0;
+  bool isReplay = false;
+
+  void updateGameDate(dynamic newData) {
+    gameData = newData;
+  }
+
+  void updateStars(int newData) {
+    stars = newData;
+  }
+
+  void updateIsReplay(bool newData) {
+    isReplay = newData;
+  }
+
 }

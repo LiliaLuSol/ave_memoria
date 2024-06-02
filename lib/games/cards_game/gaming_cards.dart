@@ -7,7 +7,12 @@ import 'utils.dart';
 import 'package:flip_card/flip_card.dart';
 
 class CardsGame extends StatefulWidget {
-  const CardsGame({super.key});
+  final bool? isStory;
+  final int? cond;
+  final int? currentLevel;
+  final int? scoreStory;
+
+  const CardsGame({super.key, this.isStory, this.cond, this.scoreStory, this.currentLevel});
 
   @override
   CardsGameState createState() => CardsGameState();
@@ -17,7 +22,6 @@ class CardsGameState extends State<CardsGame> {
   GlobalData globalData = GlobalData();
   int time = -3;
   int _previousIndex = -1;
-  int _time = 3;
   bool _flip = false;
   bool _start = false;
   bool _wait = false;
@@ -55,9 +59,7 @@ class CardsGameState extends State<CardsGame> {
 
   void startTimers() {
     _timer = Timer.periodic(const Duration(seconds: 1), (t) {
-      setState(() {
-        _time--;
-      });
+      setState(() {});
     });
 
     _timeTimer = Timer.periodic(const Duration(seconds: 1), (t) {
@@ -78,7 +80,6 @@ class CardsGameState extends State<CardsGame> {
     _data = createShuffledListFromImageSource();
     _cardFlips = getInitialItemStateList();
     _cardStateKeys = createFlipCardStateKeysList();
-    _time = -3;
     tries = 0;
     score = 0;
     _isFinished = false;
@@ -194,6 +195,10 @@ class CardsGameState extends State<CardsGame> {
             maxScore: 600,
             isGameCards: true,
             game: 'cards',
+            isStory: widget.isStory ?? false,
+            cond: widget.cond ?? 0,
+            scoreStory: widget.scoreStory ?? 0,
+            currentLevel: widget.currentLevel ?? 0,
           )
         : SafeArea(
             child: Scaffold(

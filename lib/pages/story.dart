@@ -1,8 +1,9 @@
 import 'package:ave_memoria/main.dart';
+import 'package:ave_memoria/pages/warning_cond.dart';
 import 'package:flutter/material.dart';
 import 'package:ave_memoria/other/app_export.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
+import 'dialog_game.dart';
 import 'homepage.dart';
 
 class Story extends StatefulWidget {
@@ -12,7 +13,7 @@ class Story extends StatefulWidget {
   State<Story> createState() => _StoryState();
 }
 
-class _StoryState extends State<Story> with TickerProviderStateMixin {
+class _StoryState extends State<Story> {
   late Stream<ConnectivityResult> connectivityStream;
   bool isConnected = true;
   GlobalData globalData = GlobalData();
@@ -30,6 +31,7 @@ class _StoryState extends State<Story> with TickerProviderStateMixin {
     filledStars = 3;
     moneyRule = globalData.moneyRule;
     getMoney();
+    getLevels();
     super.initState();
   }
 
@@ -56,11 +58,22 @@ class _StoryState extends State<Story> with TickerProviderStateMixin {
         .from('profileusergame')
         .select('money')
         .eq('email', email)
+        .single()
         .count(CountOption.exact);
     final data = res.data;
     setState(() {
-      globalData.updateMoney(data[0]['money']);
+      globalData.updateMoney(data['money']);
+      money = globalData.money;
     });
+  }
+
+  Future<dynamic> getLevels() async {
+    List<dynamic> list = await supabase
+        .from('levelsuser')
+        .select()
+        .eq('user_id', globalData.user_id)
+        .order('number', ascending: true);
+    return list;
   }
 
   @override
@@ -113,17 +126,16 @@ class _StoryState extends State<Story> with TickerProviderStateMixin {
                                 size: 25.h,
                                 color: appTheme.yellow,
                               ),
-                                onPressed: () {
-                                  Navigator.push(
-                                      context,
-                                      PageRouteBuilder(
-                                          pageBuilder: (_, __, ___) =>
-                                              MoneyPage(
-                                                text: moneyRule,
-                                              ),
-                                          opaque: false,
-                                          fullscreenDialog: true));
-                                },
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    PageRouteBuilder(
+                                        pageBuilder: (_, __, ___) => MoneyPage(
+                                              text: moneyRule,
+                                            ),
+                                        opaque: false,
+                                        fullscreenDialog: true));
+                              },
                             )
                         ],
                       ),
@@ -142,7 +154,7 @@ class _StoryState extends State<Story> with TickerProviderStateMixin {
         height: mediaQueryData.size.height,
         child: SizedBox(
             width: double.maxFinite,
-            child: supabase.auth.currentUser?.email == "anounymous@gmail.com"
+            child: globalData.isAnon
                 ? Column(children: [
                     SizedBox(height: 75.v),
                     Divider(height: 1, color: appTheme.gray),
@@ -163,18 +175,18 @@ class _StoryState extends State<Story> with TickerProviderStateMixin {
                                 Text("Глава I",
                                     style: CustomTextStyles.extraBold32Text,
                                     textAlign: TextAlign.center),
-                                SizedBox(height: 28.v),
-                                story_card(context,
-                                    levelText: "Уровень 1",
-                                    subText: "Пролог",
-                                    svgPath: ImageConstant.imgStoryR,
-                                    filledStars: 3),
-                                SizedBox(height: 28.v),
-                                story_card(context,
-                                    levelText: "Уровень 2",
-                                    subText: "Первая проблема",
-                                    svgPath: ImageConstant.imgStoryL,
-                                    filledStars: 2),
+                                FutureBuilder(
+                                    future: getLevels(),
+                                    builder: (context, snapshot) {
+                                      if (!snapshot.hasData) {
+                                        return Center(
+                                          child: CircularProgressIndicator(
+                                              color: theme.colorScheme.primary),
+                                        );
+                                      }
+                                      final list = snapshot.data!;
+                                      return buildList(list);
+                                    })
                               ])))),
                       Column(children: [
                         SizedBox(height: 345.v),
@@ -206,5 +218,75 @@ class _StoryState extends State<Story> with TickerProviderStateMixin {
                       ])
                     ])
                   ])));
+  }
+
+  Widget buildList(List<dynamic> list) {
+    return SingleChildScrollView(
+        child: Column(
+      children: [
+        GridView.builder(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 1,
+            childAspectRatio: 2.85,
+          ),
+          padding: EdgeInsets.only(top: 0.v),
+          physics: const NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          itemCount: list.length,
+          itemBuilder: (BuildContext ctx, index) {
+            return GestureDetector(
+                onTap: () {
+                  if (list[index]['is_available']) {
+                    globalData.updateGameDate(list[index]);
+                    if (list[index]['try']) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const DialogGame(
+                              isStart: true, isEndSuc: false, isEndFail: false),
+                        ),
+                      );
+                    } else if (list[index]['cond_start'] > 0) {
+                      Navigator.push(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder: (_, __, ___) => WarningCondGame(
+                              cond_start: list[index]['cond_start'],
+                          currentLevel: list[index]['number']),
+                          opaque: false,
+                          fullscreenDialog: true,
+                        ),
+                      ).then((value) => setState(() {}));
+                    } else {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const DialogGame(
+                              isStart: true, isEndSuc: false, isEndFail: false),
+                        ),
+                      );
+                    }
+                  }
+                },
+                child: Container(
+                    key: ValueKey(list[index]['level_id']),
+                    child: Column(children: [
+                      SizedBox(height: 28.v),
+                      list[index]['number'] * 10 % 2 == 0
+                          ? story_card(
+                              context,
+                              svgPath: ImageConstant.imgStoryL,
+                              gameData: list[index],
+                            )
+                          : story_card(
+                              context,
+                              svgPath: ImageConstant.imgStoryR,
+                              gameData: list[index],
+                            )
+                    ])));
+          },
+        ),
+      ],
+    ));
   }
 }

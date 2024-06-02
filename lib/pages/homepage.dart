@@ -349,7 +349,7 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
         .single()
         .count(CountOption.exact);
     final data = res.data;
-    if (data[0]['notification_time'] != null) {
+    if (data['notification_time'] != null) {
       final timeString = data['notification_time'] as String;
       final timeParts = timeString.split(':');
       final hour = int.parse(timeParts[0]);

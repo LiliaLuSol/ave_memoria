@@ -95,10 +95,6 @@ class AppRoutes {
         path: game_image,
         builder: (context, state) => const ImageGame(),
       ),
-      GoRoute(
-        path: dialog,
-        builder: (context, state) => const DialogGame(),
-      ),
     ],
     initialLocation: root,
     errorBuilder: (context, state) => ScreenLayout(

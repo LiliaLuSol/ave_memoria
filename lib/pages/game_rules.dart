@@ -12,6 +12,8 @@ class GameRules extends StatefulWidget {
   final String? image1;
   final String? image2;
   final String? image3;
+  final bool? isStory;
+  final Widget? goGame;
 
   const GameRules(
       {super.key,
@@ -23,7 +25,9 @@ class GameRules extends StatefulWidget {
       this.text3,
       this.image1,
       this.image2,
-      this.image3});
+      this.image3,
+      this.isStory,
+      this.goGame});
 
   @override
   State<GameRules> createState() => _GameRulesState();
@@ -74,8 +78,6 @@ class _GameRulesState extends State<GameRules> {
 
   @override
   Widget build(BuildContext context) {
-    print(
-        '${globalData.image1} image1: ${widget.image1}\ntext1: ${widget.text1}');
     return SafeArea(
         child: Scaffold(
             backgroundColor: widget.firstTimes
@@ -104,9 +106,17 @@ class _GameRulesState extends State<GameRules> {
                                 color: theme.colorScheme.primary,
                               ),
                               onPressed: () {
-                                widget.firstTimes
-                                    ? GoRouter.of(context).push(widget.goRoute)
-                                    : Navigator.pop(context);
+                                widget.isStory!
+                                    ? Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => widget.goGame!,
+                                        ),
+                                      )
+                                    : widget.firstTimes
+                                        ? GoRouter.of(context)
+                                            .push(widget.goRoute)
+                                        : Navigator.pop(context);
                               },
                             ),
                           ]),
@@ -164,10 +174,18 @@ class _GameRulesState extends State<GameRules> {
                                               curve: Curves.ease);
                                         }
                                       } else {
-                                        widget.firstTimes
-                                            ? GoRouter.of(context)
-                                                .push(widget.goRoute)
-                                            : Navigator.pop(context);
+                                        widget.isStory!
+                                            ? Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      widget.goGame!,
+                                                ),
+                                              )
+                                            : widget.firstTimes
+                                                ? GoRouter.of(context)
+                                                    .push(widget.goRoute)
+                                                : Navigator.pop(context);
                                       }
                                     });
                               }),

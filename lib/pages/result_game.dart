@@ -4,14 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../games/cards_game/gaming_cards.dart';
+import '../games/sequence_game/gaming_sequence.dart';
 import '../main.dart';
+import 'dialog_game.dart';
+import 'game_rules.dart';
 
-class ResultGame extends StatelessWidget {
+class ResultGame extends StatefulWidget {
   final String nameGame;
   final String goRoute;
   final int? tries;
   final int? round;
-  final int? score;
+  int? score;
   final int? time;
   final int? minTries;
   final int? maxScore;
@@ -22,6 +26,9 @@ class ResultGame extends StatelessWidget {
   final bool isGameImage;
   final bool isStory;
   final String game;
+  final int? cond;
+  final int? currentLevel;
+  int? scoreStory;
 
   ResultGame({
     super.key,
@@ -40,9 +47,24 @@ class ResultGame extends StatelessWidget {
     this.isGameImage = false,
     this.isStory = false,
     required this.game,
+    this.cond,
+    this.scoreStory,
+    this.currentLevel,
   });
 
+  @override
+  _ResultGameState createState() => _ResultGameState();
+}
+
+class _ResultGameState extends State<ResultGame> {
   GlobalData globalData = GlobalData();
+  int? calculatedMoney;
+
+  @override
+  void initState() {
+    super.initState();
+    calculatedMoney = calculationMoney();
+  }
 
   void getCurrentDay(int score) {
     final now = DateTime.now();
@@ -64,26 +86,73 @@ class ResultGame extends StatelessWidget {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
+  void getGamePath(int currentLevel) {
+    switch (currentLevel) {
+      case 11:
+        globalData.updateImage(globalData.image1Game1, globalData.image2Game1,
+            globalData.image3Game1);
+        Navigator.push(
+            context,
+            PageRouteBuilder(
+                pageBuilder: (_, __, ___) => GameRules(
+                    firstTimes: true,
+                    countRule: 3,
+                    goRoute: AppRoutes.game_cards,
+                    isStory: true,
+                    text1: globalData.game1Rule1,
+                    text2: globalData.game1Rule2,
+                    text3: globalData.game1Rule3,
+                    goGame: CardsGame(
+                        isStory: true,
+                        cond: globalData.gameData['cond'],
+                        scoreStory: globalData.gameData['score'])),
+                opaque: false,
+                fullscreenDialog: true));
+        break;
+      case 12:
+        globalData.updateImage(globalData.image1Game2, globalData.image2Game2,
+            globalData.image3Game2);
+        Navigator.push(
+            context,
+            PageRouteBuilder(
+                pageBuilder: (_, __, ___) => GameRules(
+                      firstTimes: true,
+                      countRule: 3,
+                      isStory: true,
+                      goRoute: AppRoutes.game_sequence,
+                      text1: globalData.game2Rule1,
+                      text2: globalData.game2Rule2,
+                      text3: globalData.game2Rule3,
+                      goGame: SequenceGame(
+                          isStory: true,
+                          cond: globalData.gameData['cond'],
+                          scoreStory: globalData.gameData['score']),
+                    ),
+                opaque: false,
+                fullscreenDialog: true));
+        break;
+    }
+  }
+
+  int calculationMoney() {
     int money = 1;
-    if (isGameImage) {
-      money = ((correctAnswers != null && totalQuestions != null)
-          ? ((correctAnswers! / totalQuestions!) * 10).toInt()
+    if (widget.isGameImage) {
+      money = ((widget.correctAnswers != null && widget.totalQuestions != null)
+          ? ((widget.correctAnswers! / widget.totalQuestions!) * 10).toInt()
           : 1);
       globalData.updateCount(30, 1);
       getCurrentDay(money * 10);
     }
-    if (isGameCards) {
+    if (widget.isGameCards) {
       const int maxScore = 600;
       const int minTries = 6;
       const int maxTries = 100;
       const double scoreWeight = 0.7;
       const double triesWeight = 0.3;
-      double normalizedScore = score! / maxScore;
-      double normalizedTries = (tries! <= minTries)
+      double normalizedScore = widget.score! / maxScore;
+      double normalizedTries = (widget.tries! <= minTries)
           ? 1.0
-          : (maxTries - tries!).toDouble() / (maxTries - minTries);
+          : (maxTries - widget.tries!).toDouble() / (maxTries - minTries);
       double combinedNormalizedValue =
           (normalizedScore * scoreWeight) + (normalizedTries * triesWeight);
       int minMoney = 1;
@@ -91,22 +160,30 @@ class ResultGame extends StatelessWidget {
       money = ((combinedNormalizedValue * (maxMoney - minMoney)) + minMoney)
           .toInt();
       globalData.updateCount(10, 1);
-      score! > globalData.best1 ? globalData.updateBest(1, score!) : null;
-      getCurrentDay(score!);
+      widget.score! > globalData.best1
+          ? globalData.updateBest(1, widget.score!)
+          : null;
+      getCurrentDay(widget.score!);
     }
-    if (isGameSequence) {
-      int a = round! > 1 ? round! : 0;
-      money = a * 2 + (score! / 100).ceil();
+    if (widget.isGameSequence) {
+      int a = widget.round! > 1 ? widget.round! : 0;
+      money = a * 2 + (widget.score! / 100).ceil();
       money == 0 ? money = 1 : null;
       globalData.updateCount(20, 1);
-      round! > globalData.best2 ? globalData.updateBest(2, round!) : null;
-      getCurrentDay(score!);
+      widget.round! > globalData.best2
+          ? globalData.updateBest(2, widget.round!)
+          : null;
+      getCurrentDay(widget.score!);
     }
     globalData.updateMoney(globalData.money + money);
+    return money;
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Color(0xFFC0C0C0),
+        backgroundColor: const Color(0xFFC0C0C0),
         body: Center(
           child: Container(
             width: 353.h,
@@ -120,15 +197,15 @@ class ResultGame extends StatelessWidget {
                 children: [
                   SizedBox(height: 35.v),
                   Text(
-                    nameGame,
+                    widget.nameGame,
                     style: CustomTextStyles.regular24Text,
                     textAlign: TextAlign.center,
                   ),
-                  Spacer(),
+                  const Spacer(),
                   buildContent(),
-                  Spacer(),
-                  buildFooter(context, money!),
-                  Spacer(),
+                  const Spacer(),
+                  buildFooter(context, calculatedMoney ?? 0),
+                  const Spacer(),
                 ],
               ),
             ),
@@ -139,14 +216,16 @@ class ResultGame extends StatelessWidget {
   }
 
   Widget buildContent() {
-    if (isGameCards) {
+    if (widget.isStory) {
+      return buildStory();
+    } else if (widget.isGameCards) {
       return buildGameCardsContent();
-    } else if (isGameSequence) {
+    } else if (widget.isGameSequence) {
       return buildGameSequenceContent();
-    } else if (isGameImage) {
+    } else if (widget.isGameImage) {
       return buildGameImageContent();
     } else {
-      return buildStory();
+      return Container();
     }
   }
 
@@ -156,13 +235,13 @@ class ResultGame extends StatelessWidget {
         SizedBox(height: 90.v),
         Row(
           children: [
-            Spacer(),
-            info_card("Попытки", "$tries"),
-            Spacer(),
-            info_card("Очки", "$score"),
-            Spacer(),
-            info_card("Время", "$time"),
-            Spacer(),
+            const Spacer(),
+            info_card("Попытки", "${widget.tries}"),
+            const Spacer(),
+            info_card("Очки", "${widget.score}"),
+            const Spacer(),
+            info_card("Время", "${widget.time}"),
+            const Spacer(),
           ],
         ),
         SizedBox(height: 90.v),
@@ -180,16 +259,14 @@ class ResultGame extends StatelessWidget {
         SizedBox(height: 30.v),
         Row(
           children: [
-            Spacer(),
-            info_card("Раунд", "$round"),
-            Spacer(),
-            info_card("Очки", "$score"),
-            Spacer(),
+            const Spacer(),
+            info_card("Раунд", "${widget.round}"),
+            const Spacer(),
+            info_card("Очки", "${widget.score}"),
+            const Spacer(),
           ],
         ),
-        SizedBox(
-          height: 20.v,
-        )
+        SizedBox(height: 20.v)
       ],
     );
   }
@@ -215,11 +292,12 @@ class ResultGame extends StatelessWidget {
               radius: 70.h,
               animation: true,
               lineWidth: 17.h,
-              percent: correctAnswers != null && totalQuestions != null
-                  ? correctAnswers! / totalQuestions!
-                  : 0,
+              percent:
+                  widget.correctAnswers != null && widget.totalQuestions != null
+                      ? widget.correctAnswers! / widget.totalQuestions!
+                      : 0,
               center: Text(
-                '${((correctAnswers != null && totalQuestions != null ? correctAnswers! / totalQuestions! : 0) * 100).toStringAsFixed(0)}%',
+                '${((widget.correctAnswers != null && widget.totalQuestions != null ? widget.correctAnswers! / widget.totalQuestions! : 0) * 100).toStringAsFixed(0)}%',
                 style: CustomTextStyles.regular24Text,
               ),
               circularStrokeCap: CircularStrokeCap.round,
@@ -228,32 +306,40 @@ class ResultGame extends StatelessWidget {
             ),
           ],
         ),
-        SizedBox(
-          height: 10.v,
-        ),
+        SizedBox(height: 10.v),
         Row(
           children: [
-            Spacer(),
-            info_card("Ответы", "$correctAnswers из $totalQuestions"),
-            Spacer(),
+            const Spacer(),
+            info_card("Ответы",
+                "${widget.correctAnswers} из ${widget.totalQuestions}"),
+            const Spacer(),
           ],
         ),
-        SizedBox(
-          height: 10.v,
-        ),
+        SizedBox(height: 10.v),
       ],
     );
   }
 
   Widget buildStars() {
-    double scorePercentage =
-        (score != null && maxScore != null) ? score! / maxScore! : 0;
-    double triesPercentage = (tries != null && minTries != null)
-        ? (tries! - minTries!) / minTries!
-        : 0;
-    double percentage = (scorePercentage + triesPercentage) / 2;
-    int filledStars = calculateStars(percentage);
-
+    int filledStars = 0;
+    if (widget.isGameCards) {
+      double scorePercentage = (widget.score != null && widget.maxScore != null)
+          ? widget.score! / widget.maxScore!
+          : 0;
+      double triesPercentage = (widget.tries != null && widget.minTries != null)
+          ? widget.tries! <= widget.minTries!
+              ? 1
+              : widget.minTries! / widget.tries!
+          : 0;
+      double percentage = scorePercentage * triesPercentage;
+      filledStars = calculateStars(percentage);
+    }
+    if (widget.isGameSequence) {
+      double percentage = (widget.score != null && widget.cond != null)
+          ? widget.score! / widget.cond!
+          : 0;
+      filledStars = calculateStars(percentage);
+    }
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(3, (index) {
@@ -272,21 +358,42 @@ class ResultGame extends StatelessWidget {
   }
 
   int calculateStars(double percentage) {
-    if (percentage >= 0.8) {
-      return 3;
-    } else if (percentage >= 0.6) {
-      return 2;
-    } else if (percentage >= 0.4) {
-      return 1;
+    if (widget.isGameCards) {
+      if (percentage >= 0.8) {
+        globalData.updateStars(3);
+        return 3;
+      } else if (percentage >= 0.6) {
+        globalData.updateStars(2);
+        return 2;
+      } else if (percentage >= 0.4) {
+        globalData.updateStars(1);
+        return 1;
+      } else {
+        globalData.updateStars(0);
+        return 0;
+      }
     } else {
-      return 0;
+      if (percentage >= 2.0) {
+        globalData.updateStars(3);
+        return 3;
+      } else if (percentage >= 1.5) {
+        globalData.updateStars(2);
+        return 2;
+      } else if (percentage >= 1.0) {
+        globalData.updateStars(1);
+        return 1;
+      } else {
+        globalData.updateStars(0);
+        return 0;
+      }
     }
   }
 
   Color _calculateColor() {
-    double percentage = (correctAnswers != null && totalQuestions != null)
-        ? correctAnswers! / totalQuestions!
-        : 0;
+    double percentage =
+        (widget.correctAnswers != null && widget.totalQuestions != null)
+            ? widget.correctAnswers! / widget.totalQuestions!
+            : 0;
 
     if (percentage <= 0.2) {
       return Colors.red;
@@ -302,15 +409,36 @@ class ResultGame extends StatelessWidget {
   }
 
   Widget buildStory() {
+    widget.scoreStory! <= widget.score!
+        ? widget.scoreStory = widget.score
+        : null;
+    List<String> comp = ['Уровень пройден!', 'Неудача!'];
+    globalData.updateIsReplay(widget.score! >= widget.cond! ? true : false);
     return Column(
       children: [
-        buildStars(),
+        Text(widget.score! >= widget.cond! ? comp[0] : comp[1],
+            style: CustomTextStyles.extraBold32Primary),
+        SizedBox(height: 20.v),
+        Row(children: [
+          const Spacer(),
+          info_card("Очки", "${widget.score}"),
+          const Spacer(),
+          info_card('Рекорд', '${widget.scoreStory}'),
+          const Spacer(),
+        ]),
+        SizedBox(height: 20.v),
+        widget.score! >= widget.cond!
+            ? buildStars()
+            : Text('Повторим попытку?',
+                style: CustomTextStyles.extraBold32Primary),
+        SizedBox(height: 20.v),
       ],
     );
   }
 
   Widget buildFooter(BuildContext context, int money) {
     int query = 0;
+
     return Column(
       children: [
         Row(
@@ -342,21 +470,24 @@ class ResultGame extends StatelessWidget {
                   .update({'money': globalData.money})
                   .eq('user_id', globalData.user_id)
                   .count(CountOption.exact);
-              if (game == 'cards') query = globalData.countGame1;
-              if (game == 'sequence') query = globalData.countGame2;
-              if (game == 'image') query = globalData.countGame3;
+              if (widget.game == 'cards') query = globalData.countGame1;
+              if (widget.game == 'sequence') query = globalData.countGame2;
+              if (widget.game == 'image') query = globalData.countGame3;
               await supabase
                   .from('GameRule')
                   .update({'quantity': query})
                   .eq('user_id', globalData.user_id)
-                  .eq('game', game)
+                  .eq('game', widget.game)
                   .count(CountOption.exact);
-              if (isGameSequence || isGameCards) {
+              if (widget.isGameSequence || widget.isGameCards) {
                 await supabase
                     .from('GameRule')
-                    .update({'best_score': game == 'cards' ? score : round})
+                    .update({
+                      'best_score':
+                          widget.game == 'cards' ? widget.score : widget.round
+                    })
                     .eq('user_id', globalData.user_id)
-                    .eq('game', game)
+                    .eq('game', widget.game)
                     .count(CountOption.exact);
               }
               final res = await supabase
@@ -370,70 +501,208 @@ class ResultGame extends StatelessWidget {
               await supabase
                   .from('Statistics')
                   .update({
-                    'score':
-                        globalData.score + (isGameImage ? money * 10 : score!)
+                    'score': globalData.score +
+                        (widget.isGameImage ? money * 10 : widget.score!)
                   })
                   .eq('user_id', globalData.user_id)
                   .eq('date_game', DateTime.now().toIso8601String())
                   .count();
+              if (widget.isStory) {
+                final res = await supabase
+                    .from('Levels')
+                    .select()
+                    .eq('user_id', globalData.user_id)
+                    .eq('number', widget.currentLevel! / 10)
+                    .single()
+                    .count();
+                globalData.updateStars(globalData.stars > res.data['stars']
+                    ? globalData.stars
+                    : res.data['stars']);
+                await supabase
+                    .from('Levels')
+                    .update({
+                      'stars': globalData.stars,
+                      'score': widget.scoreStory! <= widget.score!
+                          ? widget.scoreStory
+                          : widget.score,
+                      'is_replay': globalData.isReplay
+                    })
+                    .eq('user_id', globalData.user_id)
+                    .eq('number', widget.currentLevel! / 10)
+                    .count();
+                await supabase
+                    .from('Levels')
+                    .update({'is_available': true})
+                    .eq('user_id', globalData.user_id)
+                    .eq('number', (widget.currentLevel! + 1) / 10)
+                    .count();
+              }
             } catch (error) {
               print('$error');
             }
-            ;
-            GoRouter.of(context).push(goRoute);
+            if (widget.isStory) {
+              getGamePath(widget.currentLevel!);
+            } else {
+              GoRouter.of(context).push(widget.goRoute);
+            }
           },
         ),
         SizedBox(height: 24.v),
-        CustomElevatedButton(
-          text: "Выход",
-          buttonTextStyle: CustomTextStyles.semiBold18TextWhite,
-          buttonStyle: ElevatedButton.styleFrom(
-            backgroundColor: theme.colorScheme.primary,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(5),
+        if (widget.isStory)
+          CustomElevatedButton(
+              text: "Продолжить",
+              buttonTextStyle: CustomTextStyles.semiBold18TextWhite,
+              buttonStyle: ElevatedButton.styleFrom(
+                backgroundColor: theme.colorScheme.primary,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5),
+                ),
+              ),
+              onTap: () async {
+                await supabase
+                    .from('Characters')
+                    .update({'money': globalData.money})
+                    .eq('user_id', globalData.user_id)
+                    .count(CountOption.exact);
+                if (widget.game == 'cards') query = globalData.countGame1;
+                if (widget.game == 'sequence') query = globalData.countGame2;
+                if (widget.game == 'image') query = globalData.countGame3;
+                await supabase
+                    .from('GameRule')
+                    .update({'quantity': query})
+                    .eq('user_id', globalData.user_id)
+                    .eq('game', widget.game)
+                    .count(CountOption.exact);
+                if (widget.isGameSequence || widget.isGameCards) {
+                  await supabase
+                      .from('GameRule')
+                      .update({
+                        'best_score':
+                            widget.game == 'cards' ? widget.score : widget.round
+                      })
+                      .eq('user_id', globalData.user_id)
+                      .eq('game', widget.game)
+                      .count(CountOption.exact);
+                }
+                final res = await supabase
+                    .from('Statistics')
+                    .select('score')
+                    .eq('user_id', globalData.user_id)
+                    .eq('date_game',
+                        DateTime.now().toIso8601String().split('T')[0])
+                    .count();
+                globalData.updateScore(res.data[0]['score']);
+                await supabase
+                    .from('Statistics')
+                    .update({
+                      'score': globalData.score +
+                          (widget.isGameImage ? money * 10 : widget.score!)
+                    })
+                    .eq('user_id', globalData.user_id)
+                    .eq('date_game',
+                        DateTime.now().toIso8601String().split('T')[0])
+                    .count();
+                if (widget.isStory) {
+                  final res = await supabase
+                      .from('Levels')
+                      .select()
+                      .eq('user_id', globalData.user_id)
+                      .eq('number', widget.currentLevel! / 10)
+                      .single()
+                      .count();
+                  globalData.updateStars(globalData.stars > res.data['stars']
+                      ? globalData.stars
+                      : res.data['stars']);
+                  await supabase
+                      .from('Levels')
+                      .update({
+                        'stars': globalData.stars,
+                        'score': widget.scoreStory! <= widget.score!
+                            ? widget.scoreStory
+                            : widget.score,
+                        'is_replay': globalData.isReplay
+                      })
+                      .eq('user_id', globalData.user_id)
+                      .eq('number', widget.currentLevel! / 10)
+                      .count();
+                  await supabase
+                      .from('Levels')
+                      .update({'is_available': true})
+                      .eq('user_id', globalData.user_id)
+                      .eq('number', (widget.currentLevel! + 1) / 10)
+                      .count();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => DialogGame(
+                          isStart: false,
+                          isEndSuc: globalData.isReplay,
+                          isEndFail: !globalData.isReplay),
+                    ),
+                  );
+                }
+              }),
+        if (!widget.isStory)
+          CustomElevatedButton(
+            text: "Выход",
+            buttonTextStyle: CustomTextStyles.semiBold18TextWhite,
+            buttonStyle: ElevatedButton.styleFrom(
+              backgroundColor: theme.colorScheme.primary,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5),
+              ),
             ),
+            onTap: () async {
+              try {
+                await supabase
+                    .from('Characters')
+                    .update({'money': globalData.money})
+                    .eq('user_id', globalData.user_id)
+                    .count(CountOption.exact);
+                if (widget.game == 'cards') query = globalData.countGame1;
+                if (widget.game == 'sequence') query = globalData.countGame2;
+                if (widget.game == 'image') query = globalData.countGame3;
+                await supabase
+                    .from('GameRule')
+                    .update({'quantity': query})
+                    .eq('user_id', globalData.user_id)
+                    .eq('game', widget.game)
+                    .count(CountOption.exact);
+                if (widget.isGameSequence || widget.isGameCards) {
+                  await supabase
+                      .from('GameRule')
+                      .update({
+                        'best_score':
+                            widget.game == 'cards' ? widget.score : widget.round
+                      })
+                      .eq('user_id', globalData.user_id)
+                      .eq('game', widget.game)
+                      .count(CountOption.exact);
+                }
+                final res = await supabase
+                    .from('Statistics')
+                    .select('score')
+                    .eq('user_id', globalData.user_id)
+                    .eq('date_game',
+                        DateTime.now().toIso8601String().split('T')[0])
+                    .count();
+                globalData.updateScore(res.data[0]['score']);
+                await supabase
+                    .from('Statistics')
+                    .update({
+                      'score': globalData.score +
+                          (widget.isGameImage ? money * 10 : widget.score!)
+                    })
+                    .eq('user_id', globalData.user_id)
+                    .eq('date_game',
+                        DateTime.now().toIso8601String().split('T')[0])
+                    .count();
+              } catch (error) {
+                print('$error');
+              }
+              GoRouter.of(context).push(AppRoutes.homepage);
+            },
           ),
-          onTap: () async {
-            try {
-              await supabase
-                  .from('Characters')
-                  .update({'money': globalData.money})
-                  .eq('user_id', globalData.user_id)
-                  .count(CountOption.exact);
-              if (game == 'cards') query = globalData.countGame1;
-              if (game == 'sequence') query = globalData.countGame2;
-              if (game == 'image') query = globalData.countGame3;
-              await supabase
-                  .from('GameRule')
-                  .update({'quantity': query})
-                  .eq('user_id', globalData.user_id)
-                  .eq('game', game)
-                  .count(CountOption.exact);
-              final res = await supabase
-                  .from('Statistics')
-                  .select('score')
-                  .eq('user_id', globalData.user_id)
-                  .eq('date_game',
-                      DateTime.now().toIso8601String().split('T')[0])
-                  .count();
-              globalData.updateScore(res.data[0]['score']);
-              await supabase
-                  .from('Statistics')
-                  .update({
-                    'score':
-                        globalData.score + (isGameImage ? money * 10 : score!)
-                  })
-                  .eq('user_id', globalData.user_id)
-                  .eq('date_game',
-                      DateTime.now().toIso8601String().split('T')[0])
-                  .count();
-            } catch (error) {
-              print('$error');
-            }
-            ;
-            GoRouter.of(context).push(AppRoutes.homepage);
-          },
-        ),
         SizedBox(height: 30.v),
       ],
     );
