@@ -115,7 +115,7 @@ class TextThemes {
 class ColorSchemes {
   static const primaryColorScheme = ColorScheme.light(
     primary: Color(0XFF3498DB),
-    background: Color(0XFFF0F0F0),
+    surface: Color(0XFFF0F0F0),
     //text
     onPrimary: Color(0XFF333333),
     onPrimaryContainer: Color(0XFFFFFFFF),

@@ -4,9 +4,10 @@ import 'package:ave_memoria/main.dart';
 import 'package:flutter/material.dart';
 import 'package:ave_memoria/other/app_export.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
 import 'homepage.dart';
+import '../utils/servies/notification_service.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -114,7 +115,9 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
       final hour = int.parse(timeParts[0]);
       final minute = int.parse(timeParts[1]);
       selectedTime = TimeOfDay(hour: hour, minute: minute);
-    }
+      Provider.of<NotificationTimeProvider>(context, listen: false)
+          .setSelectedTime(selectedTime);
+        }
   }
 
   void updateNotificationTime(TimeOfDay status) async {
@@ -159,6 +162,8 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
   }
 
   Future<void> _selectTime(BuildContext context) async {
+    // final notificationTimeProvider = Provider.of<NotificationTimeProvider>(context);
+
     final TimeOfDay? picked = await showTimePicker(
       context: context,
       builder: (context, child) {
@@ -179,6 +184,9 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
         selectedTime = picked;
       });
       updateNotificationTime(selectedTime);
+      // notificationTimeProvider.setSelectedTime(picked);
+      // final notificationService = Provider.of<NotificationService>(context, listen: false);
+      // notificationService.scheduleDailyNotification(picked);
     }
   }
 
@@ -198,6 +206,7 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
 
   Widget buildContent() {
     mediaQueryData = MediaQuery.of(context);
+
     return GestureDetector(
         onTap: () {
           FocusScope.of(context).unfocus();
@@ -509,6 +518,7 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
                     ),
                     onPressed: () {
                       isSelectedSwitch ? _selectTime(context) : null;
+
                     },
                   )
                 ])),

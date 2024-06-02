@@ -1,7 +1,5 @@
-import 'package:ave_memoria/pages/dialog_game.dart';
 import 'package:ave_memoria/pages/new_password_screen.dart';
 import 'package:ave_memoria/pages/support.dart';
-import 'package:ave_memoria/theme/custom_text_style.dart';
 import 'package:flutter/material.dart';
 import 'package:ave_memoria/pages/authorization.dart';
 import 'package:ave_memoria/pages/base_screen.dart';
@@ -11,7 +9,6 @@ import 'package:ave_memoria/pages/auth_reg.dart';
 import 'package:ave_memoria/pages/registration.dart';
 import 'package:ave_memoria/main.dart';
 import 'package:ave_memoria/pages/screen_layout.dart';
-import 'package:go_router/go_router.dart';
 import '../games/cards_game/gaming_cards.dart';
 import '../games/image_game/gaming_image.dart';
 import '../games/sequence_game/gaming_sequence.dart';

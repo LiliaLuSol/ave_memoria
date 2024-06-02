@@ -174,7 +174,8 @@ class _GameRulesState extends State<GameRules> {
                                               curve: Curves.ease);
                                         }
                                       } else {
-                                        widget.isStory!
+                                       if ( widget.isStory != null ) {
+                                         widget.isStory!
                                             ? Navigator.push(
                                                 context,
                                                 MaterialPageRoute(
@@ -186,6 +187,12 @@ class _GameRulesState extends State<GameRules> {
                                                 ? GoRouter.of(context)
                                                     .push(widget.goRoute)
                                                 : Navigator.pop(context);
+                                       } else {
+                                         widget.firstTimes
+                                             ? GoRouter.of(context)
+                                             .push(widget.goRoute)
+                                             : Navigator.pop(context);
+                                       }
                                       }
                                     });
                               }),

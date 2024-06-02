@@ -281,7 +281,7 @@ class SequenceGameState extends State<SequenceGame> {
                                 handleButtonClick(1);
                               }
                             },
-                            child: Container(
+                            child: SizedBox(
                               width: 115.h,
                               height: 80.v,
                               child: CustomImageView(
@@ -321,7 +321,7 @@ class SequenceGameState extends State<SequenceGame> {
                                   handleButtonClick(3);
                                 }
                               },
-                              child: Container(
+                              child: SizedBox(
                                 width: 115.h,
                                 height: 80.v,
                                 child: CustomImageView(
@@ -384,10 +384,6 @@ class SequenceGameState extends State<SequenceGame> {
                             child: Container(
                                 width: 90.h,
                                 height: 60.v,
-                                child: CustomImageView(
-                                  svgPath: 'assets/images/sword5.svg',
-                                  fit: BoxFit.contain,
-                                ),
                                 decoration: BoxDecoration(
                                   border: Border(
                                       top: BorderSide(
@@ -398,6 +394,10 @@ class SequenceGameState extends State<SequenceGame> {
                                         color: appTheme.gray,
                                         width: 1,
                                       )),
+                                ),
+                                child: CustomImageView(
+                                  svgPath: 'assets/images/sword5.svg',
+                                  fit: BoxFit.contain,
                                 )),
                           ),
                         ],
@@ -412,7 +412,7 @@ class SequenceGameState extends State<SequenceGame> {
                                   handleButtonClick(6);
                                 }
                               },
-                              child: Container(
+                              child: SizedBox(
                                   width: 115.h,
                                   height: 80.v,
                                   child: CustomImageView(
@@ -451,7 +451,7 @@ class SequenceGameState extends State<SequenceGame> {
                                   handleButtonClick(8);
                                 }
                               },
-                              child: Container(
+                              child: SizedBox(
                                   width: 115.h,
                                   height: 80.v,
                                   child: CustomImageView(

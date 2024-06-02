@@ -27,7 +27,7 @@ class BuildNoInternet extends StatelessWidget {
         styleType: Style.bgFill,
       ),
           body:
-      Container(
+      SizedBox(
         width: mediaQueryData.size.width,
         height: mediaQueryData.size.height,
         child: SizedBox(
@@ -36,11 +36,11 @@ class BuildNoInternet extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Divider(height: 1, color: appTheme.gray),
-              Spacer(),
+              const Spacer(),
               Image.asset(
                 'assets/images/no-internet.png',
               ),
-              Spacer(),
+              const Spacer(),
             ],
           ),
         )));

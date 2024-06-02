@@ -1,8 +1,5 @@
-import 'package:ave_memoria/theme/theme_helper.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ave_memoria/other/app_export.dart';
-import 'package:ave_memoria/widgets/custom_elevated_button.dart';
 
 import '../blocs/Auth/bloc/authentication_bloc.dart';
 
@@ -25,7 +22,7 @@ class _AuthRegState extends State<AuthReg> {
       child: Scaffold(
         extendBody: true,
         extendBodyBehindAppBar: true,
-        body: Container(
+        body: SizedBox(
           width: mediaQueryData.size.width,
           height: mediaQueryData.size.height,
           child: Container(
@@ -50,13 +47,13 @@ class _AuthRegState extends State<AuthReg> {
                     style: CustomTextStyles.semiBold18Text,
                   ),
                 ),
-                Spacer(),
+                const Spacer(),
                 Text(
                   "AveMemoria",
                   style: CustomTextStyles.semiBold32Primary,
                   textAlign: TextAlign.left,
                 ),
-                Spacer(),
+                const Spacer(),
                 CustomElevatedButton(
                   text: "Войти",
                   buttonTextStyle: CustomTextStyles.semiBold18TextWhite,

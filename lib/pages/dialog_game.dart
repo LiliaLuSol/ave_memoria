@@ -1,8 +1,10 @@
 import 'package:ave_memoria/games/cards_game/gaming_cards.dart';
 import 'package:flutter/material.dart';
 import 'package:ave_memoria/other/app_export.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../games/sequence_game/gaming_sequence.dart';
+import '../main.dart';
 import 'game_rules.dart';
 
 class DialogGame extends StatefulWidget {
@@ -177,14 +179,14 @@ class _DialogGameState extends State<DialogGame> {
       'assets/images/back_forest.jpg'
     ],
     12: [
-      'assets/images/back_forest1.jpg',
-      'assets/images/back_forest1.jpg',
-      'assets/images/back_forest1.jpg',
-      'assets/images/back_forest1.jpg',
-      'assets/images/back_forest1.jpg',
-      'assets/images/back_forest1.jpg',
-      'assets/images/back_forest1.jpg',
-      'assets/images/back_forest1.jpg',
+      'assets/images/back_forest1.jpeg',
+      'assets/images/back_forest1.jpeg',
+      'assets/images/back_forest1.jpeg',
+      'assets/images/back_forest1.jpeg',
+      'assets/images/back_forest1.jpeg',
+      'assets/images/back_forest1.jpeg',
+      'assets/images/back_forest1.jpeg',
+      'assets/images/back_forest1.jpeg',
     ],
   };
 
@@ -218,20 +220,20 @@ class _DialogGameState extends State<DialogGame> {
       'assets/images/back_road.jpg',
       'assets/images/back_road.jpg',
       'assets/images/back_road.jpg',
-      'assets/images/back_forest1.jpg',
-      'assets/images/back_forest1.jpg',
-      'assets/images/back_forest1.jpg',
-      'assets/images/back_forest1.jpg',
-      'assets/images/back_forest1.jpg',
-      'assets/images/back_forest1.jpg',
-      'assets/images/back_forest1.jpg',
-      'assets/images/back_forest1.jpg',
-      'assets/images/back_forest1.jpg',
-      'assets/images/back_forest1.jpg',
-      'assets/images/back_forest1.jpg',
-      'assets/images/back_forest1.jpg',
-      'assets/images/back_forest1.jpg',
-      'assets/images/back_forest1.jpg',
+      'assets/images/back_forest1.jpeg',
+      'assets/images/back_forest1.jpeg',
+      'assets/images/back_forest1.jpeg',
+      'assets/images/back_forest1.jpeg',
+      'assets/images/back_forest1.jpeg',
+      'assets/images/back_forest1.jpeg',
+      'assets/images/back_forest1.jpeg',
+      'assets/images/back_forest1.jpeg',
+      'assets/images/back_forest1.jpeg',
+      'assets/images/back_forest1.jpeg',
+      'assets/images/back_forest1.jpeg',
+      'assets/images/back_forest1.jpeg',
+      'assets/images/back_forest1.jpeg',
+      'assets/images/back_forest1.jpeg',
     ],
   };
 
@@ -352,7 +354,7 @@ class _DialogGameState extends State<DialogGame> {
       "assets/images/noname_evan_0.png",
       "assets/images/noname_evan_0.png",
       "assets/images/noname_evan_0.png",
-      "assets/images/noname_evan_0.png",
+      "assets/images/noname_evan_1.png",
       "assets/images/noname_evan_1.png",
       "assets/images/noname_evan_1.png",
       "assets/images/noname_evan_1.png",
@@ -477,15 +479,29 @@ class _DialogGameState extends State<DialogGame> {
         body: GestureDetector(
           onTap: () {
             if (canCont) {
-              setState(() {
+              setState(() async {
                 currentDialogIndex++;
-                if (currentDialogIndex >=
-                    dialoguesStartMap[currentLevel]!.length) {
+                if ((currentDialogIndex >=
+                            dialoguesStartMap[currentLevel]!.length &&
+                        widget.isStart) ||
+                    (currentDialogIndex >=
+                            dialoguesEndSucMap[currentLevel]!.length &&
+                        widget.isEndSuc) ||
+                    (currentDialogIndex >=
+                            dialoguesEndSucMap[currentLevel]!.length &&
+                        widget.isEndFail)) {
                   currentDialogIndex = 0;
                   if (widget.isStart) {
                     getGamePath(currentLevel);
                   }
                   if (widget.isEndSuc || widget.isEndFail) {
+                    if (globalData.gameData['number'] == 1.1) {
+                      await supabase
+                          .from('Characters')
+                          .update({'security': 1})
+                          .eq('user_id', globalData.user_id)
+                          .count();
+                    }
                     GoRouter.of(context).push(AppRoutes.homepage);
                   }
                 }

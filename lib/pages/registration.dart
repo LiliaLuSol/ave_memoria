@@ -27,7 +27,7 @@ class _RegistrationState extends State<Registration>
   bool isPasswordValid = false;
   bool isConfirmPasswordValid = false;
   bool _wantNewsInfoValue = false;
-  bool is_reg = true;
+  bool isReg = true;
 
   @override
   void initState() {
@@ -52,6 +52,30 @@ class _RegistrationState extends State<Registration>
 
   @override
   Widget build(BuildContext context) {
+    return SafeArea(
+        child: Scaffold(
+      extendBody: true,
+      extendBodyBehindAppBar: true,
+      resizeToAvoidBottomInset: false,
+      body: OfflineBuilder(
+        connectivityBuilder: (
+          BuildContext context,
+          ConnectivityResult connectivity,
+          Widget child,
+        ) {
+          final bool connected = connectivity != ConnectivityResult.none;
+          return connected ? _regPage(context) : const BuildNoInternet();
+        },
+        child: Center(
+          child: CircularProgressIndicator(
+            color: theme.colorScheme.primary,
+          ),
+        ),
+      ),
+    ));
+  }
+
+  SafeArea _regPage(BuildContext context) {
     AuthenticationBloc blocProvider =
         BlocProvider.of<AuthenticationBloc>(context);
     mediaQueryData = MediaQuery.of(context);
@@ -73,7 +97,7 @@ class _RegistrationState extends State<Registration>
                         onTap: () {
                           GoRouter.of(context).push(AppRoutes.authreg);
                         })),
-                body: Container(
+                body: SizedBox(
                     width: mediaQueryData.size.width,
                     height: mediaQueryData.size.height,
                     child: Form(
@@ -284,13 +308,13 @@ class _RegistrationState extends State<Registration>
                                               _wantNewsInfoValue = value;
                                             });
                                       }),
-                                  Spacer(),
+                                  const Spacer(),
                                   BlocListener<AuthenticationBloc,
                                           AuthenticationState>(
                                       listener: (context, state) async {
                                     if (state is AuthSuccessState) {
-                                      if (is_reg) {
-                                        AwesomeDialog(
+                                      if (isReg) {
+                                        try {
                                           context: context,
                                           dialogType: DialogType.success,
                                           animType: AnimType.topSlide,
@@ -298,9 +322,13 @@ class _RegistrationState extends State<Registration>
                                           padding: EdgeInsets.symmetric(
                                               horizontal: 16.v),
                                           desc:
-                                              'Пожалуйста, не забудьте подтвердить Вашу почту для окончательного подтверждения регистрации',
+                                              'Пожалуйста, не забудьте подтвердить Вашу почту для окончательного подтверждения регистрации. Иначе могут быть проблемы с сохранением данных\n^_~',
                                           btnOkText: "Да",
                                           btnOkOnPress: () =>
+                                              GoRouter.of(context)
+                                                  .push(AppRoutes.homepage),
+                                          btnCancelText: "Точно да",
+                                          btnCancelOnPress: () =>
                                               GoRouter.of(context)
                                                   .push(AppRoutes.homepage),
                                           buttonsTextStyle:
@@ -308,7 +336,7 @@ class _RegistrationState extends State<Registration>
                                         ).show();
                                       }
                                     } else if (state is AuthErrorState) {
-                                      AwesomeDialog(
+                                      await AwesomeDialog(
                                               context: context,
                                               dialogType: DialogType.error,
                                               animType: AnimType.topSlide,
@@ -447,11 +475,14 @@ class _RegistrationState extends State<Registration>
                                               decoration: IconButtonStyleHelper
                                                   .fillWhiteA,
                                               onTap: () {
-                                                blocProvider.add(
-                                                    const GoogleAuthEvent());
                                                 context.showsnackbar(
-                                                    title:
-                                                        'Аккаунт не для тестирования!');
+                                                    title: 'Скоро будет!',
+                                                    color: Colors.grey);
+                                                // blocProvider.add(
+                                                //     const GoogleAuthEvent());
+                                                // context.showsnackbar(
+                                                //     title:
+                                                //         'Аккаунт не для тестирования!');
                                               },
                                               child: CustomImageView(
                                                 svgPath: ImageConstant

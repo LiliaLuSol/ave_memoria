@@ -12,7 +12,8 @@ class CardsGame extends StatefulWidget {
   final int? currentLevel;
   final int? scoreStory;
 
-  const CardsGame({super.key, this.isStory, this.cond, this.scoreStory, this.currentLevel});
+  const CardsGame(
+      {super.key, this.isStory, this.cond, this.scoreStory, this.currentLevel});
 
   @override
   CardsGameState createState() => CardsGameState();
@@ -105,14 +106,14 @@ class CardsGameState extends State<CardsGame> {
 
   Widget buildGameBoard() {
     return GridView.builder(
-      padding: const EdgeInsets.all(8),
+      padding: EdgeInsets.all(8.h),
       shrinkWrap: true,
       physics: const BouncingScrollPhysics(),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
-        crossAxisSpacing: 16.h,
-        mainAxisSpacing: 16.h,
-      ),
+          crossAxisCount: 3,
+          crossAxisSpacing: 16.h,
+          mainAxisSpacing: 16.h,
+          childAspectRatio: 1),
       itemBuilder: (context, index) => _start
           ? FlipCard(
               key: _cardStateKeys[index],

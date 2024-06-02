@@ -51,6 +51,30 @@ class _AuthorizationState extends State<Authorization>
 
   @override
   Widget build(BuildContext context) {
+    return SafeArea(
+        child: Scaffold(
+      extendBody: true,
+      extendBodyBehindAppBar: true,
+      resizeToAvoidBottomInset: false,
+      body: OfflineBuilder(
+        connectivityBuilder: (
+          BuildContext context,
+          ConnectivityResult connectivity,
+          Widget child,
+        ) {
+          final bool connected = connectivity != ConnectivityResult.none;
+          return connected ? _authPage(context) : const BuildNoInternet();
+        },
+        child: Center(
+          child: CircularProgressIndicator(
+            color: theme.colorScheme.primary,
+          ),
+        ),
+      ),
+    ));
+  }
+
+  SafeArea _authPage(BuildContext context) {
     AuthenticationBloc blocProvider =
         BlocProvider.of<AuthenticationBloc>(context);
     mediaQueryData = MediaQuery.of(context);
@@ -72,7 +96,7 @@ class _AuthorizationState extends State<Authorization>
                         onTap: () {
                           GoRouter.of(context).push(AppRoutes.authreg);
                         })),
-                body: Container(
+                body: SizedBox(
                     width: mediaQueryData.size.width,
                     height: mediaQueryData.size.height,
                     child: Form(
@@ -202,7 +226,7 @@ class _AuthorizationState extends State<Authorization>
                                   //               .bodyMediumPrimary,
                                   //           textAlign: TextAlign.right,
                                   //         ))),
-                                  Spacer(),
+                                  const Spacer(),
                                   BlocListener<AuthenticationBloc,
                                       AuthenticationState>(
                                     listener: (context, state) {
@@ -221,8 +245,8 @@ class _AuthorizationState extends State<Authorization>
                                       if (state is AuthLoadingState) {
                                         return Center(
                                             child: CircularProgressIndicator(
-                                              color: theme.colorScheme.primary,
-                                            ));
+                                          color: theme.colorScheme.primary,
+                                        ));
                                       } else {
                                         return CustomElevatedButton(
                                           text: "Войти",
@@ -257,7 +281,7 @@ class _AuthorizationState extends State<Authorization>
                                                       _emailcontroller.text,
                                                       _passcontroller.text,
                                                     ));
-                                                  }                                                  ;
+                                                  }
                                                 }
                                               : null,
                                         );
@@ -331,11 +355,14 @@ class _AuthorizationState extends State<Authorization>
                                               decoration: IconButtonStyleHelper
                                                   .fillWhiteA,
                                               onTap: () {
-                                                blocProvider.add(
-                                                    const GoogleAuthEvent());
                                                 context.showsnackbar(
-                                                    title:
-                                                        'Аккаунт не для тестирования!');
+                                                    title: 'Скоро будет!',
+                                                    color: Colors.grey);
+                                                // blocProvider.add(
+                                                //     const GoogleAuthEvent());
+                                                // context.showsnackbar(
+                                                //     title:
+                                                //         'Аккаунт не для тестирования!');
                                               },
                                               child: CustomImageView(
                                                 svgPath: ImageConstant
@@ -377,7 +404,7 @@ class _AuthorizationState extends State<Authorization>
                                                     text: "Нет аккаунта?",
                                                     style: theme
                                                         .textTheme.bodyMedium),
-                                                TextSpan(text: "  "),
+                                                const TextSpan(text: "  "),
                                                 TextSpan(
                                                     text: "Регистрация",
                                                     style: CustomTextStyles

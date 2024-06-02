@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../main.dart';
-import 'game_rules.dart';
 
 class WarningCondGame extends StatefulWidget {
   final int cond_start;

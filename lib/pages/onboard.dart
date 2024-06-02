@@ -1,5 +1,4 @@
 import 'package:ave_memoria/blocs/Auth/bloc/authentication_bloc.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ave_memoria/other/app_export.dart';
 import 'package:page_view_indicators/page_view_indicators.dart';
@@ -74,10 +73,6 @@ class _OnboardState extends State<Onboard> {
     return buttonTextNotifier.value;
   }
 
-  Future<dynamic> has_internet() async {
-    return await Connectivity().checkConnectivity();
-  }
-
   @override
   Widget build(BuildContext context) {
     mediaQueryData = MediaQuery.of(context);
@@ -88,9 +83,7 @@ class _OnboardState extends State<Onboard> {
           } else if (state is UnAuthenticatedState) {
             GoRouter.of(context).go(AppRoutes.onboard);
           } else if (state is AuthErrorState) {
-            if (has_internet() != ConnectivityResult.none) {
-              context.showsnackbar(title: 'Что-то пошло не так!');
-            }
+            context.showsnackbar(title: 'Что-то пошло не так!');
           }
         },
         child: SafeArea(
@@ -124,14 +117,14 @@ class _OnboardState extends State<Onboard> {
                         style: CustomTextStyles.semiBold18TextGray,
                       )),
                 ])),
-            body: Container(
+            body: SizedBox(
               width: mediaQueryData.size.width,
               height: mediaQueryData.size.height,
-              child: Container(
+              child: SizedBox(
                 width: double.maxFinite,
                 child: Column(
                   children: [
-                    Spacer(flex: 1),
+                    const Spacer(flex: 1),
                     Expanded(
                       child: PageView.builder(
                         controller: pageController,
@@ -183,8 +176,8 @@ class _OnboardState extends State<Onboard> {
                                       if (currentPageIndex < pages.length - 1) {
                                         pageController.animateToPage(
                                             currentPageIndex + 1,
-                                            duration:
-                                                Duration(milliseconds: 500),
+                                            duration: const Duration(
+                                                milliseconds: 500),
                                             curve: Curves.ease);
                                       }
                                     } else {
@@ -210,8 +203,9 @@ class OnboardPage extends StatelessWidget {
   final String message;
   final double size;
 
-  OnboardPage(
-      {required this.title1,
+  const OnboardPage(
+      {super.key,
+      required this.title1,
       required this.title2,
       required this.title3,
       required this.title4,

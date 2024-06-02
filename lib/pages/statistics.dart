@@ -1,4 +1,3 @@
-import 'package:ave_memoria/blocs/Auth/bloc/authentication_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:ave_memoria/other/app_export.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';

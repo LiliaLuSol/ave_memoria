@@ -5,6 +5,7 @@ import 'package:ave_memoria/other/app_export.dart';
 import '../../pages/pause_menu.dart';
 import '../../pages/result_game.dart';
 import 'utils.dart';
+import 'package:photo_view/photo_view.dart';
 
 class ImageGame extends StatefulWidget {
   const ImageGame({super.key});
@@ -287,9 +288,15 @@ class ImageGameState extends State<ImageGame> {
               ),
             ),
             Center(
-              child: Image.asset(
-                imageQuestions[randomIndex].imagePath,
-                width: 393.h,
+              child: PhotoView(
+                imageProvider: AssetImage(
+                  imageQuestions[randomIndex].imagePath,
+                ),
+                backgroundDecoration: const BoxDecoration(
+                  color: Colors.transparent,
+                ),
+                minScale: PhotoViewComputedScale.contained,
+                maxScale: PhotoViewComputedScale.covered * 2,
               ),
             ),
           ],
@@ -301,7 +308,7 @@ class ImageGameState extends State<ImageGame> {
   Widget buildQuestionScreen(List<Question> questions) {
     return SafeArea(
       child: Scaffold(
-        body: Container(
+        body: SizedBox(
           width: mediaQueryData.size.width,
           height: mediaQueryData.size.height,
           child: Column(

@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:ave_memoria/other/app_export.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:mailto/mailto.dart';
 
 class Support extends StatefulWidget {
   const Support({super.key});
 
   @override
-  _SupportState createState() => _SupportState();
+  SupportState createState() => SupportState();
 }
 
-class _SupportState extends State<Support> {
+class SupportState extends State<Support> {
   bool isMessageNotEmpty = false;
   late TextEditingController messageplaceholController;
   final msgFocusNode = FocusNode();
@@ -17,6 +19,26 @@ class _SupportState extends State<Support> {
   void initState() {
     messageplaceholController = TextEditingController();
     super.initState();
+  }
+
+  Future<void> _sendEmail() async {
+    final mailtoLink = Mailto(
+      subject: 'Обратная связь',
+      body: messageplaceholController.text,
+    );
+
+    try {
+      await launch('$mailtoLink');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Сообщение отправлено!'),
+          backgroundColor: Colors.grey,
+        ),
+      );
+      Navigator.of(context).pop();
+    } catch (e) {
+      print('Error $mailtoLink');
+    }
   }
 
   @override
@@ -81,7 +103,7 @@ class _SupportState extends State<Support> {
                       ])),
                   styleType: Style.bgFill,
                 ),
-                body: Container(
+                body: SizedBox(
                     width: mediaQueryData.size.width,
                     height: mediaQueryData.size.height,
                     child: SizedBox(
@@ -121,34 +143,27 @@ class _SupportState extends State<Support> {
                                         )),
                                         SizedBox(height: 180.v),
                                         CustomElevatedButton(
-                                          text: "Отправить",
-                                          buttonTextStyle: CustomTextStyles
-                                              .semiBold18TextWhite,
-                                          buttonStyle: isMessageNotEmpty
-                                              ? ElevatedButton.styleFrom(
-                                                  backgroundColor:
-                                                      theme.colorScheme.primary,
-                                                  shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              5)))
-                                              : ElevatedButton.styleFrom(
-                                                  backgroundColor:
-                                                      appTheme.gray,
-                                                  shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              5))),
-                                          onTap: isMessageNotEmpty
-                                              ? () {
-                                                  context.showsnackbar(
-                                                      title:
-                                                          'Сообщение отправлено!',
-                                                      color: Colors.grey);
-                                                  Navigator.of(context).pop();
-                                                }
-                                              : null,
-                                        ),
+                                            text: "Отправить",
+                                            buttonTextStyle: CustomTextStyles
+                                                .semiBold18TextWhite,
+                                            buttonStyle: isMessageNotEmpty
+                                                ? ElevatedButton.styleFrom(
+                                                    backgroundColor: theme
+                                                        .colorScheme.primary,
+                                                    shape: RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                                5)))
+                                                : ElevatedButton.styleFrom(
+                                                    backgroundColor:
+                                                        appTheme.gray,
+                                                    shape: RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(5))),
+                                            onTap: isMessageNotEmpty
+                                                ? _sendEmail
+                                                : null),
                                       ]))
                             ]))))));
   }

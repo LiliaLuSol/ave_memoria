@@ -1,7 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:provider/provider.dart';
+import '../utils/servies/notification_service.dart';
 import 'package:ave_memoria/other/app_export.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:sizer/sizer.dart';
@@ -24,11 +25,15 @@ void main() async {
     debug: false,
   );
   Bloc.observer = MyBlocObserver();
+  final NotificationService notificationService = NotificationService();
+  await notificationService.initNotifications();
   runApp(MultiBlocProvider(
     providers: [
       BlocProvider<AuthenticationBloc>(
         create: (_) => AuthenticationBloc(),
       ),
+      ChangeNotifierProvider(create: (_) => NotificationTimeProvider()),
+      Provider(create: (_) => NotificationService()),
     ],
     child: const MyApp(),
   ));
@@ -42,6 +47,7 @@ class MyApp extends StatefulWidget {
   @override
   State<MyApp> createState() => _MyAppState();
 }
+
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
@@ -63,13 +69,13 @@ class _MyAppState extends State<MyApp> {
                 builder: (context, orientation, deviceType) =>
                     MaterialApp.router(
                       theme: ThemeData(
-                          scaffoldBackgroundColor:
-                              theme.colorScheme.background,
+                        scaffoldBackgroundColor: theme.colorScheme.background,
                         textSelectionTheme: TextSelectionThemeData(
-                          selectionColor: theme.colorScheme.primary.withOpacity(0.5),
-                          cursorColor: theme.colorScheme.primary,
-                          selectionHandleColor: theme.colorScheme.primary
-                        ),),
+                            selectionColor:
+                                theme.colorScheme.primary.withOpacity(0.5),
+                            cursorColor: theme.colorScheme.primary,
+                            selectionHandleColor: theme.colorScheme.primary),
+                      ),
                       title: 'ave_memoria',
                       debugShowCheckedModeBanner: false,
                       routeInformationProvider:

@@ -15,7 +15,7 @@ class BaseScreen extends StatefulWidget {
 
 class _BaseScreenState extends State<BaseScreen> {
   int _selectedIndex = 0;
-  PageController _pageController = PageController(initialPage: 0);
+  final PageController _pageController = PageController(initialPage: 0);
   final List<Widget> _screens = const [
     Homepage(),
     Story(),
@@ -50,7 +50,7 @@ class _BaseScreenState extends State<BaseScreen> {
             _selectedIndex = value;
             _pageController.animateToPage(
               value,
-              duration: Duration(milliseconds: 300),
+              duration: const Duration(milliseconds: 300),
               curve: Curves.ease,
             );
           });
