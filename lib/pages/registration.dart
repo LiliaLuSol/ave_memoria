@@ -323,14 +323,11 @@ class _RegistrationState extends State<Registration>
                                               horizontal: 16.v),
                                           desc:
                                               'Пожалуйста, не забудьте подтвердить Вашу почту для окончательного подтверждения регистрации. Иначе могут быть проблемы с сохранением данных\n^_~',
-                                          btnOkText: "Да",
-                                          btnOkOnPress: () =>
-                                              GoRouter.of(context)
-                                                  .push(AppRoutes.homepage),
-                                          btnCancelText: "Точно да",
-                                          btnCancelOnPress: () =>
-                                              GoRouter.of(context)
-                                                  .push(AppRoutes.homepage),
+                                          btnOkText: "Ок",
+                                          btnOkOnPress: () {
+                                            GoRouter.of(context)
+                                                .push(AppRoutes.authorization);
+                                          },
                                           buttonsTextStyle:
                                               CustomTextStyles.regular16White,
                                         ).show();

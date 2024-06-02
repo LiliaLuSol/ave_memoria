@@ -23,6 +23,7 @@ class _AuthorizationState extends State<Authorization>
 
   bool isEmailValid = false;
   bool isPasswordValid = false;
+  bool isAuth = true;
 
   @override
   void initState() {
@@ -231,8 +232,10 @@ class _AuthorizationState extends State<Authorization>
                                       AuthenticationState>(
                                     listener: (context, state) {
                                       if (state is AuthSuccessState) {
-                                        GoRouter.of(context)
-                                            .push(AppRoutes.homepage);
+                                        if (isAuth) {
+                                          GoRouter.of(context)
+                                              .push(AppRoutes.homepage);
+                                        }
                                       } else if (state is AuthErrorState) {
                                         context.showsnackbar(
                                             title:

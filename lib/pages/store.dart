@@ -97,18 +97,26 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
   }
 
   Future<dynamic> getStoreList() async {
+    String? email = getEmail();
+    email = email.toString();
     List<dynamic> list = await supabase
         .from("storelist")
         .select()
         .lte('security', curSecurity)
-        .eq('available', true);
+        .eq('available', true)
+        .eq('email', email);
 
     return list;
   }
 
   Future<dynamic> getShopList() async {
-    List<dynamic> list =
-        await supabase.from("usershope").select().lte('security', curSecurity);
+    String? email = getEmail();
+    email = email.toString();
+    List<dynamic> list = await supabase
+        .from("usershope")
+        .select()
+        .lte('security', curSecurity)
+        .eq('email', email);
 
     return list;
   }
@@ -301,12 +309,12 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
           padding: EdgeInsets.all(16.h),
           itemCount: list.length,
           itemBuilder: (BuildContext ctx, index) {
-            final bool isCountValid = countGame[index] == 1 ||
-                countGame[index] == 5 ||
-                countGame[index] == 15 ||
-                countGame[index] > 1 && countGame[index] < 5 ||
-                countGame[index] > 5 && countGame[index] < 15 ||
-                countGame[index] >= 15;
+            final bool isCountValid = (countGame[index] == 1 && list[index]['achievement_name'].lastChars(1) == 'I') ||
+                (countGame[index] == 5 && list[index]['achievement_name'].lastChars(2) == 'II') ||
+                (countGame[index] == 15 && list[index]['achievement_name'].lastChars(3) == 'III') ||
+                (countGame[index] > 1 && countGame[index] < 5 && (countGame[index] == 1 && list[index]['achievement_name'].lastChars(1) == 'I')) ||
+                (countGame[index] > 5 && countGame[index] < 15) ||
+                (countGame[index] >= 15);
             return Container(
                 decoration: AppDecoration.outlineGray
                     .copyWith(borderRadius: BorderRadiusStyle.circleBorder5),
@@ -430,7 +438,15 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
           itemCount: list.length,
           itemBuilder: (BuildContext ctx, index) {
             return GestureDetector(
-                onTap: null,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          Article(title: list[index]["title"]),
+                    ),
+                  );
+                },
                 child: Container(
                   decoration: AppDecoration.outlineGray
                       .copyWith(borderRadius: BorderRadiusStyle.circleBorder5),

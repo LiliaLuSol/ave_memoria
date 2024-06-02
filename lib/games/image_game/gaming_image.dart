@@ -288,17 +288,20 @@ class ImageGameState extends State<ImageGame> {
               ),
             ),
             Center(
-              child: PhotoView(
-                imageProvider: AssetImage(
-                  imageQuestions[randomIndex].imagePath,
-                ),
-                backgroundDecoration: const BoxDecoration(
-                  color: Colors.transparent,
-                ),
-                minScale: PhotoViewComputedScale.contained,
-                maxScale: PhotoViewComputedScale.covered * 2,
-              ),
-            ),
+                child: AspectRatio(
+                    aspectRatio: 0.8,
+                    child: ClipRect(
+                      child: PhotoView(
+                        imageProvider: AssetImage(
+                          imageQuestions[randomIndex].imagePath,
+                        ),
+                        backgroundDecoration: const BoxDecoration(
+                          color: Colors.transparent,
+                        ),
+                        minScale: PhotoViewComputedScale.contained,
+                        maxScale: PhotoViewComputedScale.covered * 2,
+                      ),
+                    ))),
           ],
         ),
       ),
