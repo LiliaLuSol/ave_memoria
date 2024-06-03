@@ -479,8 +479,10 @@ class _DialogGameState extends State<DialogGame> {
         body: GestureDetector(
           onTap: () {
             if (canCont) {
-              setState(() async {
+              setState(() {
                 currentDialogIndex++;
+              });
+              setState(() async {
                 if ((currentDialogIndex >=
                             dialoguesStartMap[currentLevel]!.length &&
                         widget.isStart) ||

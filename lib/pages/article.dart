@@ -5,8 +5,9 @@ import '../main.dart';
 
 class Article extends StatefulWidget {
   final String title;
+  final int num;
 
-  const Article({super.key, required this.title});
+  const Article({super.key, required this.title, required this.num});
 
   @override
   ArticleState createState() => ArticleState();
@@ -17,14 +18,34 @@ class ArticleState extends State<Article> {
   late String text;
 
   void getArticleSelfList() async {
-   final res = await supabase
-        .from("Library")
-        .select().eq('title', widget.title).count(CountOption.exact);
-    final data = res.data;
-    setState(() {
-      image = data[0]['image'].toString();
-      text = data[0]['text'];
-    });
+    switch (widget.num) {
+      case 1:
+        final res = await supabase
+            .from("Library")
+            .select()
+            .eq('title', widget.title)
+            .single()
+            .count(CountOption.exact);
+        final data = res.data;
+        setState(() {
+          image = data['image'].toString();
+          text = data['text'];
+        });
+        break;
+      case 2:
+        final res = await supabase
+            .from("Store")
+            .select()
+            .eq('store_name', widget.title)
+            .single()
+            .count(CountOption.exact);
+        final data = res.data;
+        setState(() {
+          image = data['image'].toString();
+          text = data['text'];
+        });
+        break;
+    }
   }
 
   @override
@@ -44,25 +65,25 @@ class ArticleState extends State<Article> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-          extendBody: true,
-          extendBodyBehindAppBar: true,
-          resizeToAvoidBottomInset: false,
-          body: OfflineBuilder(
-            connectivityBuilder: (
-                BuildContext context,
-                ConnectivityResult connectivity,
-                Widget child,
-                ) {
-              final bool connected = connectivity != ConnectivityResult.none;
-              return connected ? _articlePage(context) : const BuildNoInternet();
-            },
-            child: Center(
-              child: CircularProgressIndicator(
-                color: theme.colorScheme.primary,
-              ),
-            ),
+      extendBody: true,
+      extendBodyBehindAppBar: true,
+      resizeToAvoidBottomInset: false,
+      body: OfflineBuilder(
+        connectivityBuilder: (
+          BuildContext context,
+          ConnectivityResult connectivity,
+          Widget child,
+        ) {
+          final bool connected = connectivity != ConnectivityResult.none;
+          return connected ? _articlePage(context) : const BuildNoInternet();
+        },
+        child: Center(
+          child: CircularProgressIndicator(
+            color: theme.colorScheme.primary,
           ),
-        ));
+        ),
+      ),
+    ));
   }
 
   SafeArea _articlePage(BuildContext context) {
@@ -102,8 +123,8 @@ class ArticleState extends State<Article> {
                             height: 75.v,
                           ),
                           Divider(height: 1, color: appTheme.gray),
-                          Expanded(child:
-                          SingleChildScrollView(
+                          Expanded(
+                              child: SingleChildScrollView(
                             padding: EdgeInsets.all(16.h),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -114,16 +135,16 @@ class ArticleState extends State<Article> {
                                 ),
                                 SizedBox(height: 16.v),
                                 if (image != 'null')
-                                Container(
-                                  decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                      image: NetworkImage(image),
-                                      fit: BoxFit.cover,
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                        image: NetworkImage(image),
+                                        fit: BoxFit.cover,
+                                      ),
                                     ),
+                                    height: 353.v,
+                                    width: 353.h,
                                   ),
-                                  height: 353.v,
-                                  width: 353.h,
-                                ),
                                 SizedBox(height: 16.v),
                                 Text(
                                   text,

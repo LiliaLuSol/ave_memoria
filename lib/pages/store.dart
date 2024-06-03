@@ -309,10 +309,16 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
           padding: EdgeInsets.all(16.h),
           itemCount: list.length,
           itemBuilder: (BuildContext ctx, index) {
-            final bool isCountValid = (countGame[index] == 1 && list[index]['achievement_name'].lastChars(1) == 'I') ||
-                (countGame[index] == 5 && list[index]['achievement_name'].lastChars(2) == 'II') ||
-                (countGame[index] == 15 && list[index]['achievement_name'].lastChars(3) == 'III') ||
-                (countGame[index] > 1 && countGame[index] < 5 && (countGame[index] == 1 && list[index]['achievement_name'].lastChars(1) == 'I')) ||
+            final bool isCountValid = (countGame[index] == 1 &&
+                    list[index]['achievement_name'].lastChars(1) == 'I') ||
+                (countGame[index] == 5 &&
+                    list[index]['achievement_name'].lastChars(2) == 'II') ||
+                (countGame[index] == 15 &&
+                    list[index]['achievement_name'].lastChars(3) == 'III') ||
+                (countGame[index] > 1 &&
+                    countGame[index] < 5 &&
+                    (countGame[index] == 1 &&
+                        list[index]['achievement_name'].lastChars(1) == 'I')) ||
                 (countGame[index] > 5 && countGame[index] < 15) ||
                 (countGame[index] >= 15);
             return Container(
@@ -442,8 +448,11 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) =>
-                          Article(title: list[index]["title"]),
+                      builder: (context) => Article(
+                        title:
+                            list[index]["title"] ?? list[index]["store_name"],
+                        num: list[index]["title"] != null ? 1 : 2,
+                      ),
                     ),
                   );
                 },
@@ -797,7 +806,10 @@ class _NestedTabBarState extends State<NestedTabBar>
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => Article(title: list[index]["title"]),
+                    builder: (context) => Article(
+                        title:
+                            list[index]["title"] ?? list[index]["store_name"],
+                        num: list[index]["title"] != null ? 1 : 2),
                   ),
                 );
               },
