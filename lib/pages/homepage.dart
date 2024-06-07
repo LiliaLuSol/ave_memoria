@@ -92,7 +92,32 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
     image1Game3 = globalData.image1Game3;
     image2Game3 = globalData.image2Game3;
     moneyRule = globalData.moneyRule;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (globalData.isReg) {
+        globalData.updateRegAuthStatus(false, true);
+        _showDialog();
+      }
+    });
     super.initState();
+  }
+
+  void _showDialog() {
+    AwesomeDialog(
+      context: context,
+      dialogType: DialogType.success,
+      animType: AnimType.topSlide,
+      title: 'Почти всё!',
+      padding: EdgeInsets.symmetric(horizontal: 16.v),
+      desc:
+      'Пожалуйста, не забудьте подтвердить Вашу почту для окончательного подтверждения регистрации. Иначе могут быть проблемы с сохранением данных\n^_~',
+      btnOkText: "Ок",
+      btnOkOnPress: () {
+        globalData.updateRegAuthStatus(false, true);
+        GoRouter.of(context).push(AppRoutes.authorization);
+      },
+      buttonsTextStyle: CustomTextStyles.regular16White,
+      dismissOnTouchOutside: false,
+    ).show();
   }
 
   String? getEmail() {

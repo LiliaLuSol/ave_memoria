@@ -63,6 +63,7 @@ class _AuthRegState extends State<AuthReg> {
                           borderRadius: BorderRadius.circular(5))),
                   onTap: () {
                     globalData.updateAnonStatus(false);
+                    globalData.updateRegAuthStatus(false, true);
                     GoRouter.of(context).push(AppRoutes.authorization);
                   },
                 ),
@@ -76,6 +77,7 @@ class _AuthRegState extends State<AuthReg> {
                           borderRadius: BorderRadius.circular(5))),
                   onTap: () {
                     globalData.updateAnonStatus(false);
+                    globalData.updateRegAuthStatus(true, false);
                     GoRouter.of(context).push(AppRoutes.registration);
                   },
                 ),
@@ -84,7 +86,7 @@ class _AuthRegState extends State<AuthReg> {
                     listener: (context, state) {
                   if (state is AuthSuccessState) {
                     GoRouter.of(context).push(AppRoutes.homepage);
-                  } else if (state is AuthErrorState) {
+                  } else if (state is AuthErrorState)  {
                     GoRouter.of(context).push(AppRoutes.homepage);
                   }
                 }, child: BlocBuilder<AuthenticationBloc, AuthenticationState>(

@@ -27,7 +27,8 @@ class _RegistrationState extends State<Registration>
   bool isPasswordValid = false;
   bool isConfirmPasswordValid = false;
   bool _wantNewsInfoValue = false;
-  bool isReg = true;
+
+  GlobalData globalData = GlobalData();
 
   @override
   void initState() {
@@ -313,24 +314,8 @@ class _RegistrationState extends State<Registration>
                                           AuthenticationState>(
                                       listener: (context, state) async {
                                     if (state is AuthSuccessState) {
-                                      if (isReg) {
+                                      if (globalData.isReg) {
                                         try {
-                                          context: context,
-                                          dialogType: DialogType.success,
-                                          animType: AnimType.topSlide,
-                                          title: 'Почти всё!',
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 16.v),
-                                          desc:
-                                              'Пожалуйста, не забудьте подтвердить Вашу почту для окончательного подтверждения регистрации. Иначе могут быть проблемы с сохранением данных\n^_~',
-                                          btnOkText: "Ок",
-                                          btnOkOnPress: () {
-                                            GoRouter.of(context)
-                                                .push(AppRoutes.authorization);
-                                          },
-                                          buttonsTextStyle:
-                                              CustomTextStyles.regular16White,
-                                        ).show();
                                       }
                                     } else if (state is AuthErrorState) {
                                       await AwesomeDialog(
@@ -512,6 +497,7 @@ class _RegistrationState extends State<Registration>
                                       alignment: Alignment.center,
                                       child: GestureDetector(
                                           onTap: () {
+                                            globalData.updateRegAuthStatus(false, true);
                                             GoRouter.of(context)
                                                 .push(AppRoutes.authorization);
                                           },

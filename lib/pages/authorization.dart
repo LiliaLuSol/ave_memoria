@@ -23,7 +23,8 @@ class _AuthorizationState extends State<Authorization>
 
   bool isEmailValid = false;
   bool isPasswordValid = false;
-  bool isAuth = true;
+
+  GlobalData globalData = GlobalData();
 
   @override
   void initState() {
@@ -232,7 +233,7 @@ class _AuthorizationState extends State<Authorization>
                                       AuthenticationState>(
                                     listener: (context, state) {
                                       if (state is AuthSuccessState) {
-                                        if (isAuth) {
+                                        if (globalData.isAuth) {
                                           GoRouter.of(context)
                                               .push(AppRoutes.homepage);
                                         }
@@ -398,6 +399,7 @@ class _AuthorizationState extends State<Authorization>
                                       alignment: Alignment.center,
                                       child: GestureDetector(
                                           onTap: () {
+                                            globalData.updateRegAuthStatus(true, false);
                                             GoRouter.of(context)
                                                 .push(AppRoutes.registration);
                                           },

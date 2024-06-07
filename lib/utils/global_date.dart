@@ -12,6 +12,8 @@ class GlobalData {
   //общее
   String emailAnon = 'anounymous@gmail.com';
   bool isAnon = false;
+  bool isReg = false;
+  bool isAuth = false;
   int money = 0;
   int user_id = 0;
 
@@ -25,6 +27,11 @@ class GlobalData {
 
   void updateAnonStatus(bool newData) {
     isAnon = newData;
+  }
+
+  void updateRegAuthStatus(bool newData1, bool newData2) {
+    isReg = newData1;
+    isAuth = newData2;
   }
 
   //статистика
@@ -123,11 +130,13 @@ class GlobalData {
   String image1 = "";
   String image2 = "";
   String image3 = "";
+
   void updateImage(String newData1, String? newData2, String? newData3) {
     image1 = newData1;
     image2 = newData2!;
     image3 = newData3!;
   }
+
   String nameGame1 = 'Карточная игра\n'
       '"Река памяти"';
   String nameGame1_ = 'Река памяти';
