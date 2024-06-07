@@ -239,6 +239,8 @@ class CardsGameState extends State<CardsGame> {
                                         text1: game1Rule1,
                                         text2: game1Rule2,
                                         text3: game1Rule3,
+                                        isStory: widget.isStory ?? false,
+                                        currentLevel: widget.currentLevel ?? 0,
                                       ),
                                       opaque: false,
                                       fullscreenDialog: true,

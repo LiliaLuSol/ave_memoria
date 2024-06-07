@@ -480,6 +480,8 @@ class SequenceGameState extends State<SequenceGame> {
           text1: game2Rule1,
           text2: game2Rule2,
           text3: game2Rule3,
+          isStory: widget.isStory ?? false,
+          currentLevel: widget.currentLevel ?? 0,
         ),
         opaque: false,
         fullscreenDialog: true,

@@ -12,7 +12,8 @@ class GameRules extends StatefulWidget {
   final String? image1;
   final String? image2;
   final String? image3;
-  final bool? isStory;
+  final bool isStory;
+  final int currentLevel;
   final Widget? goGame;
 
   const GameRules(
@@ -26,8 +27,9 @@ class GameRules extends StatefulWidget {
       this.image1,
       this.image2,
       this.image3,
-      this.isStory,
-      this.goGame});
+      this.isStory = false,
+      this.goGame,
+      this.currentLevel = 0});
 
   @override
   State<GameRules> createState() => _GameRulesState();
@@ -106,7 +108,7 @@ class _GameRulesState extends State<GameRules> {
                                 color: theme.colorScheme.primary,
                               ),
                               onPressed: () {
-                                widget.isStory!
+                                widget.isStory
                                     ? Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -174,8 +176,7 @@ class _GameRulesState extends State<GameRules> {
                                               curve: Curves.ease);
                                         }
                                       } else {
-                                       if ( widget.isStory != null ) {
-                                         widget.isStory!
+                                        widget.isStory
                                             ? Navigator.push(
                                                 context,
                                                 MaterialPageRoute(
@@ -187,12 +188,6 @@ class _GameRulesState extends State<GameRules> {
                                                 ? GoRouter.of(context)
                                                     .push(widget.goRoute)
                                                 : Navigator.pop(context);
-                                       } else {
-                                         widget.firstTimes
-                                             ? GoRouter.of(context)
-                                             .push(widget.goRoute)
-                                             : Navigator.pop(context);
-                                       }
                                       }
                                     });
                               }),

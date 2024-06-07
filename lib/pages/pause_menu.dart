@@ -16,7 +16,7 @@ class PauseMenu extends StatefulWidget {
   final String? image2;
   final String? image3;
   final bool isStory;
-  final int? currentLevel;
+  final int currentLevel;
 
   const PauseMenu({
     super.key,
@@ -29,7 +29,7 @@ class PauseMenu extends StatefulWidget {
     this.image2,
     this.image3,
     this.isStory = false,
-    this.currentLevel,
+    this.currentLevel = 11,
   });
 
   @override
@@ -128,7 +128,7 @@ class _PauseMenuState extends State<PauseMenu> {
                                     borderRadius: BorderRadius.circular(5))),
                             onTap: () {
                               if (widget.isStory) {
-                                getGamePath(widget.currentLevel!);
+                                getGamePath(widget.currentLevel);
                               } else {
                                 GoRouter.of(context).push(widget.goRoute);
                               }

@@ -293,7 +293,7 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
                                       notificationSwitch(),
                                     if (!isConnected)
                                       Text(
-                                        'Упс, без интернета функцианал крайне ограничен!',
+                                        'Упс, без интернета функционал крайне ограничен!',
                                         style: CustomTextStyles.regular16Text,
                                         textAlign: TextAlign.center,
                                       ),
@@ -535,6 +535,7 @@ class _ProfileState extends State<Profile> with TickerProviderStateMixin {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
       onTap: () {
+        globalData.updateAnonStatus(false);
         context.read<AuthenticationBloc>().add(const SignOutEvent());
         GoRouter.of(context).push(AppRoutes.authreg);
       },

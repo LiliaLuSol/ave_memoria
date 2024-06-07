@@ -1,7 +1,6 @@
 import 'package:ave_memoria/games/cards_game/gaming_cards.dart';
 import 'package:flutter/material.dart';
 import 'package:ave_memoria/other/app_export.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../games/sequence_game/gaming_sequence.dart';
 import '../main.dart';

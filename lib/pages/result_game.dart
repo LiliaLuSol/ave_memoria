@@ -27,7 +27,7 @@ class ResultGame extends StatefulWidget {
   final bool isStory;
   final String game;
   final int? cond;
-  final int? currentLevel;
+  final int currentLevel;
   int? scoreStory;
 
   ResultGame({
@@ -49,7 +49,7 @@ class ResultGame extends StatefulWidget {
     required this.game,
     this.cond,
     this.scoreStory,
-    this.currentLevel,
+    this.currentLevel = 11,
   });
 
   @override
@@ -512,7 +512,7 @@ class _ResultGameState extends State<ResultGame> {
                     .from('Levels')
                     .select()
                     .eq('user_id', globalData.user_id)
-                    .eq('number', widget.currentLevel! / 10)
+                    .eq('number', widget.currentLevel / 10)
                     .single()
                     .count();
                 globalData.updateStars(globalData.stars > res.data['stars']
@@ -528,20 +528,20 @@ class _ResultGameState extends State<ResultGame> {
                       'is_replay': globalData.isReplay
                     })
                     .eq('user_id', globalData.user_id)
-                    .eq('number', widget.currentLevel! / 10)
+                    .eq('number', widget.currentLevel / 10)
                     .count();
                 await supabase
                     .from('Levels')
                     .update({'is_available': true})
                     .eq('user_id', globalData.user_id)
-                    .eq('number', (widget.currentLevel! + 1) / 10)
+                    .eq('number', (widget.currentLevel + 1) / 10)
                     .count();
               }
             } catch (error) {
               print('$error');
             }
             if (widget.isStory) {
-              getGamePath(widget.currentLevel!);
+              getGamePath(widget.currentLevel);
             } else {
               GoRouter.of(context).push(widget.goRoute);
             }
@@ -602,45 +602,43 @@ class _ResultGameState extends State<ResultGame> {
                     .eq('date_game',
                         DateTime.now().toIso8601String().split('T')[0])
                     .count();
-                if (widget.isStory) {
-                  final res = await supabase
-                      .from('Levels')
-                      .select()
-                      .eq('user_id', globalData.user_id)
-                      .eq('number', widget.currentLevel! / 10)
-                      .single()
-                      .count();
-                  globalData.updateStars(globalData.stars > res.data['stars']
-                      ? globalData.stars
-                      : res.data['stars']);
-                  await supabase
-                      .from('Levels')
-                      .update({
-                        'stars': globalData.stars,
-                        'score': widget.scoreStory! <= widget.score!
-                            ? widget.scoreStory
-                            : widget.score,
-                        'is_replay': globalData.isReplay
-                      })
-                      .eq('user_id', globalData.user_id)
-                      .eq('number', widget.currentLevel! / 10)
-                      .count();
-                  await supabase
-                      .from('Levels')
-                      .update({'is_available': true})
-                      .eq('user_id', globalData.user_id)
-                      .eq('number', (widget.currentLevel! + 1) / 10)
-                      .count();
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => DialogGame(
-                          isStart: false,
-                          isEndSuc: globalData.isReplay,
-                          isEndFail: !globalData.isReplay),
-                    ),
-                  );
-                }
+                final res1 = await supabase
+                    .from('Levels')
+                    .select()
+                    .eq('user_id', globalData.user_id)
+                    .eq('number', widget.currentLevel / 10)
+                    .single()
+                    .count();
+                globalData.updateStars(globalData.stars > res1.data['stars']
+                    ? globalData.stars
+                    : res1.data['stars']);
+                await supabase
+                    .from('Levels')
+                    .update({
+                      'stars': globalData.stars,
+                      'score': widget.scoreStory! <= widget.score!
+                          ? widget.scoreStory
+                          : widget.score,
+                      'is_replay': globalData.isReplay
+                    })
+                    .eq('user_id', globalData.user_id)
+                    .eq('number', widget.currentLevel / 10)
+                    .count();
+                await supabase
+                    .from('Levels')
+                    .update({'is_available': true})
+                    .eq('user_id', globalData.user_id)
+                    .eq('number', (widget.currentLevel + 1) / 10)
+                    .count();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => DialogGame(
+                        isStart: false,
+                        isEndSuc: globalData.isReplay,
+                        isEndFail: !globalData.isReplay),
+                  ),
+                );
               }),
         if (!widget.isStory)
           CustomElevatedButton(
