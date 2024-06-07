@@ -310,17 +310,25 @@ class _StoreState extends State<Store> with TickerProviderStateMixin {
           itemCount: list.length,
           itemBuilder: (BuildContext ctx, index) {
             final bool isCountValid = (countGame[index] == 1 &&
-                    list[index]['achievement_name'].lastChars(1) == 'I') ||
+                    list[index]['achievement_name'].substring(list[index]['achievement_name'].length - 2) ==
+                        ' I') ||
                 (countGame[index] == 5 &&
-                    list[index]['achievement_name'].lastChars(2) == 'II') ||
+                    list[index]['achievement_name'].substring(list[index]['achievement_name'].length - 3) ==
+                        ' II') ||
                 (countGame[index] == 15 &&
-                    list[index]['achievement_name'].lastChars(3) == 'III') ||
+                    list[index]['achievement_name'].substring(list[index]['achievement_name'].length - 3) ==
+                        'III') ||
                 (countGame[index] > 1 &&
-                    countGame[index] < 5 &&
-                    (countGame[index] == 1 &&
-                        list[index]['achievement_name'].lastChars(1) == 'I')) ||
-                (countGame[index] > 5 && countGame[index] < 15) ||
-                (countGame[index] >= 15);
+                    list[index]['achievement_name'].substring(list[index]['achievement_name'].length - 2) ==
+                        ' I') ||
+                (countGame[index] > 5 &&
+                    list[index]['achievement_name'].substring(
+                            list[index]['achievement_name'].length - 3) ==
+                        ' II') ||
+                (countGame[index] > 15 &&
+                    list[index]['achievement_name']
+                            .substring(list[index]['achievement_name'].length - 3) ==
+                        'III');
             return Container(
                 decoration: AppDecoration.outlineGray
                     .copyWith(borderRadius: BorderRadiusStyle.circleBorder5),
