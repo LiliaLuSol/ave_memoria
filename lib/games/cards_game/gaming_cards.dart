@@ -119,13 +119,17 @@ class CardsGameState extends State<CardsGame> {
               key: _cardStateKeys[index],
               onFlip: () {
                 if (!_flip) {
-                  _flip = true;
-                  _previousIndex = index;
+                  setState(() {
+                    _flip = true;
+                    _previousIndex = index;
+                  });
                 } else {
                   _flip = false;
                   if (_previousIndex != index) {
                     if (_data[_previousIndex] != _data[index]) {
+                      setState(() {
                       _wait = true;
+                      });
                       Future.delayed(const Duration(milliseconds: 1500), () {
                         _cardStateKeys[_previousIndex]
                             .currentState!
@@ -145,9 +149,9 @@ class CardsGameState extends State<CardsGame> {
                         });
                       });
                     } else {
-                      _cardFlips[_previousIndex] = false;
-                      _cardFlips[index] = false;
                       setState(() {
+                        _cardFlips[_previousIndex] = false;
+                        _cardFlips[index] = false;
                         score += 100;
                         tries++;
                       });
